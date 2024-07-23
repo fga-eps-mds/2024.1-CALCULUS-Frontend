@@ -1,0 +1,14 @@
+services:
+  front-api:
+    container_name: front-api
+    restart: on-failure
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development  
+    volumes:
+      - ./src:/app/src
+    env_file:
+      - .env
+    
