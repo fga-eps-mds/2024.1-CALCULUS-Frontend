@@ -1,0 +1,21 @@
+.position-relative {
+  position: relative;
+  height: 100vh;
+}
+
+.position-custom {
+  position: absolute;
+  right: 10vw; 
+  bottom: 10vh; 
+}
+
+.centered {
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh; 
+}
+
+.button {
+  margin: 0 10px; 
+}
