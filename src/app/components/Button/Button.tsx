@@ -21,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       type="button"
       onClick={onClick}
-      className={`btn-custom ${className}`} // Adiciona a classe para estilos customizados
+      className={`btn-custom ${className}`} 
       style={{
         backgroundColor,
         color: textColor,
