@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface ButtonProps {
+interface SignUpButtonProps {
   label: string;
   backgroundColor?: string;
   textColor?: string;
@@ -9,17 +9,17 @@ interface ButtonProps {
   className?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({
+const SignUpButton: React.FC<SignUpButtonProps> = ({
   label,
-  backgroundColor = '#FF4122', 
+  backgroundColor = '#2F2F2F', 
   textColor = '#FFFAFA',     
-  shadowColor = '#C61A09',
+  shadowColor = '#1F1F1F',
   onClick,
   className = '',
 }) => {
   return (
     <button
-      type="button"
+      type="submit"
       onClick={onClick}
       className={`btn-custom ${className}`} 
       style={{
@@ -33,4 +33,4 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button;
+export default SignUpButton;
