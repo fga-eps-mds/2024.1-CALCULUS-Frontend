@@ -64,7 +64,7 @@ export default function SignUp() {
                 </div>
                 
                 <form className={cadastro1.form} onSubmit={() => alert('Submitting!')}>
-                    <input type='email' placeholder='Email' />
+                    <input type='email' placeholder='Email' required/>
                     <br/>
                     <SignUpButton
                         label="Sign Up"
@@ -72,7 +72,7 @@ export default function SignUp() {
                     />
                 </form>
                 
-                <Link className={cadastro1.link} href='https://www.google.com' title='Log In'>Já possui cadastro?Log in</Link>
+                <Link className={cadastro1.link} href='' title='Log In'>Já possui cadastro?Log in</Link>
             </div>
         </div>
     </body>
