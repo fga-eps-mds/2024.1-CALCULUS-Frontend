@@ -1,113 +1,110 @@
-"use client";
+import React from 'react';
+import { Box, Button, TextField, Typography, IconButton, Link } from '@mui/material';
+import { Apple } from '@mui/icons-material'; 
+import Image from 'next/image';
+import maoCerebro from '../../public/mao_cerebro.png';
+import googleIcon from '../../public/googleIcon.svg';
+import microsoftIcon from '../../public/microsoftIcon.svg';
 
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-const defaultTheme = createTheme();
-
-export default function SignUp() {
-  const handleSubmit = (event: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-
+const Cadastro = () => {
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h5" align="center">
-            Cadatre-se gratuitamente e descubra sua jornada de aprendizado.
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="UserName"
-                  label="UserName"
-                  name="UserName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              
-              
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                
-              </Grid>
-            </Grid>
-          </Box>
+    <Box 
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      padding={2}
+      bgcolor="#fffafa"
+    >
+      <Box 
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        width="100%"
+        maxWidth="800px"
+        padding={2}
+      >
+        <Box display="flex" justifyContent="center" alignItems="center" flex={1} sx={{ marginRight: 15 }}>
+          <Image 
+            src={maoCerebro}
+            alt="Imagem Sign Up"
+            width={500}
+            height={500}
+          />
         </Box>
-        
-        <Grid>
-          <Link href="#login" variant="body2" align="center">
-            Já tem uma conta? faça login
-          </Link>
-        </Grid>
-        
-      </Container>
-    </ThemeProvider>
+        <Box display="flex" flexDirection="column" alignItems="center" flex={1}>
+          <Typography variant="h5" gutterBottom align="center">
+            Cadastre-se gratuitamente e descubra sua jornada de aprendizado.
+          </Typography>
+          <Box display="flex" gap={1} mb={2}>
+            <IconButton size="large" color="inherit">
+            <Image 
+                src={googleIcon}
+                alt="Google Icon"
+                width={20}
+                height={20}
+              />
+            </IconButton>
+            <IconButton size="large" color="inherit">
+            <Image 
+                src={microsoftIcon}
+                alt="Microsoft Icon"
+                width={20}
+                height={20}
+              />
+            </IconButton>
+            <IconButton size="large" color="inherit">
+              <Apple />
+            </IconButton>
+          </Box>
+          <TextField 
+            fullWidth 
+            variant="outlined" 
+            label="Email" 
+            margin="normal" 
+            sx={{ bgcolor: 'white' }}
+          />
+          <Box display="flex" gap={2} width="100%">
+            <TextField 
+              fullWidth 
+              variant="outlined" 
+              label="Name" 
+              margin="normal" 
+              sx={{ bgcolor: 'white' }}
+            />
+            <TextField 
+              fullWidth 
+              variant="outlined" 
+              label="Username" 
+              margin="normal" 
+              sx={{ bgcolor: 'white' }}
+            />
+          </Box>
+          <TextField 
+            fullWidth 
+            variant="outlined" 
+            label="Password" 
+            margin="normal" 
+            type="password" 
+            sx={{ bgcolor: 'white' }}
+          />
+          <Button 
+            fullWidth 
+            variant="contained" 
+            color="primary" 
+            sx={{ bgcolor: '#000', mt: 2 }}
+          >
+            Sign up
+          </Button>
+          <Link href="/login" underline="hover" color="inherit" sx={{ mt: 2 }}>
+            <Typography variant="body2">
+              Já possui cadastro? Log in
+            </Typography>
+          </Link>  
+        </Box>
+      </Box>
+    </Box>
   );
-}
+};
+
+export default Cadastro;
