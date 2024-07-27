@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import SearchBar from '../components/admin/SearchBar';
 import UserTable from '../components/admin/UserTable';
+import Sidebar from '../components/Sidebar';
 
 type User = {
   id: number;
@@ -35,12 +36,17 @@ export default function UserManagement() {
   );
 
   return (
-    <Box className="bg-white min-h-screen flex flex-col items-center p-4">
-      <Box sx={{ maxWidth: '800px', width: '100%' }}>
-        <Box sx={{ mb: 4 }}>
-          <SearchBar value={searchQuery} onChange={handleSearchChange} />
+    <Box className="flex min-h-screen">
+      <div className="w-64 bg-white shadow-lg">
+      <Sidebar />
+      </div>
+      <Box className="flex-1 p-4 ml-64">
+        <Box sx={{ maxWidth: '800px', width: '100%' }}>
+          <Box sx={{ mb: 4 }}>
+            <SearchBar value={searchQuery} onChange={handleSearchChange} />
+          </Box>
+          <UserTable users={filteredUsers} onRoleChange={handleRoleChange} />
         </Box>
-        <UserTable users={filteredUsers} onRoleChange={handleRoleChange} />
       </Box>
     </Box>
   );
