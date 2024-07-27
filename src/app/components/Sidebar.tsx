@@ -1,28 +1,33 @@
 import Link from 'next/link';
 import HomeIcon from '@mui/icons-material/Home';
-import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import { Drawer, IconButton, Box } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
-const Siderbar = () => {
-    return (
-        <div className="h-screen w-80 bg-white text-black fixed shadow-lg">
-            <div className="p-4">
-                <ul>
-                    <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
-                        <CalendarViewMonthIcon className="h-5 w-5 mr-2"/>
-                        <Link href="#" className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
-                            Painel de Administrador
-                        </Link>
-                    </li>
-                    <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
-                        <HomeIcon className="h-5 w-5 mr-2" />
-                        <Link href="#" className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
-                            Home
-                        </Link>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    );
+const Sidebar = ({ open, handleDrawerOpen }) => {
+  return (
+    <Drawer anchor="left" open={open} onClose={handleDrawerOpen}>
+      <Box sx={{ width: 250 }}>
+        <IconButton onClick={handleDrawerOpen}>
+          <CloseIcon />
+        </IconButton>
+        <ul>
+          <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
+            <DashboardIcon className="h-5 w-5 mr-2" />
+            <Link href="/admin" className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
+              Painel de Administrador
+            </Link>
+          </li>
+          <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
+            <HomeIcon className="h-5 w-5 mr-2" />
+            <Link href="/" className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
+              Home
+            </Link>
+          </li>
+        </ul>
+      </Box>
+    </Drawer>
+  );
 };
 
-export default Siderbar;
+export default Sidebar;
