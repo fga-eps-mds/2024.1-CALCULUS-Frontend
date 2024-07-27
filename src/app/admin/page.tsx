@@ -1,10 +1,10 @@
 "use client";
 
+import Layout from '../components/ClientLayout';
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import SearchBar from '../components/admin/SearchBar';
 import UserTable from '../components/admin/UserTable';
-import Sidebar from '../components/Sidebar';
 
 type User = {
   id: number;
@@ -37,16 +37,11 @@ export default function UserManagement() {
 
   return (
     <Box className="flex min-h-screen">
-      <div className="w-64 bg-white shadow-lg">
-      <Sidebar />
-      </div>
-      <Box className="flex-1 p-4 ml-64">
-        <Box sx={{ maxWidth: '800px', width: '100%' }}>
-          <Box sx={{ mb: 4 }}>
-            <SearchBar value={searchQuery} onChange={handleSearchChange} />
-          </Box>
-          <UserTable users={filteredUsers} onRoleChange={handleRoleChange} />
+      <Box className="flex-1 p-4" sx={{ maxWidth: '800px', width: '100%', margin: '0 auto' }}>
+        <Box sx={{ mb: 4 }}>
+          <SearchBar value={searchQuery} onChange={handleSearchChange} />
         </Box>
+        <UserTable users={filteredUsers} onRoleChange={handleRoleChange} />
       </Box>
     </Box>
   );
