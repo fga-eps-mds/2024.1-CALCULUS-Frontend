@@ -10,5 +10,5 @@ services:
     volumes:
       - ./src:/app/src
     env_file:
-      - .env
+      - .env.local
     
