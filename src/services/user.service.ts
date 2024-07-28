@@ -43,4 +43,4 @@ export const googleCallback = async () => {
 
 export const userSignOut = () => {
   signOut();
-}
+};
