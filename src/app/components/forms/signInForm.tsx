@@ -39,12 +39,14 @@ export async function SingInForm() {
     resolver: zodResolver(signinSchema),
   });
 
-
   return (
     <Box
       component="form"
       action={() => {
-        signInEmailPassword({ email: watch('email'), password: watch('password') });        
+        signInEmailPassword({
+          email: watch('email'),
+          password: watch('password'),
+        });
       }}
       className="grid gap-4 justify-center m-3"
     >
@@ -86,7 +88,9 @@ export async function SingInForm() {
         }}
       />
       <p className="text-[18px] font-light">
-        Esqueceu sua senha?<Link href="#" className="text-indigo-700 block">Recuperar senha
+        Esqueceu sua senha?
+        <Link href="#" className="text-indigo-700 block">
+          Recuperar senha
         </Link>
       </p>
       <Button

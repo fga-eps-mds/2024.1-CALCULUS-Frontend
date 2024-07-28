@@ -23,7 +23,11 @@ const MyAppBar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'black', fontWeight: 'bold' }}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, color: 'black', fontWeight: 'bold' }}
+          >
             Calculus
           </Typography>
         </Toolbar>

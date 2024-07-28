@@ -1,11 +1,15 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 import MyAppBar from './AppBar';
 import Sidebar from './Sidebar';
 import { Box, Toolbar } from '@mui/material';
 
-export default function ClientLayout({ children }: { children: React.ReactNode }) {
+export default function ClientLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleDrawerOpen = () => {

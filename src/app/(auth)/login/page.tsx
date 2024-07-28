@@ -8,7 +8,6 @@ import { auth } from '@/auth';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-
 export default async function LoginPage() {
   return (
     <Box className="h-screen w-screen flex justify-center items-center bg-[#F8F3F3] box-border gap-0">

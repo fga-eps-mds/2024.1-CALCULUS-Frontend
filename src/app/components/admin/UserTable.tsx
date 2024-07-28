@@ -1,7 +1,18 @@
-"use client";
+'use client';
 
 import React, { useState, MouseEvent } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Menu, MenuItem } from '@mui/material';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Menu,
+  MenuItem,
+} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 type User = {
@@ -49,7 +60,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onRoleChange }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {users.map(user => (
+          {users.map((user) => (
             <TableRow key={user.id}>
               <TableCell>{user.username}</TableCell>
               <TableCell>{user.email}</TableCell>
@@ -63,9 +74,15 @@ const UserTable: React.FC<UserTableProps> = ({ users, onRoleChange }) => {
                   open={Boolean(anchorEl) && selectedUser?.id === user.id}
                   onClose={handleMenuClose}
                 >
-                  <MenuItem onClick={() => handleRoleChange('admin')}>Admin</MenuItem>
-                  <MenuItem onClick={() => handleRoleChange('professor')}>Professor</MenuItem>
-                  <MenuItem onClick={() => handleRoleChange('aluno')}>Aluno</MenuItem>
+                  <MenuItem onClick={() => handleRoleChange('admin')}>
+                    Admin
+                  </MenuItem>
+                  <MenuItem onClick={() => handleRoleChange('professor')}>
+                    Professor
+                  </MenuItem>
+                  <MenuItem onClick={() => handleRoleChange('aluno')}>
+                    Aluno
+                  </MenuItem>
                 </Menu>
               </TableCell>
             </TableRow>

@@ -14,7 +14,7 @@ export const getUsers = async () => {
 export const updateUserRole = async (userId: string, newRole: string) => {
   try {
     const response = await axios.patch(`${API_URL}/users/${userId}/role`, {
-      role: newRole
+      role: newRole,
     });
     return response.data;
   } catch (error) {

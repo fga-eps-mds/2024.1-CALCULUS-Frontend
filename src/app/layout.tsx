@@ -4,8 +4,8 @@ import '../styles/globals.css';
 import SessionProvider from '@/app/components/sessionProvider';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import "./globals.css";
-import ClientLayout from "./components/ClientLayout";
+import './globals.css';
+import ClientLayout from './components/ClientLayout';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,7 +25,7 @@ export default async function RootLayout({
         <ToastContainer />
         <SessionProvider>
           <ClientLayout>{children}</ClientLayout>
-          </SessionProvider>
+        </SessionProvider>
       </body>
     </html>
   );
