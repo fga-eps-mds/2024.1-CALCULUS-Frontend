@@ -56,15 +56,15 @@ export const config = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    // async signIn({ account, profile }) {
-    //   console.log(
-    //     `Account: ${account?.provider} Profile: ${profile?.email} ${account?.id_token}`,
-    //   );
-    //   if (account?.provider === 'google') {
-    //     return `${process.env.NEXT_PUBLIC_API_URL}/auth/google/callback`;
-    //   }
-    //   return true;
-    // },
+    async signIn({ account, profile }) {
+      console.log(
+        `Account: ${account?.provider} Profile: ${profile?.email} ${account?.id_token}`,
+      );
+      if (account?.provider === 'google') {
+        return `${process.env.NEXT_PUBLIC_API_URL}/auth/google/callback`;
+      }
+      return true;
+    },
 
     async jwt({ token, user, account }) {
       console.log('jwt => ', token, user, account);

@@ -1,1 +1,1 @@
-export const privateRoutes = ['/home'];
+export const privateRoutes = ['/admin'];

@@ -24,7 +24,7 @@ const Sidebar = ({ open, handleDrawerOpen }) => {
           <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
             <HomeIcon className="h-5 w-5 mr-2" />
             <Link
-              href="/home"
+              href="/"
               className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200"
             >
               Home

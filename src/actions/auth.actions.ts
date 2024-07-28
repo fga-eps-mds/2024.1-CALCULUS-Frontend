@@ -1,5 +1,5 @@
 'use server';
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 
 export async function signInEmailPassword(data: any) {
   return await signIn('credentials', {
@@ -9,6 +9,10 @@ export async function signInEmailPassword(data: any) {
   });
 }
 
-export async function authGoogle(data: any) {
+export async function authGoogle() {
   return await signIn('google');
+}
+
+export async function endSession() {
+  return await signOut();
 }

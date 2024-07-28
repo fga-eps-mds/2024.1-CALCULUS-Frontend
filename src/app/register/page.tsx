@@ -1,18 +1,14 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-  IconButton,
-  Link,
-} from '@mui/material';
+import { Box, Typography, IconButton, Link, Grid } from '@mui/material';
 import { Apple } from '@mui/icons-material';
 import Image from 'next/image';
 import maoCerebro from '@/public/mao_cerebro.png';
 import googleIcon from '@/public/googleIcon.svg';
 import microsoftIcon from '../../public/microsoftIcon.svg';
 import { SingUpForm } from '../components/forms/signupForm';
+import { GoogleAuthButton } from '../components/buttons/googleAuth.button';
+import { MicrosoftAuthButton } from '../components/buttons/microsoftAuth.button';
+import { AppleAuthButton } from '../components/buttons/appleAuth.button';
 
 export default function SingUpPage() {
   return (
@@ -47,30 +43,30 @@ export default function SingUpPage() {
           />
         </Box>
         <Box display="flex" flexDirection="column" alignItems="center" flex={1}>
-          <Typography variant="h5" gutterBottom align="center">
+          <Typography
+            variant="h5"
+            gutterBottom
+            align="center"
+            className="color-black"
+          >
             Cadastre-se gratuitamente e descubra sua jornada de aprendizado.
           </Typography>
-          <Box display="flex" gap={1} mb={2}>
-            <IconButton size="large" color="inherit">
-              <Image
-                src={googleIcon}
-                alt="Google Icon"
-                width={20}
-                height={20}
-              />
-            </IconButton>
-            <IconButton size="large" color="inherit">
-              <Image
-                src={microsoftIcon}
-                alt="Microsoft Icon"
-                width={20}
-                height={20}
-              />
-            </IconButton>
-            <IconButton size="large" color="inherit">
-              <Apple />
-            </IconButton>
-          </Box>
+          <Grid
+            container
+            spacing={1}
+            justifyContent="center"
+            className="mt-2 mb-2"
+          >
+            <Grid item>
+              <GoogleAuthButton />
+            </Grid>
+            <Grid item>
+              <MicrosoftAuthButton />
+            </Grid>
+            {/* <Grid item>
+          <AppleAuthButton />
+        </Grid> */}
+          </Grid>
           <SingUpForm />
           <Link href="/login" underline="hover" color="inherit" sx={{ mt: 2 }}>
             <Typography variant="body2">Já possui cadastro? Log in</Typography>

@@ -1,10 +1,29 @@
+'use client';
+
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import roboProfessor from '../public/robo_professor.png';
+import { auth } from '@/auth';
+import { endSession } from '@/actions/auth.actions';
+import { Button } from '@mui/material';
 
-export default function LandingPage() {
-  return (
+export default async function LandingPage() {
+  const session = await auth();
+  console.log('session home', session);
+  return session ? (
+    <>
+      <p className=" text-black font-bold">Logado</p>
+      <Button
+        onClick={() => {
+          endSession();
+        }}
+        className="text-red-500 font-bold"
+      >
+        Deslogar
+      </Button>
+    </>
+  ) : (
     <div className="min-h-screen flex flex-col bg-[#fffafa]">
       <header className="w-full flex justify-between p-4">
         <h1 className="text-4xl font-bold text-[#1F1F1F]">Calculus</h1>
