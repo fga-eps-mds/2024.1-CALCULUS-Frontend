@@ -35,7 +35,7 @@ export default function LandingPage() {
               em diversão.
             </p>
             <div className="flex justify-center md:justify-start">
-              <Link href="/signup">
+              <Link href="/register">
                 <button className="bg-orange-500 text-white px-8 py-4 rounded-full shadow-md hover:shadow-lg transition duration-300 font-bold">
                   Comece aqui
                 </button>

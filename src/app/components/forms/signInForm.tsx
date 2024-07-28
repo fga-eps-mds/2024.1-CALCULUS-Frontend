@@ -18,8 +18,9 @@ import { useRouter } from 'next/router';
 import { signIn } from '@/auth';
 import { useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { signInEmailPassword } from '@/actions/auth.actions';
 
-export function SingInForm() {
+export async function SingInForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => {
@@ -38,20 +39,13 @@ export function SingInForm() {
     resolver: zodResolver(signinSchema),
   });
 
-  const onSubmit: SubmitHandler<SigninData> = async (data) => {
-    alert(JSON.stringify(data, null, 2));
-    // const res = await signIn('credentials', {
-    //   email: data.email,
-    //   password: data.password,
-    //   redirect: true,
-    //   redirectTo: '/',
-    // });
-  };
 
   return (
     <Box
       component="form"
-      onSubmit={handleSubmit(onSubmit)}
+      action={() => {
+        signInEmailPassword({ email: watch('email'), password: watch('password') });        
+      }}
       className="grid gap-4 justify-center m-3"
     >
       <TextField

@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Grid } from '@mui/material';
 import { SingInForm } from '@/app/components/forms/signInForm';

@@ -55,9 +55,6 @@ export const config = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: '/login',
-  },
   callbacks: {
     // async signIn({ account, profile }) {
     //   console.log(
@@ -116,13 +113,11 @@ export const config = {
     authorized({ request, auth }) {
       const { pathname } = request.nextUrl;
 
-      // get the route name from the url such as "/about"
       const searchTerm = request.nextUrl.pathname
         .split('/')
         .slice(0, 2)
         .join('/');
 
-      // if the private routes array includes the search term, we ask authorization here and forward any unauthorized users to the login page
       if (privateRoutes.includes(searchTerm)) {
         console.log(
           `${!!auth ? 'Can' : 'Cannot'} access private route ${searchTerm}`,
@@ -132,7 +127,7 @@ export const config = {
       } else if (
         pathname.startsWith('/login') ||
         pathname.startsWith('/forgot-password') ||
-        pathname.startsWith('/signup')
+        pathname.startsWith('/register')
       ) {
         const isLoggedIn = !!auth;
 
@@ -148,5 +143,6 @@ export const config = {
   },
   debug: process.env.NODE_ENV === 'development',
 } satisfies NextAuthConfig;
+
 
 export const { handlers, signIn, signOut, auth } = NextAuth(config);

@@ -26,6 +26,7 @@ export function SingUpForm() {
     } else {
       toast.error(response.error);
     }
+    window.location.href = '/login';
   };
 
   return (
