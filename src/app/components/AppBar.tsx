@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Sidebar from './Sidebar';
 
-const MyAppBar = () => {
-  const [open, setOpen] = useState(false);
+interface MyAppBarProps {
+  handleDrawerOpen: () => void;
+  open: boolean;
+}
 
-  const handleDrawerOpen = () => {
-    setOpen(!open);
-  };
-
+const MyAppBar: React.FC<MyAppBarProps> = ({ handleDrawerOpen, open }) => {
   return (
     <>
       <AppBar position="fixed" sx={{ backgroundColor: 'white' }}>
