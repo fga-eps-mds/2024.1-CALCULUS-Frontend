@@ -1,10 +1,11 @@
 "use client";
 
 import Layout from '../components/ClientLayout';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import SearchBar from '../components/admin/SearchBar';
 import UserTable from '../components/admin/UserTable';
+import { getUsers } from '../services/apiService';
 
 type User = {
   id: number;
@@ -13,14 +14,22 @@ type User = {
   role: string;
 };
 
-const initialUsers: User[] = [
-  { id: 1, username: 'user1', email: 'user1@example.com', role: 'admin' },
-  { id: 2, username: 'user2', email: 'user2@example.com', role: 'aluno' },
-];
-
 export default function UserManagement() {
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [users, setUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const usersData = await getUsers();
+        setUsers(usersData);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const handleRoleChange = (user: User, newRole: string) => {
     setUsers(users.map(u => u.id === user.id ? { ...u, role: newRole } : u));
