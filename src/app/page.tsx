@@ -1,23 +1,25 @@
 'use client';
 
-import '../styles/positioning.css'; 
-import Button from './components/Button/Button';
+import { auth, signOut } from '@/auth';
+import { SignOutButton } from './components/buttons/signOutButton';
 
-const HomePage: React.FC = () => {
-  const handleClick = () => {
-    alert('Botão clicado!');
+export default async function Home() {
+  const session = await auth();
+
+  const handleSigout = () => {
+    console.log('handleSigout');
+    
+    signOut();
   };
 
-  return (
-    <div className="position-relative">
-      <Button 
-        label="Comece aqui"
-        onClick={handleClick}
-        className="position-custom" // Posiciona o botão com base nas unidades de viewport
-      />
-    </div>
-  );
-};
-
-export default HomePage;
-  
+  if (session) {
+    return (
+      <div className="position-relative">
+        <p>Nome: {session?.user.name}</p>
+        <p>Email: {session?.user.email}</p>
+        <SignOutButton/>
+      </div>
+    );
+  }
+  return <div className="position-relative">To na home deslogado meo</div>;
+}

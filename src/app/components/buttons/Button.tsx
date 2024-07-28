@@ -9,10 +9,10 @@ interface ButtonProps {
   className?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   label,
-  backgroundColor = '#FF4122', 
-  textColor = '#FFFAFA',     
+  backgroundColor = '#FF4122',
+  textColor = '#FFFAFA',
   shadowColor = '#C61A09',
   onClick,
   className = '',
@@ -21,7 +21,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       type="button"
       onClick={onClick}
-      className={`btn-custom ${className}`} 
+      className={`btn-custom ${className}`}
       style={{
         backgroundColor,
         color: textColor,
