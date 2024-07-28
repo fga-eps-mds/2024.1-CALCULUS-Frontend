@@ -24,14 +24,7 @@ const LoginForm: React.FC = () => {
 
       <SingInForm />
 
-      <p className="text-[18px] font-medium">
-        Esqueceu sua senha?
-        <Link href="#" className="text-indigo-700 block">
-          Recuperar Senha
-        </Link>
-      </p>
-
-      <p className="text-[18px] font-medium">
+      <p className="text-[18px] font-light">
         Novo Usuário?
         <Link href="/register" className="text-indigo-700 block">
           Cadastre-se

@@ -5,6 +5,7 @@ import {
   Button,
   IconButton,
   InputAdornment,
+  Link,
   TextField,
 } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -90,6 +91,10 @@ export function SingInForm() {
           ),
         }}
       />
+      <p className="text-[18px] font-light">
+        Esqueceu sua senha?<Link href="#" className="text-indigo-700 block">Recuperar senha
+        </Link>
+      </p>
       <Button
         fullWidth
         variant="contained"
