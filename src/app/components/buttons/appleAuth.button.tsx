@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import appleIcon from '@/public/apple.svg';
-import { signIn } from '@/auth';
 import { Button } from '@mui/material';
 
 export function AppleAuthButton() {

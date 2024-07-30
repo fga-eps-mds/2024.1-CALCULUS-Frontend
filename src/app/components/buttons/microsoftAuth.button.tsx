@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import microsoftIcon from '@/public/microsoft.svg';
-import { signIn } from '@/auth';
 import { Button } from '@mui/material';
 
 export function MicrosoftAuthButton() {

@@ -1,14 +1,13 @@
-import NextAuth from 'next-auth';
-import type { NextAuthConfig } from 'next-auth';
+import { Awaitable, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { loginWithEmailAndPassword } from '@/services/user.service';
 import { privateRoutes } from '@/contains/constants';
-import Google from 'next-auth/providers/google';
+import GoogleProvider from 'next-auth/providers/google';
+import { JWT } from 'next-auth/jwt';
 
-export const config = {
-  trustHost: true,
+export const authOptions: NextAuthOptions = {
   providers: [
-    Google({
+    GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       authorization: {
@@ -37,8 +36,8 @@ export const config = {
         console.log('req', req);
 
         const res = await loginWithEmailAndPassword(
-          credentials.email as string,
-          credentials.password as string,
+          credentials!.email as string,
+          credentials!.password as string,
         );
         if (res?.status !== 201) {
           throw new Error(res?.data.message);
@@ -55,6 +54,7 @@ export const config = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+
   callbacks: {
     async signIn({ account, profile }) {
       console.log(
@@ -88,15 +88,13 @@ export const config = {
       ) {
         const { refreshToken, ...rest } = token;
 
-        return rest;
+        return rest as Awaitable<JWT>;
       }
       return null;
-      // return await refreshAccessToken(token)
     },
 
     async session({ session, token }) {
       console.log('session => ', session);
-
       return {
         ...session,
         user: {
@@ -141,7 +139,4 @@ export const config = {
       return true;
     },
   },
-  debug: process.env.NODE_ENV === 'development',
-} satisfies NextAuthConfig;
-
-export const { handlers, signIn, signOut, auth } = NextAuth(config);
+};

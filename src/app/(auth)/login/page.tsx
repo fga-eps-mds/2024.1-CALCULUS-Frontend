@@ -3,10 +3,7 @@
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import calcuclusLogo from '@/public/calculus-logo.svg';
-import LoginForm from '@/app/components/loginForm';
-import { auth } from '@/auth';
-import { useEffect } from 'react';
-import { toast } from 'react-toastify';
+import LoginComponent from '@/app/components/login.component';
 
 export default async function LoginPage() {
   return (
@@ -22,7 +19,7 @@ export default async function LoginPage() {
           />
           <p className="text-[32px] font-bold">Login</p>
         </Box>
-        <LoginForm />
+        <LoginComponent />
       </Box>
     </Box>
   );
