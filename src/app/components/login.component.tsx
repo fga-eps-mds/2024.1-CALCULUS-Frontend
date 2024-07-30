@@ -16,9 +16,9 @@ const LoginComponent: React.FC = () => {
         <Grid item>
           <MicrosoftAuthButton />
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <AppleAuthButton />
-        </Grid>
+        </Grid> */}
       </Grid>
 
       <SingInForm />

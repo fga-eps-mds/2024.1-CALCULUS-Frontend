@@ -21,6 +21,10 @@ export const authOptions: NextAuthOptions = {
     }),
     CredentialsProvider({
       credentials: {
+        token: {
+          label: 'token',
+          type: 'text',
+        },
         email: {
           label: 'email',
           type: 'email',
@@ -34,6 +38,20 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials, req) {
         console.log('credentials', credentials);
         console.log('req', req);
+        if (credentials!.token) {
+          console.log("Eu nasci")
+        const token = credentials!.token;
+        const decodedAccessToken = JSON.parse(
+          Buffer.from(token!.split('.')[1], 'base64').toString(),
+        );
+        const user = {
+          id: decodedAccessToken['id'],
+          name: decodedAccessToken['name'],
+          email: decodedAccessToken['email'],
+          accessToken: token,
+        }
+        return user
+        }
 
         const res = await loginWithEmailAndPassword(
           credentials!.email as string,
