@@ -1,11 +1,9 @@
-'use client';
-
 import { Box, Button } from '@mui/material';
 import { signOut } from 'next-auth/react';
 
 export function SignOutButton() {
-  const handleClick = () => {
-    signOut();
+  const handleClick = async () => {
+    await signOut();
     window.location.href = '/';
   };
   return (

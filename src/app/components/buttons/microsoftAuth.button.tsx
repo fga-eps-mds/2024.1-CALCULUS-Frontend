@@ -3,11 +3,11 @@
 import Image from 'next/image';
 import microsoftIcon from '@/public/microsoft.svg';
 import { Button } from '@mui/material';
+import { signIn } from 'next-auth/react';
 
 export function MicrosoftAuthButton() {
   const handleClick = () => {
-    alert('clicked m');
-    //signIn('microsoft');
+    signIn('azure-ad');
   };
 
   return (

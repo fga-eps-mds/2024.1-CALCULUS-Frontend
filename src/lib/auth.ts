@@ -3,10 +3,24 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { loginWithEmailAndPassword } from '@/services/user.service';
 import { privateRoutes } from '@/contains/constants';
 import GoogleProvider from 'next-auth/providers/google';
+import AzureADProvider from 'next-auth/providers/azure-ad';
 import { JWT } from 'next-auth/jwt';
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    AzureADProvider({
+      clientId: process.env.MICROSOFT_CLIENT_ID!,
+      clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
+      tenantId: process.env.MICROSOFT_TENANT_ID!,
+      authorization: {
+        params: {
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code',
+          request_uri: `${process.env.NEXT_PUBLIC_API_URL!}/auth/microsoft/callback`,
+        },
+      },
+    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
@@ -39,18 +53,18 @@ export const authOptions: NextAuthOptions = {
         console.log('credentials', credentials);
         console.log('req', req);
         if (credentials!.token) {
-          console.log("Eu nasci")
-        const token = credentials!.token;
-        const decodedAccessToken = JSON.parse(
-          Buffer.from(token!.split('.')[1], 'base64').toString(),
-        );
-        const user = {
-          id: decodedAccessToken['id'],
-          name: decodedAccessToken['name'],
-          email: decodedAccessToken['email'],
-          accessToken: token,
-        }
-        return user
+          console.log('Eu nasci');
+          const token = credentials!.token;
+          const decodedAccessToken = JSON.parse(
+            Buffer.from(token!.split('.')[1], 'base64').toString(),
+          );
+          const user = {
+            id: decodedAccessToken['id'],
+            name: decodedAccessToken['name'],
+            email: decodedAccessToken['email'],
+            accessToken: token,
+          };
+          return user;
         }
 
         const res = await loginWithEmailAndPassword(
@@ -81,6 +95,9 @@ export const authOptions: NextAuthOptions = {
       if (account?.provider === 'google') {
         return `${process.env.NEXT_PUBLIC_API_URL}/auth/google/callback`;
       }
+      if (account?.provider === 'azure-ad') {
+        return `${process.env.NEXT_PUBLIC_API_URL}/auth/microsoft/callback`;
+      }
       return true;
     },
 
@@ -104,7 +121,7 @@ export const authOptions: NextAuthOptions = {
         token.accessTokenExpires &&
         Date.now() < Number(token.accessTokenExpires)
       ) {
-        const { refreshToken, ...rest } = token;
+        const { ...rest } = token;
 
         return rest as Awaitable<JWT>;
       }

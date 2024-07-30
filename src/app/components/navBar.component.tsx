@@ -2,7 +2,7 @@ import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Sidebar from './sidebar.component';
-import { SignOutButton } from './buttons/singOut.button';
+import { SignOutButton } from './buttons/signOut.button';
 
 interface NavBarProps {
   handleDrawerOpen: () => void;

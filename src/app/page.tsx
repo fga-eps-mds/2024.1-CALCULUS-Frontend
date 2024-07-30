@@ -4,14 +4,14 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import roboProfessor from '../public/robo_professor.png';
-import { SignOutButton } from './components/buttons/singOut.button';
+import { SignOutButton } from './components/buttons/signOut.button';
 
 import { useSession } from 'next-auth/react';
 
 export default function LandingPage() {
   const session = useSession();
 
-  if(session.data) {
+  if (session.data) {
     window.location.href = '/home';
   }
 

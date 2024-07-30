@@ -24,9 +24,13 @@ export default function ClientLayout({
 
   return (
     <Box component="main">
-        {session.data && <NavBar handleDrawerOpen={handleDrawerOpen} open={sidebarOpen} />}
-        {session.data && <Sidebar open={sidebarOpen} handleDrawerOpen={handleDrawerClose} />}
-        {children}
-      </Box>
+      {session.data && (
+        <NavBar handleDrawerOpen={handleDrawerOpen} open={sidebarOpen} />
+      )}
+      {session.data && (
+        <Sidebar open={sidebarOpen} handleDrawerOpen={handleDrawerClose} />
+      )}
+      {children}
+    </Box>
   );
 }

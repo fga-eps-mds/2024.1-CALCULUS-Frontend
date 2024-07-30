@@ -12,7 +12,7 @@ interface SideBarProps {
   open: boolean;
 }
 
-const Sidebar : React.FC<SideBarProps> =  ({ handleDrawerOpen, open }) => {
+const Sidebar: React.FC<SideBarProps> = ({ handleDrawerOpen, open }) => {
   const session = useSession();
 
   return (
@@ -22,15 +22,18 @@ const Sidebar : React.FC<SideBarProps> =  ({ handleDrawerOpen, open }) => {
           <CloseIcon />
         </IconButton>
         <ul>
-          <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
-            <DashboardIcon className="h-5 w-5 mr-2" />
-            <Link
-              href="/admin"
-              className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200"
-            >
-              Painel de Administrador
-            </Link>
-          </li>
+          {session.data?.user.role === 'admin' && (
+            <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
+              <DashboardIcon className="h-5 w-5 mr-2" />
+
+              <Link
+                href="/admin"
+                className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200"
+              >
+                Painel de Administrador
+              </Link>
+            </li>
+          )}
           <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
             <HomeIcon className="h-5 w-5 mr-2" />
             <Link

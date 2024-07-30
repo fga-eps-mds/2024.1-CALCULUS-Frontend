@@ -16,7 +16,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { signIn, useSession } from 'next-auth/react';
-import { authOptions } from '@/auth';
+import { authOptions } from '@/lib/auth';
 
 export function SingInForm() {
   const session = useSession();
