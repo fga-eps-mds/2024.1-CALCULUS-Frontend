@@ -1,57 +1,133 @@
 "use client";
 
-import Layout from '../components/ClientLayout';
 import React, { useState, useEffect } from 'react';
-import { Box } from '@mui/material';
-import SearchBar from '../components/admin/SearchBar';
 import UserTable from '../components/admin/UserTable';
-import { getUsers } from '../services/apiService';
+import SearchBar from '../components/admin/SearchBar';
+import { getUsers, updateUserRole } from '@/services/user.service';
+import { CircularProgress, Box, Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography } from '@mui/material';
 
 type User = {
-  id: number;
+  _id: string;
   username: string;
   email: string;
   role: string;
 };
 
-export default function UserManagement() {
+const Admin: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const usersData = await getUsers();
-        setUsers(usersData);
-      } catch (error) {
-        console.error('Error fetching users:', error);
+        const response = await getUsers();
+        setUsers(response);
+        setFilteredUsers(response);
+      } catch (err) {
+        setError('Failed to fetch users');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchUsers();
   }, []);
 
-  const handleRoleChange = (user: User, newRole: string) => {
-    setUsers(users.map(u => u.id === user.id ? { ...u, role: newRole } : u));
-  };
+  useEffect(() => {
+    const lowercasedQuery = searchQuery.toLowerCase();
+    const newFilteredUsers = users.filter(user =>
+      user.username.toLowerCase().includes(lowercasedQuery) ||
+      user.email.toLowerCase().includes(lowercasedQuery)
+    );
+    setFilteredUsers(newFilteredUsers);
+  }, [searchQuery, users]);
 
-  const handleSearchChange = (query: string) => {
+  const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
 
-  const filteredUsers = users.filter(user => 
-    user.username.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    user.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>, user: User) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedUser(user);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedUser(null);
+    setSelectedRole(null);
+  };
+
+  const handleRoleSelect = (role: string) => {
+    setSelectedRole(role);
+    setDialogOpen(true);
+  };
+
+  const confirmRoleChange = async () => {
+    if (selectedUser && selectedRole) {
+      try {
+        await updateUserRole(selectedUser._id, selectedRole);
+        const updatedUsers = users.map(user =>
+          user._id === selectedUser._id ? { ...user, role: selectedRole } : user
+        );
+        setUsers(updatedUsers);
+        setFilteredUsers(updatedUsers);
+        handleMenuClose();
+      } catch (err) {
+        setError('Failed to update user role');
+      } finally {
+        setDialogOpen(false);
+      }
+    }
+  };
+
+  const cancelRoleChange = () => {
+    setDialogOpen(false);
+  };
+
+  if (loading) return <CircularProgress />;
+  if (error) return <div>{error}</div>;
 
   return (
-    <Box className="flex min-h-screen">
-      <Box className="flex-1 p-4" sx={{ maxWidth: '800px', width: '100%', margin: '0 auto' }}>
-        <Box sx={{ mb: 4 }}>
-          <SearchBar value={searchQuery} onChange={handleSearchChange} />
-        </Box>
-        <UserTable users={filteredUsers} onRoleChange={handleRoleChange} />
+    <Box sx={{ padding: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Box sx={{ width: '100%', maxWidth: 800, marginBottom: 2 }}>
+        <SearchBar value={searchQuery} onChange={handleSearch} />
       </Box>
+      <UserTable
+        users={filteredUsers}
+        anchorEl={anchorEl}
+        onMenuClick={handleMenuClick}
+        onMenuClose={handleMenuClose}
+        onRoleSelect={handleRoleSelect}
+      />
+
+      {/* Dialog de confirmação */}
+      <Dialog open={dialogOpen} onClose={cancelRoleChange}>
+        <DialogTitle>Confirmar Alteração de Role</DialogTitle>
+        <DialogContent>
+          {selectedUser && selectedRole && (
+            <Typography variant="h6">
+              {`Tornar ${selectedUser.username} ${selectedRole}`}
+            </Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cancelRoleChange} color="error">
+            Cancelar
+          </Button>
+          <Button onClick={confirmRoleChange} color="primary">
+            Confirmar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
-}
+};
+
+export default Admin;
