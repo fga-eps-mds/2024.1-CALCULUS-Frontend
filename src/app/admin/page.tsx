@@ -1,6 +1,6 @@
 'use client';
 
-import Layout from '../components/ClientLayout';
+import Layout from '../components/clientLayout';
 import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import SearchBar from '../components/admin/SearchBar';

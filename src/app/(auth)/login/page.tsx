@@ -3,12 +3,9 @@
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import calcuclusLogo from '@/public/calculus-logo.svg';
-import LoginForm from '@/app/components/loginForm';
-import { auth } from '@/auth';
-import { useEffect } from 'react';
-import { toast } from 'react-toastify';
+import LoginComponent from '@/app/components/login.component';
 
-export default async function LoginPage() {
+export default function LoginPage() {
   return (
     <Box className="h-screen w-screen flex justify-center items-center bg-[#F8F3F3] box-border gap-0">
       <Box className="flex flex-col text-center box-border gap-3 max-h-[900px] justify-self-center">
@@ -22,7 +19,7 @@ export default async function LoginPage() {
           />
           <p className="text-[32px] font-bold">Login</p>
         </Box>
-        <LoginForm />
+        <LoginComponent />
       </Box>
     </Box>
   );

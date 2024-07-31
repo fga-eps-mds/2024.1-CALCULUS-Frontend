@@ -1,14 +1,27 @@
-import NextAuth from 'next-auth';
-import type { NextAuthConfig } from 'next-auth';
+import { Awaitable, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { loginWithEmailAndPassword } from '@/services/user.service';
 import { privateRoutes } from '@/contains/constants';
-import Google from 'next-auth/providers/google';
+import GoogleProvider from 'next-auth/providers/google';
+import AzureADProvider from 'next-auth/providers/azure-ad';
+import { JWT } from 'next-auth/jwt';
 
-export const config = {
-  trustHost: true,
+export const authOptions: NextAuthOptions = {
   providers: [
-    Google({
+    AzureADProvider({
+      clientId: process.env.MICROSOFT_CLIENT_ID!,
+      clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
+      tenantId: process.env.MICROSOFT_TENANT_ID!,
+      authorization: {
+        params: {
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code',
+          request_uri: `${process.env.NEXT_PUBLIC_API_URL!}/auth/microsoft/callback`,
+        },
+      },
+    }),
+    GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       authorization: {
@@ -22,6 +35,10 @@ export const config = {
     }),
     CredentialsProvider({
       credentials: {
+        token: {
+          label: 'token',
+          type: 'text',
+        },
         email: {
           label: 'email',
           type: 'email',
@@ -35,10 +52,24 @@ export const config = {
       async authorize(credentials, req) {
         console.log('credentials', credentials);
         console.log('req', req);
+        if (credentials!.token) {
+          console.log('Eu nasci');
+          const token = credentials!.token;
+          const decodedAccessToken = JSON.parse(
+            Buffer.from(token!.split('.')[1], 'base64').toString(),
+          );
+          const user = {
+            id: decodedAccessToken['id'],
+            name: decodedAccessToken['name'],
+            email: decodedAccessToken['email'],
+            accessToken: token,
+          };
+          return user;
+        }
 
         const res = await loginWithEmailAndPassword(
-          credentials.email as string,
-          credentials.password as string,
+          credentials!.email as string,
+          credentials!.password as string,
         );
         if (res?.status !== 201) {
           throw new Error(res?.data.message);
@@ -55,6 +86,7 @@ export const config = {
     }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
+
   callbacks: {
     async signIn({ account, profile }) {
       console.log(
@@ -62,6 +94,9 @@ export const config = {
       );
       if (account?.provider === 'google') {
         return `${process.env.NEXT_PUBLIC_API_URL}/auth/google/callback`;
+      }
+      if (account?.provider === 'azure-ad') {
+        return `${process.env.NEXT_PUBLIC_API_URL}/auth/microsoft/callback`;
       }
       return true;
     },
@@ -86,17 +121,13 @@ export const config = {
         token.accessTokenExpires &&
         Date.now() < Number(token.accessTokenExpires)
       ) {
-        const { refreshToken, ...rest } = token;
-
-        return rest;
+        return token as Awaitable<JWT>;
       }
-      return null;
-      // return await refreshAccessToken(token)
+      throw new Error('Token expired or invalid');
     },
 
     async session({ session, token }) {
       console.log('session => ', session);
-
       return {
         ...session,
         user: {
@@ -110,38 +141,5 @@ export const config = {
         error: token.error,
       };
     },
-    authorized({ request, auth }) {
-      const { pathname } = request.nextUrl;
-
-      const searchTerm = request.nextUrl.pathname
-        .split('/')
-        .slice(0, 2)
-        .join('/');
-
-      if (privateRoutes.includes(searchTerm)) {
-        console.log(
-          `${!!auth ? 'Can' : 'Cannot'} access private route ${searchTerm}`,
-        );
-        return !!auth;
-        // if the pathname starts with one of the routes below and the user is already logged in, forward the user to the home page
-      } else if (
-        pathname.startsWith('/login') ||
-        pathname.startsWith('/forgot-password') ||
-        pathname.startsWith('/register')
-      ) {
-        const isLoggedIn = !!auth;
-
-        if (isLoggedIn) {
-          return Response.redirect(new URL('/', request.nextUrl));
-        }
-
-        return true;
-      }
-
-      return true;
-    },
   },
-  debug: process.env.NODE_ENV === 'development',
-} satisfies NextAuthConfig;
-
-export const { handlers, signIn, signOut, auth } = NextAuth(config);
+};

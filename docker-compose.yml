@@ -4,11 +4,11 @@ services:
     restart: on-failure
     build: .
     ports:
-      - "4000:4000"
+      - "3000:3000"
     environment:
       - NODE_ENV=development  
     volumes:
       - ./src:/app/src
     env_file:
-      - .env.local
+      - .env
     

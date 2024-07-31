@@ -6,7 +6,7 @@ import { GoogleAuthButton } from '@/app/components/buttons/googleAuth.button';
 import { MicrosoftAuthButton } from '@/app/components/buttons/microsoftAuth.button';
 import { AppleAuthButton } from '@/app/components/buttons/appleAuth.button';
 
-const LoginForm: React.FC = () => {
+const LoginComponent: React.FC = () => {
   return (
     <>
       <Grid container spacing={1} justifyContent="center" className="mt-2 mb-2">
@@ -16,9 +16,9 @@ const LoginForm: React.FC = () => {
         <Grid item>
           <MicrosoftAuthButton />
         </Grid>
-        <Grid item>
+        {/* <Grid item>
           <AppleAuthButton />
-        </Grid>
+        </Grid> */}
       </Grid>
 
       <SingInForm />
@@ -33,4 +33,4 @@ const LoginForm: React.FC = () => {
   );
 };
 
-export default LoginForm;
+export default LoginComponent;

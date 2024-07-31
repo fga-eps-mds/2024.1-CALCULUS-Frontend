@@ -11,17 +11,26 @@ import {
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SigninData, signinSchema } from '@/lib/schemas/singin.schemas';
-import { SignInResponse } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
-import { signIn } from '@/auth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { signInEmailPassword } from '@/actions/auth.actions';
+import { signIn, useSession } from 'next-auth/react';
+import { authOptions } from '@/lib/auth';
 
-export async function SingInForm() {
+export function SingInForm() {
+  const session = useSession();
+  console.log('Session: ', session);
+
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    if (session.data) {
+      toast.success('Login efetuado com sucesso!');
+      setTimeout(() => {}, 1000);
+      window.location.href = '/';
+    }
+  }, [session.data]);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -43,9 +52,10 @@ export async function SingInForm() {
     <Box
       component="form"
       action={() => {
-        signInEmailPassword({
+        signIn('credentials', {
           email: watch('email'),
           password: watch('password'),
+          redirect: false,
         });
       }}
       className="grid gap-4 justify-center m-3"

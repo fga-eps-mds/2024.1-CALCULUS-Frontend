@@ -1,14 +1,15 @@
 import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Sidebar from './Sidebar';
+import Sidebar from './sidebar.component';
+import { SignOutButton } from './buttons/signOut.button';
 
-interface MyAppBarProps {
+interface NavBarProps {
   handleDrawerOpen: () => void;
   open: boolean;
 }
 
-const MyAppBar: React.FC<MyAppBarProps> = ({ handleDrawerOpen, open }) => {
+const NavBar: React.FC<NavBarProps> = ({ handleDrawerOpen, open }) => {
   return (
     <>
       <AppBar position="fixed" sx={{ backgroundColor: 'white' }}>
@@ -29,6 +30,7 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ handleDrawerOpen, open }) => {
           >
             Calculus
           </Typography>
+          <SignOutButton />
         </Toolbar>
       </AppBar>
       <Sidebar open={open} handleDrawerOpen={handleDrawerOpen} />
@@ -37,4 +39,4 @@ const MyAppBar: React.FC<MyAppBarProps> = ({ handleDrawerOpen, open }) => {
   );
 };
 
-export default MyAppBar;
+export default NavBar;

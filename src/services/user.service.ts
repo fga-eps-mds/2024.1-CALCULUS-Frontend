@@ -1,8 +1,5 @@
-import { NextResponse } from 'next/server';
 import api from './api.service';
 import { CalculusRequest } from '@/lib/interfaces/request.interface';
-import { User } from 'next-auth';
-import { signOut } from '@/auth';
 
 export const createUser = async (data: any): Promise<CalculusRequest> => {
   console.log(`Data: ${data}`);
@@ -39,8 +36,4 @@ export const loginWithEmailAndPassword = async (
 export const googleCallback = async () => {
   const response = await api.get('auth/google/callback');
   return response;
-};
-
-export const userSignOut = () => {
-  signOut();
 };
