@@ -21,7 +21,6 @@ const OAuthContent = () => {
         if (session) {
           setAuthenticated(true);
           setMessage('Login efetuado com sucesso! redirecionando');
-          await new Promise((resolve) => setTimeout(resolve, 5000));
           window.location.href = '/home';
         }
       };

@@ -10,7 +10,8 @@ import { useSession } from 'next-auth/react';
 
 export default function LandingPage() {
   const session = useSession();
-
+  console.log('Home session: ', session + " " + process.env.NEXT_PUBLIC_API_URL!);
+  
   if (session.data) {
     window.location.href = '/home';
   }
