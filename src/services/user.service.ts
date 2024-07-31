@@ -37,3 +37,26 @@ export const googleCallback = async () => {
   const response = await api.get('auth/google/callback');
   return response;
 };
+
+export const getUsers = async () => {
+  try {
+    const response = await api.get('/users');
+    console.log('Users:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch users:', error);
+    throw error;
+  }
+};
+
+export const updateUserRole = async (userId: string, newRole: string) => {
+  try {
+    const response = await api.patch(`/users/${userId}/role`, {
+      role: newRole,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to update user role:', error);
+    throw error;
+  }
+};
