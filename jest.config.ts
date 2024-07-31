@@ -12,7 +12,8 @@ const config: Config = {
   preset: 'ts-jest',
   moduleNameMapper: {
     // ...
-    '^@/components/(.*)$': '<rootDir>/app/components/$1',
+    '^@/components/(.*)$': '<rootDir>/src/app/components/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
   reporters: [
     'default',
