@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import UserTable from '../components/admin/UserTable';
-import SearchBar from '../components/admin/SearchBar';
+import UserTable from '@/app/components/admin/UserTable';
+import SearchBar from '@/app/components/admin/SearchBar';
 import { getUsers, updateUserRole } from '@/services/user.service';
 import { CircularProgress, Box, Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography } from '@mui/material';
 
