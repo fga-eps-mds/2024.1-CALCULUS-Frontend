@@ -10,7 +10,6 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
   return (
     <TextField
-      label=""
       variant="outlined"
       fullWidth
       value={value}

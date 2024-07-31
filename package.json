@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 4000",
     "format": "prettier --write \"src/**/*.tsx\" \"src/**/*.ts\" \"test/**/*.ts\"",
     "build": "next build",
-    "start": "next start -p 3000",
+    "start": "next start -p 4000",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest --passWithNoTests --no-cache --runInBand",
     "test:all": "npm run test -- --coverage --config jest.config.ts"
@@ -24,6 +24,7 @@
     "axios": "^1.7.2",
     "cookie": "^0.6.0",
     "dotenv": "^16.4.5",
+    "glob": "^9.3.5",
     "jsonwebtoken": "^9.0.2",
     "next": "^14.2.5",
     "next-auth": "^4.24.7",
