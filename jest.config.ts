@@ -1,18 +1,30 @@
-import type {Config} from 'jest';
+import type { Config } from 'jest';
 
+import nextJest from 'next/jest.js'
+ 
+const createJestConfig = nextJest({
+  dir: './src',
+})
+ 
 const config: Config = {
-    preset: 'ts-jest',
-    testEnvironment: 'node',
-    reporters: [
-        'default',
-        [
-            'jest-sonar',
-            {
-                outputDirectory: 'reports',
-                outputName: 'sonar-report.xml'
-            }
-        ]
-    ]
-};
+  coverageProvider: 'v8',
+  testEnvironment: 'jsdom',
+  preset: 'ts-jest',
+  moduleNameMapper: {
+    // ...
+    '^@/components/(.*)$': '<rootDir>/app/components/$1',
+  },
+  reporters: [
+    'default',
+    [
+      'jest-sonar',
+      {
+        outputDirectory: 'reports',
+        outputName: 'sonar-report.xml',
+      },
+    ],
+  ],
 
-export default config;
+}
+ 
+export default createJestConfig(config)
