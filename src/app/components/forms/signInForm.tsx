@@ -28,7 +28,7 @@ export function SingInForm() {
     if (session.data) {
       toast.success('Login efetuado com sucesso!');
       setTimeout(() => {}, 1000);
-      window.location.href = '/';
+      window.location.href = '/home';
     }
   }, [session.data]);
 

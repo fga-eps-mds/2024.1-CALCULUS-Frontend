@@ -32,8 +32,3 @@ export const loginWithEmailAndPassword = async (
     return null;
   }
 };
-
-export const googleCallback = async () => {
-  const response = await api.get('auth/google/callback');
-  return response;
-};
