@@ -3,14 +3,12 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import roboProfessor from '../public/robo_professor.png';
-import { SignOutButton } from './components/buttons/signOut.button';
+import roboProfessor from '@/public/robo_professor.png';
 
 import { useSession } from 'next-auth/react';
 
 export default function LandingPage() {
   const session = useSession();
-  console.log('Home session: ', session + " " + process.env.NEXT_PUBLIC_API_URL!);
   
   if (session.data) {
     window.location.href = '/home';
