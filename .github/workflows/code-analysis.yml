@@ -2,7 +2,7 @@ name: Análise de Código
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
   
     branches:
