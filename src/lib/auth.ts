@@ -121,11 +121,9 @@ export const authOptions: NextAuthOptions = {
         token.accessTokenExpires &&
         Date.now() < Number(token.accessTokenExpires)
       ) {
-        const { ...rest } = token;
-
-        return rest as Awaitable<JWT>;
+        return token as Awaitable<JWT>;
       }
-      return null;
+      throw new Error('Token expired or invalid');
     },
 
     async session({ session, token }) {
@@ -142,36 +140,6 @@ export const authOptions: NextAuthOptions = {
         },
         error: token.error,
       };
-    },
-    authorized({ request, auth }) {
-      const { pathname } = request.nextUrl;
-
-      const searchTerm = request.nextUrl.pathname
-        .split('/')
-        .slice(0, 2)
-        .join('/');
-
-      if (privateRoutes.includes(searchTerm)) {
-        console.log(
-          `${!!auth ? 'Can' : 'Cannot'} access private route ${searchTerm}`,
-        );
-        return !!auth;
-        // if the pathname starts with one of the routes below and the user is already logged in, forward the user to the home page
-      } else if (
-        pathname.startsWith('/login') ||
-        pathname.startsWith('/forgot-password') ||
-        pathname.startsWith('/register')
-      ) {
-        const isLoggedIn = !!auth;
-
-        if (isLoggedIn) {
-          return Response.redirect(new URL('/', request.nextUrl));
-        }
-
-        return true;
-      }
-
-      return true;
     },
   },
 };
