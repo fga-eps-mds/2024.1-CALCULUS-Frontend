@@ -1,7 +1,6 @@
 import { Awaitable, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { loginWithEmailAndPassword } from '@/services/user.service';
-import { privateRoutes } from '@/contains/constants';
 import GoogleProvider from 'next-auth/providers/google';
 import AzureADProvider from 'next-auth/providers/azure-ad';
 import { JWT } from 'next-auth/jwt';

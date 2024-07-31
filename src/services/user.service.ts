@@ -33,11 +33,6 @@ export const loginWithEmailAndPassword = async (
   }
 };
 
-export const googleCallback = async () => {
-  const response = await api.get('auth/google/callback');
-  return response;
-};
-
 export const getUsers = async () => {
   try {
     const response = await api.get('/users');
