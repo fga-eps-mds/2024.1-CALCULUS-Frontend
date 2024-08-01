@@ -3,13 +3,10 @@ name: Metrics and Release
 on:
     pull_request:
         branches:
-            - main
             - master
+            - main
         types: [closed]
-    push:
-        branches:
-            - main
-            - master
+
 
 jobs:
     release:
