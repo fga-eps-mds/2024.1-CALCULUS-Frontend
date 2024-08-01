@@ -2,7 +2,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import LandingPage from '../../src/app/page';
 import { useSession } from 'next-auth/react';
-import roboProfessor from '../../src/public/robo_professor.png';
 
 jest.mock('next-auth/react', () => ({
   useSession: jest.fn(),
