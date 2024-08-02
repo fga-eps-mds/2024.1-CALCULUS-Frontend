@@ -10,7 +10,7 @@ const config: Config = {
   testEnvironment: 'jsdom',
   preset: 'ts-jest',
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1', 
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
   reporters: [
     'default',
