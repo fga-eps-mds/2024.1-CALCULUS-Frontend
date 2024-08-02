@@ -2,8 +2,6 @@ import api from './api.service';
 import { CalculusRequest } from '@/lib/interfaces/request.interface';
 
 export const createUser = async (data: any): Promise<CalculusRequest> => {
-  console.log(`Data: ${data}`);
-
   try {
     const response = await api.post('users', data);
     return {
