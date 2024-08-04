@@ -31,6 +31,19 @@ export const loginWithEmailAndPassword = async (
   }
 };
 
+export const loginWithFederatedProvider = async (accessToken: string) => {
+  try {
+    const response = await api.post('auth/login/federated', {
+      accessToken,
+    });
+    console.log('Login response: ', response.data);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 export const getUsers = async () => {
   try {
     const response = await api.get('/users');

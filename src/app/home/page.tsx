@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { SignOutButton } from '../components/buttons/signOut.button';
+import { SignOutButton } from '@/components/ui/buttons/signOut.button';
 
 export default function HomePage() {
   const session = useSession();

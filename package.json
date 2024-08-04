@@ -25,13 +25,12 @@
     "cookie": "^0.6.0",
     "dotenv": "^16.4.5",
     "glob": "^9.3.5",
-    "jsonwebtoken": "^9.0.2",
     "next": "^14.2.5",
     "next-auth": "^4.24.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.1",
-    "react-toastify": "^10.0.5",
+    "sonner": "^1.5.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

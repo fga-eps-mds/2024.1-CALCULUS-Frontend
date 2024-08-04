@@ -1,14 +1,10 @@
 import React from 'react';
 import { Box, Typography, IconButton, Link, Grid } from '@mui/material';
-import { Apple } from '@mui/icons-material';
 import Image from 'next/image';
 import maoCerebro from '@/public/mao_cerebro.png';
-import googleIcon from '@/public/googleIcon.svg';
-import microsoftIcon from '../../public/microsoftIcon.svg';
-import { SingUpForm } from '../components/forms/signupForm';
-import { GoogleAuthButton } from '../components/buttons/googleAuth.button';
-import { MicrosoftAuthButton } from '../components/buttons/microsoftAuth.button';
-import { AppleAuthButton } from '../components/buttons/appleAuth.button';
+import { SingUpForm } from '@/components/forms/signUpForm';
+import { GoogleAuthButton } from '@/components/ui/buttons/googleAuth.button';
+import { MicrosoftAuthButton } from '@/components/ui/buttons/microsoftAuth.button';
 
 export default function SingUpPage() {
   return (

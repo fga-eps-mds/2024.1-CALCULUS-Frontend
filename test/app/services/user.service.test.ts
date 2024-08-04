@@ -1,6 +1,11 @@
 import api from '@/services/api.service';
-import { createUser, loginWithEmailAndPassword, getUsers, updateUserRole } from '@/services/user.service';
-import { UserRole } from '@/lib/enum/userRole.enum'; 
+import {
+  createUser,
+  loginWithEmailAndPassword,
+  getUsers,
+  updateUserRole,
+} from '@/services/user.service';
+import { UserRole } from '@/lib/enum/userRole.enum';
 
 jest.mock('@/services/api.service');
 const mockedApi = api as jest.Mocked<typeof api>;
@@ -15,7 +20,9 @@ describe('User Service', () => {
 
       const result = await updateUserRole(userId, newRole);
 
-      expect(mockedApi.patch).toHaveBeenCalledWith(`/users/${userId}/role`, { role: newRole });
+      expect(mockedApi.patch).toHaveBeenCalledWith(`/users/${userId}/role`, {
+        role: newRole,
+      });
       expect(result).toEqual(mockResponse.data);
     });
 
@@ -25,13 +32,21 @@ describe('User Service', () => {
       const mockError = new Error('Failed to update user role');
       mockedApi.patch.mockRejectedValueOnce(mockError);
 
-      await expect(updateUserRole(userId, newRole)).rejects.toThrow('Failed to update user role');
+      await expect(updateUserRole(userId, newRole)).rejects.toThrow(
+        'Failed to update user role',
+      );
     });
   });
 
   describe('createUser', () => {
     it('should create a user and return the user data', async () => {
-      const userData = { name: 'John Doe', email: 'john@example.com', username: 'johndoe', password: 'password123', role: UserRole.ALUNO };
+      const userData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        username: 'johndoe',
+        password: 'password123',
+        role: UserRole.ALUNO,
+      };
       const mockResponse = { data: userData };
       mockedApi.post.mockResolvedValueOnce(mockResponse);
 
@@ -42,8 +57,16 @@ describe('User Service', () => {
     });
 
     it('should handle errors and return an error message', async () => {
-      const userData = { name: 'John Doe', email: 'john@example.com', username: 'johndoe', password: 'password123', role: UserRole.ALUNO };
-      const mockError = { response: { data: { message: 'Error creating user' } } };
+      const userData = {
+        name: 'John Doe',
+        email: 'john@example.com',
+        username: 'johndoe',
+        password: 'password123',
+        role: UserRole.ALUNO,
+      };
+      const mockError = {
+        response: { data: { message: 'Error creating user' } },
+      };
       mockedApi.post.mockRejectedValueOnce(mockError);
 
       const result = await createUser(userData);
@@ -62,7 +85,10 @@ describe('User Service', () => {
 
       const result = await loginWithEmailAndPassword(email, password);
 
-      expect(mockedApi.post).toHaveBeenCalledWith('auth/login', { email, password });
+      expect(mockedApi.post).toHaveBeenCalledWith('auth/login', {
+        email,
+        password,
+      });
       expect(result).toEqual(mockResponse);
     });
 
@@ -74,7 +100,10 @@ describe('User Service', () => {
 
       const result = await loginWithEmailAndPassword(email, password);
 
-      expect(mockedApi.post).toHaveBeenCalledWith('auth/login', { email, password });
+      expect(mockedApi.post).toHaveBeenCalledWith('auth/login', {
+        email,
+        password,
+      });
       expect(result).toBeNull();
     });
   });
