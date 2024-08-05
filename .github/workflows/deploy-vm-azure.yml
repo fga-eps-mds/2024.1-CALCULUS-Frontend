@@ -24,9 +24,6 @@ jobs:
       
       - name: Checking working Dir
         run: pwd
-      
-      - name: Chaging working Dir
-        run: cd /home/Calculus-admin1/app
 
       - name: Run script on Azure VM
         run: |
