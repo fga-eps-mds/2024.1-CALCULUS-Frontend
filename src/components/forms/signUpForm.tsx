@@ -4,28 +4,35 @@ import { Box, Button, TextField } from '@mui/material';
 import { SignupData, signupSchema } from '@/lib/schemas/singup.schemas';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'react-toastify';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
+
 import { createUser } from '@/services/user.service';
+import { toast } from 'sonner';
 
 export function SingUpForm() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<SignupData>({
     resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit: SubmitHandler<SignupData> = async (data) => {
-    const response = await createUser(data);
-    console.log('Response: ', response);
+  const { mutate: server_createUser, isPending } = useMutation({
+    mutationFn: async (data: SignupData) => await createUser(data),
+    onSuccess: (data) => {
+      toast.success(data.data.message);
+      router.push('/login');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
-    if (!response.error) {
-      toast.success('Cadastrado com sucesso!');
-    } else {
-      toast.error(response.error);
-    }
+  const onSubmit: SubmitHandler<SignupData> = (data) => {
+    server_createUser(data);
   };
 
   return (
@@ -80,7 +87,7 @@ export function SingUpForm() {
         sx={{ bgcolor: '#000', mt: 2 }}
         type="submit"
       >
-        Sign up
+        {isPending ? 'Loading...' : 'Sign up'}
       </Button>
     </Box>
   );

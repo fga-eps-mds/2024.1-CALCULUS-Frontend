@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '../styles/globals.css';
-import SessionProvider from '@/components/sessionProvider';
-import 'react-toastify/dist/ReactToastify.css';
+import SessionProvider from '@/providers/session.provider';
 import './globals.css';
 import ClientLayout from '@/components/clientLayout';
 import { Toaster } from 'sonner';
+import ReactQueryProvider from '@/providers/reactQueryProvider.provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,8 +23,10 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider>
-          <ClientLayout>{children}</ClientLayout>
-          <Toaster />
+          <ClientLayout>
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+          </ClientLayout>
+          <Toaster position="top-center" closeButton richColors />
         </SessionProvider>
       </body>
     </html>

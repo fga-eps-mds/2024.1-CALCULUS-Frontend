@@ -44,10 +44,7 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials, req) {
-        console.log('credentials', credentials);
-        console.log('req', req);
         if (credentials!.token) {
-          console.log('Eu nasci');
           const token = credentials!.token;
           const decodedAccessToken = JSON.parse(
             Buffer.from(token!.split('.')[1], 'base64').toString(),
@@ -70,9 +67,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         const user = res?.data;
-
         if (user) {
-          console.log('Returning user', res);
           return user;
         }
         return null;
@@ -110,7 +105,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      console.log('session => ', session);
       return {
         ...session,
         user: {
