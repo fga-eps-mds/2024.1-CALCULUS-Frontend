@@ -23,7 +23,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_VM_AZURE_DEV }}
       
       - name: Checking working Dir
-        run: pwd
+        run: ssh -o StrictHostKeyChecking=no ${{ secrets.USER_VM_AZURE_DEV }}@${{ secrets.IP_VM_AZURE_DEV }} 'pwd'
 
       - name: Run script on Azure VM
         run: |
