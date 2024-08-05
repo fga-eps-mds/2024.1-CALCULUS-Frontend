@@ -8,27 +8,25 @@ import {
   Link,
   TextField,
 } from '@mui/material';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SigninData, signinSchema } from '@/lib/schemas/singin.schemas';
-import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { signIn, useSession } from 'next-auth/react';
-import { authOptions } from '@/lib/auth';
+import { toast } from 'sonner';
 
 export function SingInForm() {
   const session = useSession();
-  console.log('Session: ', session);
+  const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (session.data) {
-      toast.success('Login efetuado com sucesso!');
-      setTimeout(() => {}, 1000);
-      window.location.href = '/home';
+      toast.success('Login realizado com sucesso!');
+      router.push('/home');
     }
   }, [session.data]);
 

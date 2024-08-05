@@ -1,6 +1,9 @@
 import { Awaitable, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { loginWithEmailAndPassword } from '@/services/user.service';
+import {
+  loginWithEmailAndPassword,
+  loginWithFederatedProvider,
+} from '@/services/user.service';
 import GoogleProvider from 'next-auth/providers/google';
 import AzureADProvider from 'next-auth/providers/azure-ad';
 import { JWT } from 'next-auth/jwt';
@@ -11,26 +14,18 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.MICROSOFT_CLIENT_ID!,
       clientSecret: process.env.MICROSOFT_CLIENT_SECRET!,
       tenantId: process.env.MICROSOFT_TENANT_ID!,
-      authorization: {
-        params: {
-          prompt: 'consent',
-          access_type: 'offline',
-          response_type: 'code',
-          request_uri: `${process.env.NEXT_PUBLIC_API_URL!}/auth/microsoft/callback`,
-        },
-      },
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      authorization: {
-        params: {
-          request_uri: `${process.env.NEXT_PUBLIC_API_URL!}/auth/google/callback`,
-          prompt: 'consent',
-          access_type: 'offline',
-          response_type: 'code',
-        },
-      },
+      // authorization: {
+      //   params: {
+      //     request_uri: `${process.env.NEXT_PUBLIC_API_URL!}/auth/google/callback`,
+      //     prompt: 'consent',
+      //     access_type: 'offline',
+      //     response_type: 'code',
+      //   },
+      // },
     }),
     CredentialsProvider({
       credentials: {
@@ -49,10 +44,7 @@ export const authOptions: NextAuthOptions = {
         },
       },
       async authorize(credentials, req) {
-        console.log('credentials', credentials);
-        console.log('req', req);
         if (credentials!.token) {
-          console.log('Eu nasci');
           const token = credentials!.token;
           const decodedAccessToken = JSON.parse(
             Buffer.from(token!.split('.')[1], 'base64').toString(),
@@ -75,33 +67,20 @@ export const authOptions: NextAuthOptions = {
         }
 
         const user = res?.data;
-
         if (user) {
-          console.log('Returning user', res);
           return user;
         }
         return null;
       },
     }),
   ],
+  pages: {
+    signIn: '/login',
+  },
   secret: process.env.NEXTAUTH_SECRET,
 
   callbacks: {
-    async signIn({ account, profile }) {
-      console.log(
-        `Account: ${account?.provider} Profile: ${profile?.email} ${account?.id_token}`,
-      );
-      if (account?.provider === 'google') {
-        return `${process.env.NEXT_PUBLIC_API_URL}/auth/google/callback`;
-      }
-      if (account?.provider === 'azure-ad') {
-        return `${process.env.NEXT_PUBLIC_API_URL}/auth/microsoft/callback`;
-      }
-      return true;
-    },
-
     async jwt({ token, user, account }) {
-      console.log('jwt => ', token, user, account);
       if (account && user) {
         token.id = user.id;
         token.accessToken = user.accessToken;
@@ -126,7 +105,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      console.log('session => ', session);
       return {
         ...session,
         user: {

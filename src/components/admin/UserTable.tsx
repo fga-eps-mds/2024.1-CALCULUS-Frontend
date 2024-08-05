@@ -1,5 +1,18 @@
 import React from 'react';
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 type User = {
@@ -17,16 +30,34 @@ interface UserTableProps {
   onRoleSelect: (role: string) => void;
 }
 
-const UserTable: React.FC<UserTableProps> = ({ users, anchorEl, onMenuClick, onMenuClose, onRoleSelect }) => {
+const UserTable: React.FC<UserTableProps> = ({
+  users,
+  anchorEl,
+  onMenuClick,
+  onMenuClose,
+  onRoleSelect,
+}) => {
   return (
     <Box sx={{ width: '100%', maxWidth: 800 }}>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ fontWeight: 'bold', textTransform: 'lowercase' }}>username</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', textTransform: 'lowercase' }}>email</TableCell>
-              <TableCell sx={{ fontWeight: 'bold', textTransform: 'lowercase' }}>role</TableCell>
+              <TableCell
+                sx={{ fontWeight: 'bold', textTransform: 'lowercase' }}
+              >
+                username
+              </TableCell>
+              <TableCell
+                sx={{ fontWeight: 'bold', textTransform: 'lowercase' }}
+              >
+                email
+              </TableCell>
+              <TableCell
+                sx={{ fontWeight: 'bold', textTransform: 'lowercase' }}
+              >
+                role
+              </TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -50,11 +81,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, anchorEl, onMenuClick, onM
         </Table>
       </TableContainer>
 
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={onMenuClose}
-      >
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={onMenuClose}>
         <MenuItem onClick={() => onRoleSelect('admin')}>
           <Typography>Tornar Admin</Typography>
         </MenuItem>

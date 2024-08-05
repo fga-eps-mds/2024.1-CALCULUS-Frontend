@@ -7,7 +7,8 @@ import { signIn } from 'next-auth/react';
 
 export function MicrosoftAuthButton() {
   const handleClick = () => {
-    signIn('azure-ad');
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/microsoft/callback`;
+    // signIn('azure-ad');
   };
 
   return (

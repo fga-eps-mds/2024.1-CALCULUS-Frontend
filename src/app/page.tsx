@@ -9,7 +9,7 @@ import { useSession } from 'next-auth/react';
 
 export default function LandingPage() {
   const session = useSession();
-  
+
   if (session.data) {
     window.location.href = '/home';
   }
