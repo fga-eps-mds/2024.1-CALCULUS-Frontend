@@ -1,4 +1,4 @@
-name: CI Workflow
+name: Deploy App in Azure
 
 # Dispara o workflow para push e pull request na branch 'dev'
 on:
