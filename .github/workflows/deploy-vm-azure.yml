@@ -24,6 +24,6 @@ jobs:
 
       - name: Run script on Azure VM
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USER_VM_AZURE_DEV }}@${{ secrets.IP_VM_AZURE_DEV }} 'bash -s' < /home/Calculus-admin1/app/run_npm_tmux.sh
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USER_VM_AZURE_DEV }}@${{ secrets.IP_VM_AZURE_DEV }} 'bash -s' < /app/run_npm_tmux.sh
         env:
           SSH_KNOWN_HOSTS: ${{ secrets.IP_VM_AZURE_DEV }}
