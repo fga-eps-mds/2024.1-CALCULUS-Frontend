@@ -10,6 +10,8 @@ import { useRouter } from 'next/navigation';
 import { createUser } from '@/services/user.service';
 import { toast } from 'sonner';
 
+import Mybutton from '@/components/ui/buttons/myButton.component';
+
 export function SingUpForm() {
   const router = useRouter();
   const {
@@ -80,15 +82,9 @@ export function SingUpForm() {
         error={!!errors.password}
         helperText={errors.password?.message}
       />
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        sx={{ bgcolor: '#000', mt: 2 }}
-        type="submit"
-      >
+      <Mybutton type="submit" width="400px" height="61px" color="black">
         {isPending ? 'Loading...' : 'Sign up'}
-      </Button>
+      </Mybutton>
     </Box>
   );
 }

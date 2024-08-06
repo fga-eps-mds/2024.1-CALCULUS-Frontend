@@ -16,6 +16,7 @@ import { useEffect, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { signIn, useSession } from 'next-auth/react';
 import { toast } from 'sonner';
+import Mybutton from '@/components/ui/buttons/myButton.component';
 
 export function SingInForm() {
   const session = useSession();
@@ -101,15 +102,9 @@ export function SingInForm() {
           Recuperar senha
         </Link>
       </p>
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        sx={{ bgcolor: '#000', mt: 2 }}
-        type="submit"
-      >
+      <Mybutton type='submit' width='400px' height='61px' color='black'>
         Login
-      </Button>
+      </Mybutton>
     </Box>
   );
 }

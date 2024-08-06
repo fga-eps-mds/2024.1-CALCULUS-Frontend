@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import roboProfessor from '@/public/robo_professor.png';
+import Mybutton from '@/components/ui/buttons/myButton.component';
 
 import { useSession } from 'next-auth/react';
 
@@ -19,9 +20,9 @@ export default function LandingPage() {
       <header className="w-full flex justify-between p-4">
         <h1 className="text-4xl font-bold text-[#1F1F1F]">Calculus</h1>
         <Link href="/login">
-          <button className="bg-black text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition duration-300 font-bold">
+          <Mybutton width="120px" height="50px" color="white">
             Login
-          </button>
+          </Mybutton>
         </Link>
       </header>
       <main className="flex-grow flex flex-col justify-center items-center px-8">
@@ -46,9 +47,9 @@ export default function LandingPage() {
             </p>
             <div className="flex justify-center md:justify-start">
               <Link href="/register">
-                <button className="bg-orange-500 text-white px-8 py-4 rounded-full shadow-md hover:shadow-lg transition duration-300 font-bold">
-                  Comece aqui
-                </button>
+                <Mybutton width="150px" height="50px" color="red">
+                  Começe aqui
+                </Mybutton>
               </Link>
             </div>
           </div>
