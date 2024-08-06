@@ -11,4 +11,5 @@ services:
       - ./src:/app/src
     env_file:
       - .env
-    
+    networks:
+      - calculus-network    
