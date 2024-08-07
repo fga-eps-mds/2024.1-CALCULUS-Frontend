@@ -12,4 +12,8 @@ services:
     env_file:
       - .env
     networks:
-      - calculus-network    
+      - calculus-network
+
+networks:
+  calculus-network:
+    driver: bridge
