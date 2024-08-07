@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import calculusLogos from '@/public/calculus-logo.svg';
+import { Box, TextField, Button, IconButton, InputAdornment, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import calculusLogos from '@/public/calculus-logo.svg';
 
 export default function ResetPassword() {
-
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
@@ -32,11 +32,11 @@ export default function ResetPassword() {
         setError('');
         setSuccess('Senha redefinida com sucesso!');
 
-        // lógica do back aqui
+        // routes logic....
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-[#F8F3F3] text-black">
+        <Box className="flex flex-col items-center justify-center min-h-screen py-2 bg-[#F8F3F3] text-black">
             <Image
                 className="mx-auto mb-12"
                 src={calculusLogos}
@@ -45,48 +45,72 @@ export default function ResetPassword() {
                 height={128}
             />
             <h2 className="text-4xl font-bold mb-8 text-center">Redefinir Senha</h2>
-            <form onSubmit={handleSubmit} className="flex flex-col items-center w-full max-w-md">
-                <div className="relative mb-4 w-full">
-                    <input
-                        type={showNewPassword ? 'text' : 'password'}
-                        placeholder="Nova senha"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        className="p-2 border border-gray-300 rounded-md w-full"
-                    />
-                    <button
-                        type="button"
-                        onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-500"
-                    >
-                        {showNewPassword ? <VisibilityOff /> : <Visibility />}
-                    </button>
-                </div>
-                <div className="relative mb-4 w-full">
-                    <input
-                        type={showConfirmPassword ? 'text' : 'password'}
-                        placeholder="Confirmar nova senha"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="p-2 border border-gray-300 rounded-md w-full"
-                    />
-                    <button
-                        type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute inset-y-0 right-0 flex items-center px-2 text-gray-500"
-                    >
-                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                    </button>
-                </div>
-                <button
+            <Box
+                component="form"
+                onSubmit={handleSubmit}
+                className="flex flex-col items-center w-full max-w-md"
+            >
+                <TextField
+                    type={showNewPassword ? 'text' : 'password'}
+                    label="Nova senha"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    variant="outlined"
+                    fullWidth
+                    className="mb-4"
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                    edge="end"
+                                >
+                                    {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+                <TextField
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    label="Confirmar nova senha"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    variant="outlined"
+                    fullWidth
+                    className="mb-4"
+                    InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <IconButton
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    edge="end"
+                                >
+                                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                                </IconButton>
+                            </InputAdornment>
+                        ),
+                    }}
+                />
+                <Button
                     type="submit"
+                    variant="contained"
+                    fullWidth
                     className="bg-black text-white py-3 rounded-full hover:bg-gray-800 transition-colors w-full"
                 >
                     Enviar
-                </button>
-                {error && <p className="text-red-500 mt-4">{error}</p>}
-                {success && <p className="text-green-500 mt-4">{success}</p>}
-            </form>
-        </div>
+                </Button>
+                {error && (
+                    <Alert severity="error" className="mt-4">
+                        {error}
+                    </Alert>
+                )}
+                {success && (
+                    <Alert severity="success" className="mt-4">
+                        {success}
+                    </Alert>
+                )}
+            </Box>
+        </Box>
     );
 }

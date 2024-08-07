@@ -97,7 +97,7 @@ export function SingInForm() {
       />
       <p className="text-[18px] font-light">
         Esqueceu sua senha?
-        <Link href="#" className="text-indigo-700 block">
+        <Link href="/forgot-password" className="text-indigo-700 block">
           Recuperar senha
         </Link>
       </p>
