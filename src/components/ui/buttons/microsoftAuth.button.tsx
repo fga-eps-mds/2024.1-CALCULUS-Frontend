@@ -4,6 +4,7 @@ import Image from 'next/image';
 import microsoftIcon from '@/public/microsoft.svg';
 import { Button } from '@mui/material';
 import { signIn } from 'next-auth/react';
+import MyButton from '@/components/ui/buttons/myButton.component';
 
 export function MicrosoftAuthButton() {
   const handleClick = () => {
@@ -12,7 +13,7 @@ export function MicrosoftAuthButton() {
   };
 
   return (
-    <Button className="w-[115px] h-[50px] shadow-[0_6px_0px_0px_rgba(0,0,0,0.1)] bg-white border-2  border-[#E0E0E0] rounded-[50px] text-center">
+    <MyButton width="120px" height="55px" color="white" onClick={handleClick}>
       <Image
         src={microsoftIcon}
         width={0}
@@ -21,6 +22,6 @@ export function MicrosoftAuthButton() {
         className="w-full h-[25px]"
         onClick={handleClick}
       />
-    </Button>
+    </MyButton>
   );
 }
