@@ -60,18 +60,18 @@ export function SingInForm() {
       }}
       className="grid gap-4 justify-center m-3"
     >
-      <MyInput 
+      <MyInput
         label="Email"
-        width='380px'
+        width="380px"
         required
         register={register('email')}
         error={!!errors.email}
         helperText={errors.email?.message}
-        />
-      <MyInput 
+      />
+      <MyInput
         type={showPassword ? 'text' : 'password'}
         label="Password"
-        width='380px'
+        width="380px"
         required
         register={register('password')}
         error={!!errors.password}
@@ -86,16 +86,17 @@ export function SingInForm() {
               >
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
-            </InputAdornment>)
+            </InputAdornment>
+          ),
         }}
-        />
+      />
       <p className="text-[18px] font-light">
         Esqueceu sua senha?
         <Link href="#" className="text-indigo-700 block">
           Recuperar senha
         </Link>
       </p>
-      <Mybutton type='submit' width='400px' height='61px' color='black'>
+      <Mybutton type="submit" width="400px" height="61px" color="black" bold>
         Login
       </Mybutton>
     </Box>

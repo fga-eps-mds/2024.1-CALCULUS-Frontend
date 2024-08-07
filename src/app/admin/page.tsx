@@ -15,6 +15,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import MyButton from '@/components/ui/buttons/myButton.component';
+
 type User = {
   _id: string;
   username: string;
@@ -140,12 +142,12 @@ const Admin: React.FC = () => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={cancelRoleChange} color="error">
+          <MyButton onClick={cancelRoleChange} color="red" radius='30px' bold>
             Cancelar
-          </Button>
-          <Button onClick={confirmRoleChange} color="primary">
+          </MyButton>
+          <MyButton onClick={confirmRoleChange} color="green" radius='30px' bold>
             Confirmar
-          </Button>
+          </MyButton>
         </DialogActions>
       </Dialog>
     </Box>

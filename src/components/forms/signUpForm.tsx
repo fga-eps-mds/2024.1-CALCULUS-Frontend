@@ -77,7 +77,7 @@ export function SingUpForm() {
           error={!!errors.password}
           helperText={errors.password?.message}
         />
-      <Mybutton type="submit" width="400px" height="61px" color="black">
+      <Mybutton type="submit" width="400px" height="61px" color="black" bold>
         {isPending ? 'Loading...' : 'Sign up'}
       </Mybutton>
     </Box>

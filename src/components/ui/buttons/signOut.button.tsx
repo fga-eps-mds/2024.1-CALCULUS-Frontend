@@ -1,5 +1,6 @@
 import { Box, Button } from '@mui/material';
 import { signOut } from 'next-auth/react';
+import MyButton from './myButton.component';
 
 export function SignOutButton() {
   const handleClick = async () => {
@@ -7,12 +8,15 @@ export function SignOutButton() {
     window.location.href = '/';
   };
   return (
-    <Button
-      className="color-red-500 w-[115px] h-[50px] shadow-[0_6px_0px_0px_rgba(0,0,0,0.1)] bg-white border-2  border-[#E0E0E0] rounded-[50px] text-center"
+    <MyButton
+      width="115px"
+      height="50px"
+      color="white"
       type="submit"
+      bold
       onClick={handleClick}
     >
       Sair
-    </Button>
+    </MyButton>
   );
 }

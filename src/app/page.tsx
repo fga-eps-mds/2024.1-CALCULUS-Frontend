@@ -20,7 +20,7 @@ export default function LandingPage() {
       <header className="w-full flex justify-between p-4">
         <h1 className="text-4xl font-bold text-[#1F1F1F]">Calculus</h1>
         <Link href="/login">
-          <Mybutton width="120px" height="50px" color="white">
+          <Mybutton width="120px" height="50px" color="white" bold>
             Login
           </Mybutton>
         </Link>
@@ -47,7 +47,7 @@ export default function LandingPage() {
             </p>
             <div className="flex justify-center md:justify-start">
               <Link href="/register">
-                <Mybutton width="150px" height="50px" color="red">
+                <Mybutton width="150px" height="50px" color="red" bold>
                   Começe aqui
                 </Mybutton>
               </Link>
