@@ -7,14 +7,18 @@ type InputProps = TextFieldProps & {
     width?: string;
     helperText?: string;
     bgcolor?: string;
+    placeholder?: string;
+    value?: string;
 };
 
-const MyInput: FC<InputProps> = ({ bgcolor,width,register, error, helperText, ...props }) => {
+const MyInput: FC<InputProps> = ({ value,placeholder, bgcolor, width, register, error, helperText, ...props }) => {
     return (
     <TextField
         {...register}
         {...props}
+        value={value}
         variant="outlined"
+        placeholder={placeholder}
         sx={{ bgcolor: bgcolor, width: width}}
         margin="normal"
         className="justify-self-center"
