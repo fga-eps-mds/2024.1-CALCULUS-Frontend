@@ -4,6 +4,7 @@
     padding: 0;
     display: flex;
     height: 100vh;
+    width: 100%;
 }
 
 .container {
@@ -12,20 +13,49 @@
     height: 100%;
 }
 
-.editor, .preview {
+.editor-section, .preview-section {
     flex: 1;
-    padding: 20px;
-    box-sizing: border-box;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#botoes {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-bottom: 2px solid #ccc;
+}
+
+button {
+    margin: 0 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
 }
 
 .editor {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
     background-color: #f4f4f4;
     border-right: 2px solid #ccc;
+    overflow-y: auto;
 }
 
-.preview {
+.preview-section {
+    padding: 20px;
+    box-sizing: border-box;
     background-color: #fff;
+    overflow-y: auto;
 }
 
 textarea {
@@ -42,15 +72,4 @@ textarea {
 .preview-content {
     white-space: pre-wrap;
     word-wrap: break-word;
-}
-
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-    }
-
-    .editor {
-        border-right: none;
-        border-bottom: 2px solid #ccc;
-    }
 }
