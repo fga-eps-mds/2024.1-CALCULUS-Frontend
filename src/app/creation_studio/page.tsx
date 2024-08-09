@@ -1,5 +1,7 @@
 'use client';
 import '../../styles/creation.css';
+import folder from '@/public/folder.png';
+import Image from 'next/image';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -13,14 +15,25 @@ export default function CreationStudio() {
     <Box className="h-screen w-screen overflow-hidden">
       <Box
         id="botoes"
-        className="bg-[#f8f3f3] border-2 border-solid border-[#D9D9D9]"
+        className="flex items-center bg-[#f8f3f3] border-2 border-solid border-[#D9D9D9] p-2"
       >
+        <Box className="flex w-3/12 items-center justify-evenly">
         <button>
-          <strong>N</strong>
+          <Image
+            src={folder}
+            alt="Folder"
+            style={{ width: '24px', height: '24px' }}
+          />
+        </button>
+
+        <span className="mx-2">|</span>
+
+        <button>
+          <strong>B</strong>
         </button>
         <button>
           <strong>
-            <em>S</em>
+            <em>I</em>
           </strong>
         </button>
         <button>
@@ -28,7 +41,24 @@ export default function CreationStudio() {
             <s>S</s>
           </strong>
         </button>
+        <button>
+          <strong>&ldquo;&rdquo;</strong>
+        </button>
+
+        <button>
+          <strong>Aa</strong>
+        </button>
+
+        <button>
+          <strong>A</strong>
+        </button>
+
+        <button>
+          <strong>a</strong>
+        </button>
+        </Box>
       </Box>
+
       <Box className="grid grid-cols-2 h-full">
         <textarea
           autoFocus
