@@ -1,23 +1,80 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-*{
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
 }
 
-body{
-    background-color: #fffafa;
+body {
+  @apply m-0 font-sans bg-white text-black;
+  background-color: #fffafa; 
+  color: rgb(var(--foreground-rgb));
 }
 
-ul{
-    list-style: none;
+ul {
+  list-style: none;
 }
 
-a{
-    text-decoration: none;
+a {
+  text-decoration: none;
+}
+
+/* Estilo do editor */
+.editor {
+  background-color: #FFFAFA;
+  border-right: 1px solid #E0E0E0;
+}
+
+.preview {
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  background-color: #FFF5EE;
+}
+
+.preview h1 {
+  font-size: 3em; 
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.preview h2 {
+  font-size: 2em; 
+  font-weight: bold;
+  margin-top: 18px;
+  margin-bottom: 18px;
+}
+
+.preview h3 {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.preview ul {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+}
+
+.preview li {
+  margin-bottom: 5px;
+}
+
+.preview code {
+  background-color: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 90%;
+}
+
+.katex {
+  display: block;
+  margin: 10px 0;
 }

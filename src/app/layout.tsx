@@ -4,7 +4,6 @@ import '../styles/globals.css';
 import SessionProvider from '@/app/components/sessionProvider';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './globals.css';
 import ClientLayout from './components/clientLayout';
 
 const inter = Inter({ subsets: ['latin'] });
