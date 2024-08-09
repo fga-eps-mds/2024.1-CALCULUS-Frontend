@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 import { Drawer, IconButton, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useSession } from 'next-auth/react';
@@ -22,10 +23,18 @@ const Sidebar: React.FC<SideBarProps> = ({ handleDrawerOpen, open }) => {
           <CloseIcon />
         </IconButton>
         <ul>
+          <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
+            <HomeIcon className="h-5 w-5 mr-2" />
+            <Link
+              href="/home"
+              className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200"
+            >
+              Home
+            </Link>
+          </li>
           {session.data?.user.role === 'admin' && (
             <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
               <DashboardIcon className="h-5 w-5 mr-2" />
-
               <Link
                 href="/admin"
                 className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200"
@@ -35,12 +44,12 @@ const Sidebar: React.FC<SideBarProps> = ({ handleDrawerOpen, open }) => {
             </li>
           )}
           <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
-            <HomeIcon className="h-5 w-5 mr-2" />
+            <EditNoteIcon className="h-5 w-5 mr-2" />
             <Link
-              href="/home"
+              href="/studio"
               className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200"
             >
-              Home
+              Estúdio de Criação
             </Link>
           </li>
         </ul>
