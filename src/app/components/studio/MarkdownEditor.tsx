@@ -5,12 +5,10 @@ import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
-import { AppBar, Toolbar, IconButton, Tooltip, Box, Button } from '@mui/material';
-import TitleIcon from '@mui/icons-material/Title';
+import { AppBar, Toolbar, IconButton, Tooltip, Box, Button, Divider } from '@mui/material';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import FunctionsIcon from '@mui/icons-material/Functions';
-import BoldIcon from '@mui/icons-material/FormatBold';
-import ItalicIcon from '@mui/icons-material/FormatItalic';
+import { Save as SaveIcon, Folder as FolderIcon, Functions as FunctionsIcon, FormatBold as BoldIcon, FormatItalic as ItalicIcon, Title as TitleIcon} from '@mui/icons-material';
+
 
 const MarkdownEditor: React.FC = () => {
   const [markdown, setMarkdown] = useState('');
@@ -48,8 +46,17 @@ const MarkdownEditor: React.FC = () => {
       <AppBar position="static" className="bg-[#f8f3f3] border-b border-[#D9D9D9]">
         <Toolbar className="flex justify-between items-center">
           <Box className="flex items-center gap-2">
+
+          <Tooltip title="Arquivos">
+              <IconButton className="text-[#6667AB]">
+                <FolderIcon sx={{fontSize:32}} />
+              </IconButton>
+            </Tooltip>
+
+            <Divider orientation="vertical" flexItem className="bg-[#D9D9D9]" />
+
             <Tooltip title="Negrito">
-              <IconButton className="text-[#6667AB]" onClick={() => insertTextAtSelection('**', '**', 'texto em negrito')}>
+              <IconButton onClick={() => insertTextAtSelection('**', '**', 'texto em negrito')}>
                 <BoldIcon />
               </IconButton>
             </Tooltip>
@@ -74,12 +81,13 @@ const MarkdownEditor: React.FC = () => {
               </IconButton>
             </Tooltip>
           </Box>
-          <Button
-            onClick={handleSave}
-            className="bg-[#6667AB] text-[#FFFAFA] font-bold rounded-full px-8 py-2 text-lg"
-          >
-            Salvar
-          </Button>
+
+          <Tooltip title="Save">
+              <IconButton className="text-[#515287]">
+                <SaveIcon sx={{fontSize:35}}/>
+              </IconButton>
+            </Tooltip>
+
         </Toolbar>
       </AppBar>
       <Box className="flex flex-1">
@@ -100,6 +108,13 @@ const MarkdownEditor: React.FC = () => {
           </ReactMarkdown>
         </Box>
       </Box>
+          {/* Botão do protótipo */}
+          {/* <Button
+            onClick={handleSave}
+            className="fixed bottom-4 right-4 bg-[#6667AB] text-[#FFFAFA] font-bold rounded-full px-8 py-2 text-lg"
+          >
+            Salvar
+          </Button> */}
     </Box>
   );
 };
