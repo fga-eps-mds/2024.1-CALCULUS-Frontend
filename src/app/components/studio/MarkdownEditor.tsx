@@ -26,12 +26,11 @@ const MarkdownEditor: React.FC = () => {
       const end = textareaRef.current.selectionEnd;
       const selectedText = markdown.substring(start, end);
 
-      const textToInsert = selectedText || defaultText; // Se não houver texto selecionado, usa o template padrão
+      const textToInsert = selectedText || defaultText;
       const newText = markdown.substring(0, start) + before + textToInsert + after + markdown.substring(end);
 
       setMarkdown(newText);
 
-      // Seleciona o texto inserido
       setTimeout(() => {
         textareaRef.current!.selectionStart = start + before.length;
         textareaRef.current!.selectionEnd = start + before.length + textToInsert.length;
@@ -41,65 +40,58 @@ const MarkdownEditor: React.FC = () => {
   };
 
   const handleSave = () => {
-    // Lógica para salvar conteúdo
     alert('Conteúdo salvo!');
   };
 
   return (
-    <Box display="flex" flexDirection="column" height="100vh">
-      <AppBar position="static" style={{ backgroundColor: '#1F1F1F' }}>
-        <Toolbar>
-          <Tooltip title="Negrito">
-            <IconButton color="inherit" onClick={() => insertTextAtSelection('**', '**', 'texto em negrito')}>
-              <BoldIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Itálico">
-            <IconButton color="inherit" onClick={() => insertTextAtSelection('*', '*', 'texto em itálico')}>
-              <ItalicIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Título">
-            <IconButton color="inherit" onClick={() => insertTextAtSelection('# ', '\n', 'Título')}>
-              <TitleIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Lista">
-            <IconButton color="inherit" onClick={() => insertTextAtSelection('- ', '\n', 'Item da lista')}>
-              <FormatListBulletedIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="LaTeX">
-            <IconButton color="inherit" onClick={() => insertTextAtSelection('$$', '$$\n', 'E = mc^2')}>
-              <FunctionsIcon />
-            </IconButton>
-          </Tooltip>
+    <Box className="flex flex-col h-screen">
+      <AppBar position="static" className="bg-[#f8f3f3] border-b border-[#D9D9D9]">
+        <Toolbar className="flex justify-between items-center">
+          <Box className="flex items-center gap-2">
+            <Tooltip title="Negrito">
+              <IconButton className="text-[#6667AB]" onClick={() => insertTextAtSelection('**', '**', 'texto em negrito')}>
+                <BoldIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Itálico">
+              <IconButton onClick={() => insertTextAtSelection('*', '*', 'texto em itálico')}>
+                <ItalicIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Título">
+              <IconButton onClick={() => insertTextAtSelection('# ', '\n', 'Título')}>
+                <TitleIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Lista">
+              <IconButton onClick={() => insertTextAtSelection('- ', '\n', 'Item da lista')}>
+                <FormatListBulletedIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="LaTeX">
+              <IconButton onClick={() => insertTextAtSelection('$$', '$$\n', 'E = mc^2')}>
+                <FunctionsIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
           <Button
             onClick={handleSave}
-            style={{
-              marginLeft: 'auto',
-              backgroundColor: '#6667AB',
-              color: '#FFFAFA',
-              fontWeight: 'bold',
-              borderRadius: '50px',
-              padding: '10px 30px',
-              fontSize: '16px'
-            }}
+            className="bg-[#6667AB] text-[#FFFAFA] font-bold rounded-full px-8 py-2 text-lg"
           >
             Salvar
           </Button>
         </Toolbar>
       </AppBar>
-      <Box display="flex" flex={1}>
-        <Box className="editor" flex={1} style={{ backgroundColor: '#FFFAFA', borderRight: '1px solid #E0E0E0' }}>
+      <Box className="flex flex-1">
+        <Box className="editor flex-1 bg-[#FFFAFA] border-r border-[#E0E0E0]">
           <textarea
             ref={textareaRef}
             value={markdown}
             onChange={(e) => handleChange(e.target.value)}
-            style={{ width: '100%', height: '100%', padding: '10px', fontSize: '16px', boxSizing: 'border-box', border: 'none' }}
+            className="w-full h-full p-2 text-lg box-border border-none"
           />
         </Box>
-        <Box className="preview" flex={1} style={{ padding: '20px', boxSizing: 'border-box', overflowY: 'auto', backgroundColor: '#FFF5EE' }}>
+        <Box className="preview flex-1 p-5 box-border overflow-y-auto bg-[#FFF5EE]">
           <ReactMarkdown
             remarkPlugins={[remarkMath]}
             rehypePlugins={[rehypeKatex]}
