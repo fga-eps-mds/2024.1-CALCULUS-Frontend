@@ -1,9 +1,8 @@
 'use server';
 
-import api from './api.service';
-import { CalculusRequest } from '@/lib/interfaces/request.interface';
+import api from '@/services/api.service';
 
-export const createUser = async (data: any): Promise<CalculusRequest> => {
+export const createUser = async (data: any) => {
   console.log(data);
   try {
     const response = await api.post('users', data);
@@ -46,9 +45,13 @@ export const loginWithFederatedProvider = async (accessToken: string) => {
   }
 };
 
-export const getUsers = async () => {
+export const getUsers = async (token: string) => {
   try {
-    const response = await api.get('/users');
+    const response = await api.get('/users', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     console.log('Users:', response.data);
     return response.data;
   } catch (error) {

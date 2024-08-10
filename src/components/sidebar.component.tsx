@@ -13,7 +13,7 @@ interface SideBarProps {
 }
 
 const Sidebar: React.FC<SideBarProps> = ({ handleDrawerOpen, open }) => {
-  const session = useSession();
+  const { data: session } = useSession();
 
   return (
     <Drawer anchor="left" open={open} onClose={handleDrawerOpen}>
@@ -31,7 +31,7 @@ const Sidebar: React.FC<SideBarProps> = ({ handleDrawerOpen, open }) => {
               Home
             </Link>
           </li>
-          {session.data?.user.role === 'admin' && (
+          {session?.user.role === 'admin' && (
             <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
               <DashboardIcon className="h-5 w-5 mr-2" />
 

@@ -1,9 +1,13 @@
+'use client';
+
 import { Box, Button } from '@mui/material';
 import { signOut } from 'next-auth/react';
 
 export function SignOutButton() {
   const handleClick = async () => {
     await signOut();
+    localStorage.removeItem('token');
+    localStorage.removeItem('refresh');
     window.location.href = '/';
   };
   return (

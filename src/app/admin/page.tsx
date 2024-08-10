@@ -36,7 +36,7 @@ const Admin: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await getUsers();
+        const response = await getUsers(JSON.parse(localStorage.getItem('token')!));
         setUsers(response);
         setFilteredUsers(response);
       } catch (err) {
