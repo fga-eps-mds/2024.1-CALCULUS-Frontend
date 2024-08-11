@@ -12,7 +12,7 @@ export default function ClientLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = useSession();
+  const { data: session } = useSession();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const handleDrawerOpen = () => {
     setSidebarOpen(!sidebarOpen);
@@ -24,10 +24,10 @@ export default function ClientLayout({
 
   return (
     <Box component="main">
-      {session.data && (
+      {session && (
         <NavBar handleDrawerOpen={handleDrawerOpen} open={sidebarOpen} />
       )}
-      {session.data && (
+      {session && (
         <Sidebar open={sidebarOpen} handleDrawerOpen={handleDrawerClose} />
       )}
       {children}
