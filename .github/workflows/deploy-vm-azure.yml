@@ -25,9 +25,8 @@ jobs:
           password: ${{ secrets.USER_VM_AZURE_DEV }}
           port: 22
           script: |
-            pwd
             echo $USER
             cd /home/Calculus-admin1/app 
-            sudo su
+            pwd
             ./run_npm_tmux.sh
       
