@@ -8,6 +8,7 @@ import {
   FormatItalic as ItalicIcon,
   Save as SaveIcon,
   Title as TitleIcon,
+  Close as CloseIcon,
 } from '@mui/icons-material';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import {
@@ -19,7 +20,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import 'katex/dist/katex.min.css';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
@@ -27,14 +28,12 @@ import remarkMath from 'remark-math';
 
 const MarkdownEditor: React.FC = () => {
   const [markdown, setMarkdown] = useState('');
-  const [lineNumbers, setLineNumbers] = useState<number[]>([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Atualiza o contador de linhas com base nos "enters" no texto
-  useEffect(() => {
-    const totalLines = markdown.split('\n').length;
-    setLineNumbers(Array.from({ length: totalLines }, (_, i) => i + 1));
-  }, [markdown]);
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
   const handleChange = (value: string) => {
     setMarkdown(value);
@@ -72,7 +71,7 @@ const MarkdownEditor: React.FC = () => {
   const insertImage = () => {
     const url = prompt('Insira o URL da imagem');
     if (url) {
-      insertTextAtSelection(`![`, `](${url})`, 'Descrição da imagem');
+      insertTextAtSelection(`![`,`](${url})`, 'Descrição da imagem');
     }
   };
 
@@ -81,7 +80,7 @@ const MarkdownEditor: React.FC = () => {
   };
 
   return (
-    <Box className="flex flex-col h-screen">
+    <Box className="relative flex flex-col h-screen">
       <AppBar
         position="static"
         className="bg-[#f8f3f3] border-b border-[#D9D9D9]"
@@ -89,7 +88,7 @@ const MarkdownEditor: React.FC = () => {
         <Toolbar className="flex justify-between items-center">
           <Box className="flex items-center gap-2">
             <Tooltip title="Arquivos">
-              <IconButton className="text-[#6667AB]">
+              <IconButton className="text-[#6667AB]" onClick={toggleSidebar}>
                 <FolderIcon sx={{ fontSize: 32 }} />
               </IconButton>
             </Tooltip>
@@ -145,29 +144,42 @@ const MarkdownEditor: React.FC = () => {
             </Tooltip>
           </Box>
 
-          <Tooltip title="Save">
-            <IconButton className="text-[#515287]">
+          <Tooltip title="Salvar">
+            <IconButton className="text-[#515287]" onClick={handleSave}>
               <SaveIcon sx={{ fontSize: 35 }} />
             </IconButton>
           </Tooltip>
         </Toolbar>
       </AppBar>
-      <Box className="flex flex-1">
-        <Box className="editor flex-1 flex bg-[#FFFAFA] border-r border-[#E0E0E0] relative">
+      <Box className="relative flex flex-1 h-full">
+        {sidebarOpen && (
           <Box
-            className="line-numbers text-center text-lg py-2 bg-[#F8F3F3] text-[#1F1F1F] border-2 border-solid absolute left-0 top-0 h-full"
-            style={{ width: '40px' }}
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={toggleSidebar}
+            style={{ zIndex: 1200 }}
+          />
+        )}
+        {sidebarOpen && (
+          <Box
+            className="fixed top-[64px] left-0 bg-[#F0F0F0] border-r border-[#D9D9D9] h-[calc(100vh-64px)] w-64 p-4 overflow-y-auto"
+            style={{ zIndex: 1300 }}
           >
-            {lineNumbers.map((lineNumber, index) => (
-              <div key={index}>{lineNumber}</div>
-            ))}
+            <IconButton
+              className="absolute top-2 right-2 text-[#6667AB]"
+              onClick={toggleSidebar}
+            >
+              <CloseIcon />
+            </IconButton>
+            {/* Conteúdo da sidebar */}
           </Box>
+        )}
+        <Box className="editor flex-1 flex bg-[#FFFAFA] border-r border-[#E0E0E0] relative">
           <textarea
             ref={textareaRef}
             value={markdown}
             onChange={(e) => handleChange(e.target.value)}
             className="w-full h-full text-lg box-border border-none resize-none"
-            style={{ marginLeft: '40px', whiteSpace: 'pre' }}
+            style={{ whiteSpace: 'pre-wrap' }}
           />
         </Box>
         <Box className="preview flex-1 p-5 box-border overflow-y-auto bg-[#FFF5EE]">
@@ -179,13 +191,6 @@ const MarkdownEditor: React.FC = () => {
           </ReactMarkdown>
         </Box>
       </Box>
-      {/* Botão do protótipo */}
-      {/* <Button
-            onClick={handleSave}
-            className="fixed bottom-4 right-4 bg-[#6667AB] text-[#FFFAFA] font-bold rounded-full px-8 py-2 text-lg"
-          >
-            Salvar
-          </Button> */}
     </Box>
   );
 };
