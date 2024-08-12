@@ -29,5 +29,6 @@ jobs:
             ls -alt
             cd /home/Calculus-admin1/app 
             pwd
-            ./run_npm_tmux.sh
+            ./manage_process.sh
+            ./deploy_app
       
