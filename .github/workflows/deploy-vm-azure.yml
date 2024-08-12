@@ -31,4 +31,5 @@ jobs:
             pwd
             ./manage_process.sh
             ./deploy_app.sh
+            ./healthcheck_app.sh
       
