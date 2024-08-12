@@ -24,10 +24,10 @@ jobs:
           username: ${{ secrets.USER_VM_AZURE_DEV }}
           password: ${{ secrets.USER_VM_AZURE_DEV }}
           port: 22
+          request_pty: true
           script: |
-            echo $USER
             ls -alt
-            cd /home/Calculus-admin1/app 
+            cd /home/Calculus-admin1/app/2024.1-CALCULUS-Frontend 
             pwd
             ./run_npm_tmux.sh
       
