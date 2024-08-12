@@ -179,19 +179,15 @@ const MarkdownEditor: React.FC = () => {
           </ReactMarkdown>
         </Box>
       </Box>
+      {/* Botão do protótipo */}
+      {/* <Button
+            onClick={handleSave}
+            className="fixed bottom-4 right-4 bg-[#6667AB] text-[#FFFAFA] font-bold rounded-full px-8 py-2 text-lg"
+          >
+            Salvar
+          </Button> */}
     </Box>
   );
 };
 
 export default MarkdownEditor;
-
-
-
-
-{/* Botão do protótipo */}
-{/* <Button
-      onClick={handleSave}
-      className="fixed bottom-4 right-4 bg-[#6667AB] text-[#FFFAFA] font-bold rounded-full px-8 py-2 text-lg"
-    >
-      Salvar
-    </Button> */}
