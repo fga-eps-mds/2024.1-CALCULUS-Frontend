@@ -71,3 +71,22 @@ export const updateUserRole = async (userId: string, newRole: string) => {
     throw error;
   }
 };
+
+export const forgotPassword = async (data: any) => {
+  console.log('forgot data', data);
+  try {
+    const response = await api.post('/auth/forgot-password', data);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resetPassword = async (data: any) => {
+  console.log('reset data', data);
+  try {
+    const response = await api.put('/auth/reset-password', data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
