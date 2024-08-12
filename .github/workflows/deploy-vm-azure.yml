@@ -27,7 +27,7 @@ jobs:
           request_pty: true
           script: |
             ls -alt
-            cd /home/Calculus-admin1/app/2024.1-CALCULUS-Frontend 
+            cd /home/Calculus-admin1/app 
             pwd
             ./run_npm_tmux.sh
       
