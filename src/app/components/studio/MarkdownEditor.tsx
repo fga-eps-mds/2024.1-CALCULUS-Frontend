@@ -104,7 +104,7 @@ const MarkdownEditor: React.FC = () => {
             <Tooltip title="Negrito">
               <IconButton
                 onClick={() =>
-                  insertTextAtSelection('*', '*', 'texto em negrito')
+                  insertTextAtSelection('**', '**', 'texto em negrito')
                 }
               >
                 <BoldIcon />
@@ -113,7 +113,7 @@ const MarkdownEditor: React.FC = () => {
             <Tooltip title="Itálico">
               <IconButton
                 onClick={() =>
-                  insertTextAtSelection('', '', 'texto em itálico')
+                  insertTextAtSelection('*', '*', 'texto em itálico')
                 }
               >
                 <ItalicIcon />
