@@ -137,7 +137,7 @@ const MarkdownEditor: React.FC = () => {
             </Tooltip>
             <Tooltip title="LaTeX">
               <IconButton
-                onClick={() => insertTextAtSelection('$$', '$$\n', 'E = mc^2')}
+                onClick={() => insertTextAtSelection('$$\n', '\n$$\n', 'E = mc^2')}
               >
                 <FunctionsIcon />
               </IconButton>
