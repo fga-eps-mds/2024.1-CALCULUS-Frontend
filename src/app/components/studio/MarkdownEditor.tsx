@@ -16,19 +16,35 @@ import {
   Box,
   Divider,
   IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
   Toolbar,
   Tooltip,
 } from '@mui/material';
 import 'katex/dist/katex.min.css';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
+
+interface Content {
+  _id: string;
+  title: string;
+  body: string;
+  user: string;
+}
 
 const MarkdownEditor: React.FC = () => {
+  const { data: session } = useSession();
   const [markdown, setMarkdown] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [contents, setContents] = useState<Content[]>([]);
+  const [selectedContentId, setSelectedContentId] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const toggleSidebar = () => {
@@ -75,9 +91,60 @@ const MarkdownEditor: React.FC = () => {
     }
   };
 
-  const handleSave = () => {
-    alert('Conteúdo salvo!');
+  const handleSave = async () => {
+    if (!session) {
+      alert('Você precisa estar logado para salvar o conteúdo.');
+      return;
+    }
+
+    const lines = markdown.split('\n');
+    const titleLine = lines.find((line) => line.startsWith('# '));
+    const title = titleLine ? titleLine.substring(2) : 'Sem Título';
+    const body = markdown;
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API2_URL}contents`,
+        { title, body },
+        {
+          headers: {
+            Authorization: `Bearer ${session.user.accessToken}`,
+          },
+        }
+      );
+      alert('Conteúdo salvo!');
+      fetchContents(); 
+    } catch (error) {
+      console.error('Erro ao salvar conteúdo:', error);
+      alert('Erro ao salvar conteúdo.');
+    }
   };
+
+  const fetchContents = async () => {
+    if (!session) return;
+    try {
+      const response = await axios.get<Content[]>(`${process.env.NEXT_PUBLIC_API2_URL}contents`);
+      const userId = session.user.id; 
+      const filteredContents = response.data.filter(content => content.user === userId);
+      setContents(filteredContents);
+    } catch (error) {
+      console.error('Erro ao buscar conteúdos:', error);
+    }
+  };
+
+  const handleSelectContent = async (id: string) => {
+    try {
+      const response = await axios.get<Content>(`${process.env.NEXT_PUBLIC_API2_URL}contents/${id}`);
+      setMarkdown(response.data.body);
+      setSelectedContentId(id);
+    } catch (error) {
+      console.error('Erro ao carregar conteúdo:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchContents(); 
+  }, [session]);
 
   return (
     <Box className="relative flex flex-col h-screen">
@@ -170,7 +237,18 @@ const MarkdownEditor: React.FC = () => {
             >
               <CloseIcon />
             </IconButton>
-            {/* Conteúdo da sidebar */}
+            <Box mt={4} /> 
+            <List>
+              {contents.map((content) => (
+                <ListItemButton
+                  key={content._id}
+                  selected={selectedContentId === content._id}
+                  onClick={() => handleSelectContent(content._id)}
+                >
+                  <ListItemText primary={content.title} />
+                </ListItemButton>
+              ))}
+            </List>
           </Box>
         )}
         <Box className="editor flex-1 flex bg-[#FFFAFA] border-r border-[#E0E0E0] relative">
