@@ -17,16 +17,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY_VM_AZURE_DEV }}
-      
-      - name: Checking working Dir
-        run: ssh -o StrictHostKeyChecking=no ${{ secrets.USER_VM_AZURE_DEV }}@${{ secrets.IP_VM_AZURE_DEV }} 'pwd'
-
-      - name: Run script on Azure VM
-        run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.USER_VM_AZURE_DEV }}@${{ secrets.IP_VM_AZURE_DEV }} 'cd /home/Calculus-admin1/app && sudo bash -s' < run_npm_tmux.sh
+      - name:  Run script on Azure VM
+        uses: cross-the-world/ssh-pipeline@master
         env:
-          SSH_KNOWN_HOSTS: ${{ secrets.IP_VM_AZURE_DEV }}
+          WELCOME: "ssh pipeline"
+        with:
+          host: ${{ secrets.IP_VM_AZURE_DEV }}
+          user: ${{ secrets.USER_VM_AZURE_DEV }}
+          pass: ${{ secrets.USER_VM_AZURE_DEV }}
+          port: 22
+          connect_timeout: 10s
+          script: |
+            cd /home/Calculus-admin1/app 
+            sudo su
+            ./run_npm_tmux.sh
