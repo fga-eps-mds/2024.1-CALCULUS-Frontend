@@ -19,7 +19,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import 'katex/dist/katex.min.css';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeKatex from 'rehype-katex';
 import remarkGfm from 'remark-gfm';
@@ -27,7 +27,14 @@ import remarkMath from 'remark-math';
 
 const MarkdownEditor: React.FC = () => {
   const [markdown, setMarkdown] = useState('');
+  const [lineNumbers, setLineNumbers] = useState<number[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Atualiza o contador de linhas com base nos "enters" no texto
+  useEffect(() => {
+    const totalLines = markdown.split('\n').length;
+    setLineNumbers(Array.from({ length: totalLines }, (_, i) => i + 1));
+  }, [markdown]);
 
   const handleChange = (value: string) => {
     setMarkdown(value);
@@ -146,12 +153,21 @@ const MarkdownEditor: React.FC = () => {
         </Toolbar>
       </AppBar>
       <Box className="flex flex-1">
-        <Box className="editor flex-1 bg-[#FFFAFA] border-r border-[#E0E0E0]">
+        <Box className="editor flex-1 flex bg-[#FFFAFA] border-r border-[#E0E0E0] relative">
+          <Box
+            className="line-numbers text-center text-lg py-2 bg-[#F8F3F3] text-[#1F1F1F] border-2 border-solid absolute left-0 top-0 h-full"
+            style={{ width: '40px' }}
+          >
+            {lineNumbers.map((lineNumber, index) => (
+              <div key={index}>{lineNumber}</div>
+            ))}
+          </Box>
           <textarea
             ref={textareaRef}
             value={markdown}
             onChange={(e) => handleChange(e.target.value)}
-            className="w-full h-full p-2 text-lg box-border border-none"
+            className="w-full h-full text-lg box-border border-none resize-none"
+            style={{ marginLeft: '40px', whiteSpace: 'pre' }}
           />
         </Box>
         <Box className="preview flex-1 p-5 box-border overflow-y-auto bg-[#FFF5EE]">
@@ -163,15 +179,19 @@ const MarkdownEditor: React.FC = () => {
           </ReactMarkdown>
         </Box>
       </Box>
-      {/* Botão do protótipo */}
-      {/* <Button
-            onClick={handleSave}
-            className="fixed bottom-4 right-4 bg-[#6667AB] text-[#FFFAFA] font-bold rounded-full px-8 py-2 text-lg"
-          >
-            Salvar
-          </Button> */}
     </Box>
   );
 };
 
 export default MarkdownEditor;
+
+
+
+
+{/* Botão do protótipo */}
+{/* <Button
+      onClick={handleSave}
+      className="fixed bottom-4 right-4 bg-[#6667AB] text-[#FFFAFA] font-bold rounded-full px-8 py-2 text-lg"
+    >
+      Salvar
+    </Button> */}
