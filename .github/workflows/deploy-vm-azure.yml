@@ -31,6 +31,6 @@ jobs:
             pwd
             sudo ./manage_process.sh
             echo "Starting Deploy Front"
-            sudo ./tmux_deploy_front.sh
+            sudo ./deploy_front.sh
             sudo ./healthcheck_front.sh
       
