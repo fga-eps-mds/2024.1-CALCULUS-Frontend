@@ -30,6 +30,7 @@ jobs:
             cd /home/Calculus-admin1/app 
             pwd
             sudo ./manage_process.sh
-            sudo ./deploy_front.sh
-            sudo ./healthcheck_app.sh
+            echo "Starting Deploy Front"
+            sudo ./tmux_deploy_front.sh
+            sudo ./healthcheck_front.sh
       
