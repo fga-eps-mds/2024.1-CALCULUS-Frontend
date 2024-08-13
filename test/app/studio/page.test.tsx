@@ -2,15 +2,25 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import React, {useState, useRef} from 'react';
 import MarkdownEditor from '../../../src/app/studio/page';
+import { useSession } from 'next-auth/react';
 'use client';
 
 jest.mock('react-markdown', () => () => <div>Mocked Markdown</div>);
 jest.mock('rehype-katex', () => jest.fn());
 jest.mock('remark-gfm', () => jest.fn());
 jest.mock('remark-math', () => jest.fn());
-
+jest.mock('next-auth/react', () => ({
+    useSession: jest.fn(),
+  }));  
+(useSession as jest.Mock).mockReturnValue({
+            data: {
+              user: null        },
+            status: 'authenticated',
+          });
 describe('MardownEditor', () => {
+    
     it('renders the Mark Down Editor', () => {
+        
         render(<MarkdownEditor/>);
 
         expect(screen.getByRole('button', {name:"Imagem"})).toBeInTheDocument();
