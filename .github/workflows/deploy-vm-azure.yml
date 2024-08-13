@@ -27,8 +27,8 @@ jobs:
             ls -alt
             cd /home/Calculus-admin1/app 
             pwd
-            sudo ./manage_process.sh
-            echo "Starting Deploy Front"
+            sudo ./manage_process_front.sh
+            echo "Starting deploy Front"
             sudo ./deploy_front.sh
 
       
