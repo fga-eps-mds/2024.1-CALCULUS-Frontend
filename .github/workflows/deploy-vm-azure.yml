@@ -29,7 +29,7 @@ jobs:
             ls -alt
             cd /home/Calculus-admin1/app 
             pwd
-            ./manage_process.sh
-            ./deploy_app.sh
-            ./healthcheck_app.sh
+            sudo ./manage_process.sh
+            sudo ./deploy_app.sh
+            sudo ./healthcheck_app.sh
       
