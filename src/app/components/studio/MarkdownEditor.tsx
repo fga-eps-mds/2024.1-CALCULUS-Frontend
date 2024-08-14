@@ -17,7 +17,6 @@ import {
   Divider,
   IconButton,
   List,
-  ListItem,
   ListItemButton,
   ListItemText,
   Toolbar,
@@ -103,16 +102,31 @@ const MarkdownEditor: React.FC = () => {
     const body = markdown;
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API2_URL}contents`,
-        { title, body },
-        {
-          headers: {
-            Authorization: `Bearer ${session.user.accessToken}`,
-          },
-        }
-      );
-      alert('Conteúdo salvo!');
+      const existingContent = contents.find(content => content.title === title);
+
+      if (existingContent) {
+        await axios.put(
+          `${process.env.NEXT_PUBLIC_API2_URL}contents/${existingContent._id}`,
+          { title, body },
+          {
+            headers: {
+              Authorization: `Bearer ${session.user.accessToken}`,
+            },
+          }
+        );
+        alert('Conteúdo atualizado!');
+      } else {
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API2_URL}contents`,
+          { title, body },
+          {
+            headers: {
+              Authorization: `Bearer ${session.user.accessToken}`,
+            },
+          }
+        );
+        alert('Conteúdo salvo!');
+      }
       fetchContents(); 
     } catch (error) {
       console.error('Erro ao salvar conteúdo:', error);
