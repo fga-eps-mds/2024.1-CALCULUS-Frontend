@@ -9,6 +9,7 @@ import {
   Save as SaveIcon,
   Title as TitleIcon,
   Close as CloseIcon,
+  Delete as DeleteIcon,
 } from '@mui/icons-material';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import {
@@ -134,6 +135,23 @@ const MarkdownEditor: React.FC = () => {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    try {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API2_URL}contents/${id}`, {
+        headers: {
+          Authorization: `Bearer ${session?.user.accessToken}`,
+        },
+      });
+      alert('Conteúdo deletado!');
+      setMarkdown('');
+      setSelectedContentId(null);
+      fetchContents();
+    } catch (error) {
+      console.error('Erro ao deletar conteúdo:', error);
+      alert('Erro ao deletar conteúdo.');
+    }
+  };
+
   const fetchContents = async () => {
     if (!session) return;
     try {
@@ -253,14 +271,22 @@ const MarkdownEditor: React.FC = () => {
             </IconButton>
             <Box mt={4} /> 
             <List>
-              {contents.map((content) => (
-                <ListItemButton
-                  key={content._id}
-                  selected={selectedContentId === content._id}
-                  onClick={() => handleSelectContent(content._id)}
-                >
-                  <ListItemText primary={content.title} />
-                </ListItemButton>
+              {contents.map((content, index) => (
+                <React.Fragment key={content._id}>
+                  <ListItemButton
+                    selected={selectedContentId === content._id}
+                    onClick={() => handleSelectContent(content._id)}
+                  >
+                    <ListItemText primary={content.title} />
+                    <IconButton
+                      className="text-red-500"
+                      onClick={() => handleDelete(content._id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemButton>
+                  {index < contents.length - 1 && <Divider />}
+                </React.Fragment>
               ))}
             </List>
           </Box>
@@ -268,15 +294,15 @@ const MarkdownEditor: React.FC = () => {
         <Box className="editor flex-1 flex bg-[#FFFAFA] border-r border-[#E0E0E0] relative">
           <textarea
             ref={textareaRef}
+            className="w-full h-full resize-none p-4 focus:outline-none"
             value={markdown}
             onChange={(e) => handleChange(e.target.value)}
-            className="w-full h-full text-lg box-border border-none resize-none"
-            style={{ whiteSpace: 'pre-wrap' }}
           />
         </Box>
-        <Box className="preview flex-1 p-5 box-border overflow-y-auto bg-[#FFF5EE]">
+        <Box className="preview flex-1 overflow-y-auto p-4 bg-white">
           <ReactMarkdown
-            remarkPlugins={[remarkMath, remarkGfm]}
+            className="prose prose-lg"
+            remarkPlugins={[remarkGfm, remarkMath]}
             rehypePlugins={[rehypeKatex]}
           >
             {markdown}
