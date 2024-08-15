@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import HomeIcon from '@mui/icons-material/Home';
+import { useSession } from 'next-auth/react';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import { Drawer, IconButton, Box } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
 import CloseIcon from '@mui/icons-material/Close';
-import { useSession } from 'next-auth/react';
+import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
 
 interface SideBarProps {
   handleDrawerOpen: () => void;
@@ -43,6 +44,15 @@ const Sidebar: React.FC<SideBarProps> = ({ handleDrawerOpen, open }) => {
               </Link>
             </li>
           )}
+          <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
+            <FollowTheSignsIcon className="h-5 w-5 mr-2" />
+            <Link
+              href="/journey"
+              className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200"
+            >
+              Minhas jornadas
+            </Link>
+          </li>
         </ul>
       </Box>
     </Drawer>
