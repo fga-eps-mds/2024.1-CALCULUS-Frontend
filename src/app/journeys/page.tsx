@@ -15,13 +15,17 @@ import {
 } from '@mui/material';
 
 type Journey = {
-    _id: string;
+    /* _id: string;
     name: string;
     description: string;
-    owner?: string;
+    owner?: string; */
+    name: string;
+    description: string;
   };
 
 const JourneyPage: React.FC = () => {
+
+  const journeyTestArray = [{name: '1', description:'description1'}, {name:'2', description:'description2'}, {name: '3', description:'description3'}];
 
   const [journey, setJourney] = useState<Journey[]>([]);
   const [selectedJourney, setSelectedJourney] = useState<Journey | null>(null);
@@ -46,10 +50,10 @@ const JourneyPage: React.FC = () => {
 
   const handleJourneyAction = (action: string) => {
     if(action === 'editar'){
-      
+      seteditionDialogOpen(true);
     }
     if(action === 'gerenciar'){
-      
+      alert("to redirect to selected journey's trails");
     }
     if(action === 'excluir'){
       setExclusionDialogOpen(true);
@@ -64,6 +68,10 @@ const JourneyPage: React.FC = () => {
     alert('to exclude journey');
     setExclusionDialogOpen(false);
     setAnchorEl(null);
+  }
+
+  const handleNewJourney = () => {
+    alert('to create a new journey');
   }
 
   return (
@@ -83,38 +91,41 @@ const JourneyPage: React.FC = () => {
     </Box>
 
     <JourneyTable
-        journeys={[]}
+        journeys={journeyTestArray}
         anchorEl= {anchorEl}
         onMenuClick={handleMenuOpen}
         onMenuClose={handleMenuClose}
         onJourneyAction={handleJourneyAction}
     />
 
-    {/* <Dialog
+    <Dialog
             open={editionDialogOpen}
             onClose={handleEdtionDialogClose}
             PaperProps={{
               component: 'form',
               onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-                event.preventDefault();
-                const formData = new FormData(event.currentTarget);
-                const formJson = Object.fromEntries((formData as any).entries());
-                const email = formJson.email;
-                console.log(email);
                 handleEdtionDialogClose();
               },
             }}
           >
-            <DialogTitle>Editar</DialogTitle>
+            <DialogTitle>Editar Jornada</DialogTitle>
               <DialogContent>
                 <TextField
                   autoFocus
                   required
                   margin="dense"
-                  id="name"
-                  name="email"
-                  label="Email Address"
-                  type="email"
+                  name="journeyName"
+                  label="Nome da Jornada"
+                  type="text"
+                  fullWidth
+                  variant="standard"
+                />
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  name="journeyDescription"
+                  label="Breve descrição"
+                  type="text"
                   fullWidth
                   variant="standard"
                 />
@@ -123,8 +134,34 @@ const JourneyPage: React.FC = () => {
               <Button onClick={handleEdtionDialogClose}>Cancelar</Button>
               <Button type="submit">Confirmar</Button>
             </DialogActions>
-      </Dialog> */}
+      </Dialog>
 
+    <Button
+        onClick={handleNewJourney}
+        variant="contained"
+        sx={{
+          fontWeight: 'bold',
+          position: 'fixed',
+          bottom: 16,
+          right: 44,
+          bgcolor: 'red',
+          color: 'white',
+          py: 2,
+          px: 4,
+          borderRadius: '50px',
+          textTransform: 'none',
+          width: 'auto',
+          minWidth: '200px',
+          maxWidth: '300px',
+          transition: 'background-color 0.3s',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+          '&:hover': {
+            bgcolor: 'darkred',
+          },
+        }}
+      >
+        Nova Jornada
+    </Button>
 
     <Dialog open={exclusionDialogOpen} onClose={cancelJourneyExclusion}>
         <DialogTitle>Confirmar Exclusão de Jornada</DialogTitle>
