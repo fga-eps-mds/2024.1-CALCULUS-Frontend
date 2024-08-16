@@ -66,6 +66,7 @@ const useMarkdownEditor = () => {
         }
         fetchContents();
         } catch (error) {
+        console.log('TOKEN:',session.user.accessToken);
         console.error('Erro ao salvar conteúdo:', error);
         alert('Erro ao salvar conteúdo.');
         }
@@ -116,6 +117,7 @@ const useMarkdownEditor = () => {
         sidebarOpen,
         setSidebarOpen,
         contents,
+        setContents,
         selectedContentId,
         textareaRef,
         toggleSidebar,

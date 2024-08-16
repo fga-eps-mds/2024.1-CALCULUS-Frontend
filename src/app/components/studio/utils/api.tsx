@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export const fetchContents = async () => {
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API2_URL}contents`);
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API2_URL}contents/`);
     return response.data;
 };
 

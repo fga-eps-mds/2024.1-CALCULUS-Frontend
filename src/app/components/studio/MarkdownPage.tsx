@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, AppBar, Toolbar } from '@mui/material';
+import { useSession } from 'next-auth/react';
 import MarkdownToolbar from './MarkdownToolbar';
 import MarkdownSidebar from './MarkdownSidebar';
 import MarkdownEditor from './MarkdownEditor';
@@ -17,12 +18,14 @@ export interface Content {
 }
 
 const MarkdownPage: React.FC = () => {
+  const { data: session } = useSession();
   const {
     markdown,
     setMarkdown,
     sidebarOpen,
     setSidebarOpen,
     contents,
+    setContents,
     selectedContentId,
     textareaRef,
     toggleSidebar,
@@ -35,8 +38,20 @@ const MarkdownPage: React.FC = () => {
   } = useMarkdownEditor();
 
   useEffect(() => {
-    fetchContents();
-  }, []);
+    const loadContents = async () => {
+      if (!session) return;
+      try {
+        const response = await fetchContents();
+        const userId = session.user.id;
+        const filteredContents = response.filter((content: { user: string }) => content.user === userId);
+        setContents(filteredContents);
+      } catch (error) {
+        console.error("Erro ao buscar os conteúdos:", error);
+      }
+    };
+
+    loadContents();
+  }, [session, setContents]);
 
   const handleInsertTextAtSelection = (before: string, after: string, defaultText: string) => {
     insertTextAtSelection(textareaRef, markdown, setMarkdown, before, after, defaultText);
