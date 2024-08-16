@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSession } from 'next-auth/react';
 import {
   Box,
   Table,
@@ -36,6 +37,8 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
   onMenuClose,
   onJourneyAction,
 }) => {
+  const session= useSession();
+
   return (
     <Box sx={{ width: '100%', maxWidth: 800 }}>
       <TableContainer component={Paper}>
@@ -61,12 +64,12 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
                 <TableCell>{journey.name}</TableCell>
                 <TableCell>{journey.description}</TableCell>
                 <TableCell>
-                  <IconButton
+                  {session.data?.user.role === 'admin' || session.data?.user.role === 'professor' && (<IconButton
                     onClick={(e) => onMenuClick(e, journey)}
                     color="primary"
                   >
                     <MoreVertIcon />
-                  </IconButton>
+                  </IconButton>)}
                 </TableCell>
               </TableRow>
             ))}
