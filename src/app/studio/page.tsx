@@ -1,9 +1,9 @@
-import MarkdownEditor from '@/app/components/studio/MarkdownEditor';
+import MarkdownPage from '@/app/components/studio/MarkdownPage';
 
 export default function Home() {
   return (
     <main>
-      <MarkdownEditor />
+      <MarkdownPage/>
     </main>
   );
 }
