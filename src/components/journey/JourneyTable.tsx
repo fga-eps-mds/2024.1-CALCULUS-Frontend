@@ -18,12 +18,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
 type Journey = {
-  /* _id: string;
-  name: string;
+  title: string;
   description: string;
-  owner?: string; */
-  name: string;
-  description: string;
+  user?: string;
 };
 
 interface JourneyTableProps {
@@ -64,8 +61,8 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
           </TableHead>
           <TableBody>
             {journeys.map((journey) => (
-              <TableRow key={journey.name}>
-                <TableCell align='left'>{journey.name}</TableCell>
+              <TableRow key={journey.title}>
+                <TableCell align='left'>{journey.title}</TableCell>
                 <TableCell align='left'>{journey.description}</TableCell>
                 <TableCell align='right'>
                   {(session.data?.user.role === 'admin' || session.data?.user.role === 'professor') && (<IconButton

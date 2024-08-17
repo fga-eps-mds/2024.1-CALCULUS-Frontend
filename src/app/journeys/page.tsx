@@ -15,37 +15,57 @@ import {
 } from '@mui/material';
 
 type Journey = {
-    /* _id: string;
-    name: string;
+    title: string;
     description: string;
-    owner?: string; */
-    name: string;
-    description: string;
+    user?: string;
   };
 
 const JourneyPage: React.FC = () => {
 
-  const journeyTestArray = [{name: '1', description:'description1'}, {name:'2', description:'description2'}, {name: '3', description:'description3'}];
+  const journeyTestArray = [{title: '1', description:'description1'}, {title:'2', description:'description2'}, {title: '3', description:'description3'}, {title: '11', description:'description1'}];
 
-  const [journey, setJourney] = useState<Journey[]>([]);
+  const [journeys, setJourneys] = useState<Journey[]>([]);
+  const [filteredJourneys, setfilteredJourneys] = useState<Journey[]>([]);
   const [selectedJourney, setSelectedJourney] = useState<Journey | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [exclusionDialogOpen, setExclusionDialogOpen] = useState<boolean>(false);
   const [editionDialogOpen, seteditionDialogOpen] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+  useEffect(() => {
+    /* const fetchJourneys = async () => {};
+    fetchJourneys(); */
+    setJourneys(journeyTestArray);
+    setfilteredJourneys(filteredJourneys);
+  }, []);
+
+  useEffect(() => {
+    const lowercasedQuery = searchQuery.toLowerCase();
+    const newFilteredJourneys = journeys.filter(
+      (journey) =>
+        journey.title.toLowerCase().includes(lowercasedQuery) ||
+        journey.description.toLowerCase().includes(lowercasedQuery),
+    );
+    setfilteredJourneys(newFilteredJourneys);
+  }, [searchQuery, journeys]);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  }
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>, journey: Journey) => {
     setAnchorEl(event.currentTarget);
+    setSelectedJourney(journey);
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleEdtionDialogOpen = () => {
-    seteditionDialogOpen(true);
+    setSelectedJourney(null);
   };
 
   const handleEdtionDialogClose = () => {
     seteditionDialogOpen(false);
+    handleMenuClose();
   };
 
   const handleJourneyAction = (action: string) => {
@@ -62,12 +82,15 @@ const JourneyPage: React.FC = () => {
 
   const cancelJourneyExclusion = () => {
     setExclusionDialogOpen(false);
+    handleMenuClose();
   }
 
   const excludeJourney = () => {
-    alert('to exclude journey');
-    setExclusionDialogOpen(false);
-    setAnchorEl(null);
+    if(selectedJourney){
+      alert('to exclude journey');
+      setExclusionDialogOpen(false);
+      setAnchorEl(null);
+    }
   }
 
   const handleNewJourney = () => {
@@ -87,11 +110,11 @@ const JourneyPage: React.FC = () => {
     <Typography variant='h2'>Jornadas</Typography>
 
     <Box sx={{ width: '100%', maxWidth: 800, marginBottom: 2 }}>
-        <SearchBar value={''} onChange={()=>{}} />
+      <SearchBar value={searchQuery} onChange={handleSearch} />
     </Box>
 
     <JourneyTable
-        journeys={journeyTestArray}
+        journeys={filteredJourneys}
         anchorEl= {anchorEl}
         onMenuClick={handleMenuOpen}
         onMenuClose={handleMenuClose}
@@ -104,30 +127,42 @@ const JourneyPage: React.FC = () => {
             PaperProps={{
               component: 'form',
               onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-                handleEdtionDialogClose();
+                if(selectedJourney){
+                  event.preventDefault();
+                  const formData = new FormData(event.currentTarget);
+                  const formJson = Object.fromEntries((formData as any).entries());
+                  const title = formJson.title;
+                  const description = formJson.description;
+                  console.log(`${title}  ${description}`);
+                  alert('to edit selected journey')
+                  handleEdtionDialogClose();
+                }
               },
             }}
           >
             <DialogTitle>Editar Jornada</DialogTitle>
               <DialogContent>
                 <TextField
-                  autoFocus
-                  required
-                  margin="dense"
-                  name="journeyName"
-                  label="Nome da Jornada"
-                  type="text"
+                  name='title'
                   fullWidth
-                  variant="standard"
+                  variant="outlined"
+                  label="Nome da Jornada"
+                  margin="normal"
+                  type='text'
+                  required
+                  sx={{ bgcolor: 'white' }}
                 />
                 <TextField
-                  autoFocus
-                  margin="dense"
-                  name="journeyDescription"
-                  label="Breve descrição"
-                  type="text"
+                  name='description'
                   fullWidth
-                  variant="standard"
+                  variant="outlined"
+                  label="Breve descrição da jornada"
+                  margin="normal"
+                  type='text'
+                  sx={{ bgcolor: 'white' }}
+                  multiline
+                  rows={4}
+                  maxRows={8}
                 />
               </DialogContent>
             <DialogActions>
@@ -168,7 +203,7 @@ const JourneyPage: React.FC = () => {
         <DialogContent>
           {selectedJourney && (
             <Typography variant="h6">
-              {`Excluir ${selectedJourney.name}?`}
+              {`Excluir ${selectedJourney.title}?`}
             </Typography>
           )}
         </DialogContent>

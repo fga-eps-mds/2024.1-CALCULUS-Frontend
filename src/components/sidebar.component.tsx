@@ -47,7 +47,7 @@ const Sidebar: React.FC<SideBarProps> = ({ handleDrawerOpen, open }) => {
           <li className="mb-2 flex items-center p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200">
             <FollowTheSignsIcon className="h-5 w-5 mr-2" />
             <Link
-              href="/journey"
+              href="/journeys"
               className="block p-2 hover:bg-blue-100 hover:text-purple-600 transition duration-200"
             >
               Minhas jornadas
