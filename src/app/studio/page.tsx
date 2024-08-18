@@ -1,9 +1,13 @@
+import { useRouter } from 'next/router';
 import MarkdownPage from '@/app/components/studio/MarkdownPage';
 
-export default function Home() {
+export default function StudioPage() {
+  const router = useRouter();
+  const { trailId } = router.query;
+
   return (
     <main>
-      <MarkdownPage/>
+      <MarkdownPage trailId={trailId as string} />
     </main>
   );
 }

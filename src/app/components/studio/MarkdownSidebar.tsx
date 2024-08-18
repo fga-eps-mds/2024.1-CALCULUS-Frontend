@@ -10,7 +10,8 @@ interface SidebarProps {
     toggleSidebar: () => void;
     selectedContentId: string | null;
     handleSelectContent: (id: string) => void;
-    handleDelete: (id: string) => void;
+    handleDelete: (id: string, trailId: string) => void;
+    trailId: string;
 }
 
 const MarkdownSidebar: React.FC<SidebarProps> = ({
@@ -20,6 +21,7 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
     selectedContentId,
     handleSelectContent,
     handleDelete,
+    trailId,
 }) => {
     if (!sidebarOpen) return null;
 
@@ -46,7 +48,7 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
                     onClick={() => handleSelectContent(content._id)}
                 >
                     <ListItemText primary={content.title} />
-                    <IconButton className="text-red-500" onClick={() => handleDelete(content._id)}>
+                    <IconButton className="text-red-500" onClick={() => handleDelete(content._id, trailId)}>
                     <DeleteIcon />
                     </IconButton>
                 </ListItemButton>

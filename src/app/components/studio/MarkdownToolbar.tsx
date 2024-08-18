@@ -15,10 +15,11 @@ interface ToolbarProps {
     toggleSidebar: () => void;
     insertTextAtSelection: (before: string, after: string, defaultText: string) => void;
     insertImage: () => void;
-    handleSave: () => void;
+    handleSave: (trailId: string) => void;
+    trailId: string; 
 }
 
-const MarkdownToolbar: React.FC<ToolbarProps> = ({ toggleSidebar, insertTextAtSelection, insertImage, handleSave }) => (
+const MarkdownToolbar: React.FC<ToolbarProps> = ({ toggleSidebar, insertTextAtSelection, insertImage, handleSave, trailId }) => (
     <><Toolbar className="flex justify-between items-center">
         <Box className="flex items-center gap-2">
             <Tooltip title="Arquivos">
@@ -60,7 +61,7 @@ const MarkdownToolbar: React.FC<ToolbarProps> = ({ toggleSidebar, insertTextAtSe
         </Box>
     </Toolbar><Box>
             <Tooltip title="Salvar">
-                <IconButton className="text-[#515287]" onClick={handleSave}>
+                <IconButton className="text-[#515287]" onClick={() => handleSave(trailId)}>
                     <SaveIcon sx={{ fontSize: 35 }} />
                 </IconButton>
             </Tooltip>

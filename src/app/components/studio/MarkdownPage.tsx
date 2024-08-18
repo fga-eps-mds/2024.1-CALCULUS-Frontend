@@ -8,22 +8,24 @@ import MarkdownSidebar from './MarkdownSidebar';
 import MarkdownEditor from './MarkdownEditor';
 import MarkdownPreview from './MarkdownPreview';
 import useMarkdownEditor from './hooks/useMarkdownEditor';
-import { fetchContents } from './utils/api';
 
 export interface Content {
   _id: string;
   title: string;
   body: string;
-  user: string;
+  trail: string;
 }
 
-const MarkdownPage: React.FC = () => {
+interface MarkdownPageProps {
+  trailId: string;
+}
+
+const MarkdownPage: React.FC<MarkdownPageProps> = ({ trailId }) => {
   const { data: session } = useSession();
   const {
     markdown,
     setMarkdown,
     sidebarOpen,
-    setSidebarOpen,
     contents,
     setContents,
     selectedContentId,
@@ -35,16 +37,14 @@ const MarkdownPage: React.FC = () => {
     handleSave,
     handleDelete,
     handleSelectContent,
+    fetchContents
   } = useMarkdownEditor();
 
   useEffect(() => {
     const loadContents = async () => {
       if (!session) return;
       try {
-        const response = await fetchContents();
-        const userId = session.user.id;
-        const filteredContents = response.filter((content: { user: string }) => content.user === userId);
-        setContents(filteredContents);
+        await fetchContents(trailId);
       } catch (error) {
         console.error("Erro ao buscar os conteúdos:", error);
       }
@@ -66,6 +66,7 @@ const MarkdownPage: React.FC = () => {
             insertTextAtSelection={handleInsertTextAtSelection}
             insertImage={insertImage}
             handleSave={handleSave}
+            trailId={trailId}
           />
         </Toolbar>
       </AppBar>
@@ -77,6 +78,7 @@ const MarkdownPage: React.FC = () => {
           selectedContentId={selectedContentId}
           handleSelectContent={handleSelectContent}
           handleDelete={handleDelete}
+          trailId={trailId}
         />
         <Box className="editor flex-1 flex bg-[#FFFAFA] border-r border-[#E0E0E0] relative">
           <MarkdownEditor markdown={markdown} handleChange={handleChange} textareaRef={textareaRef} />
