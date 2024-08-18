@@ -1,9 +1,8 @@
 'use server';
 
-import api from './api.service';
-import { CalculusRequest } from '@/lib/interfaces/request.interface';
+import api from '@/services/api.service';
 
-export const createUser = async (data: any): Promise<CalculusRequest> => {
+export const createUser = async (data: any) => {
   console.log(data);
   try {
     const response = await api.post('users', data);
@@ -46,9 +45,13 @@ export const loginWithFederatedProvider = async (accessToken: string) => {
   }
 };
 
-export const getUsers = async () => {
+export const getUsers = async (token: string) => {
   try {
-    const response = await api.get('/users');
+    const response = await api.get('/users', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     console.log('Users:', response.data);
     return response.data;
   } catch (error) {
@@ -65,6 +68,25 @@ export const updateUserRole = async (userId: string, newRole: string) => {
     return response.data;
   } catch (error) {
     console.error('Failed to update user role:', error);
+    throw error;
+  }
+};
+
+export const forgotPassword = async (data: any) => {
+  console.log('forgot data', data);
+  try {
+    const response = await api.post('/auth/forgot-password', data);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const resetPassword = async (data: any) => {
+  console.log('reset data', data);
+  try {
+    const response = await api.put('/auth/reset-password', data);
+    return response.data;
+  } catch (error) {
     throw error;
   }
 };
