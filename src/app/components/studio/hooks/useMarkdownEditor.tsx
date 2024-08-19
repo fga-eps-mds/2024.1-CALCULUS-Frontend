@@ -36,15 +36,15 @@ const useMarkdownEditor = () => {
         const lines = markdown.split('\n');
         const titleLine = lines.find((line) => line.startsWith('# '));
         const title = titleLine ? titleLine.substring(2) : 'Sem Título';
-        const body = markdown;
+        const content = markdown;
     
         try {
             const existingContent = contents.find(content => content.title === title);
     
             if (existingContent) {
                 await axios.put(
-                    `${process.env.NEXT_PUBLIC_API2_URL}contents/${existingContent._id}`,
-                    { title, body },
+                    `${process.env.NEXT_PUBLIC_API_URL_STUDIO}contents/${existingContent._id}`,
+                    { title, content },
                     {
                         headers: {
                             Authorization: `Bearer ${session.user.accessToken}`,
@@ -54,8 +54,8 @@ const useMarkdownEditor = () => {
                 alert('Conteúdo atualizado!');
             } else {
                 const contentResponse = await axios.post(
-                    `${process.env.NEXT_PUBLIC_API2_URL}contents`,
-                    { title, body, trail: trailId }, 
+                    `${process.env.NEXT_PUBLIC_API_URL_STUDIO}contents`,
+                    { title, content, trailId: trailId }, 
                     {
                         headers: {
                             Authorization: `Bearer ${session.user.accessToken}`,
@@ -65,7 +65,7 @@ const useMarkdownEditor = () => {
                 const newContentId = contentResponse.data._id;
     
                 await axios.put(
-                    `${process.env.NEXT_PUBLIC_API2_URL}trails/${trailId}/addContent`,
+                    `${process.env.NEXT_PUBLIC_API_URL_STUDIO}trails/${trailId}/addContent`,
                     { contentId: newContentId },
                     {
                         headers: {
@@ -92,7 +92,7 @@ const useMarkdownEditor = () => {
     
         try {
             await axios.put(
-                `${process.env.NEXT_PUBLIC_API2_URL}trails/${trailId}/removeContent`,
+                `${process.env.NEXT_PUBLIC_API_URL_STUDIO}trails/${trailId}/removeContent`,
                 { contentId: id },
                 {
                     headers: {
@@ -101,7 +101,7 @@ const useMarkdownEditor = () => {
                 }
             );
     
-            await axios.delete(`${process.env.NEXT_PUBLIC_API2_URL}contents/${id}`, {
+            await axios.delete(`${process.env.NEXT_PUBLIC_API_URL_STUDIO}contents/${id}`, {
                 headers: {
                     Authorization: `Bearer ${session?.user.accessToken}`,
                 },
@@ -121,17 +121,27 @@ const useMarkdownEditor = () => {
     const fetchContents = async (trailId: string) => {
         if (!session) return;
         try {
-            const response = await axios.get<Content[]>(`${process.env.NEXT_PUBLIC_API2_URL}contents`);
+            const response = await axios.get<Content[]>(`${process.env.NEXT_PUBLIC_API_URL_STUDIO}contents`);
+            
+            // Log da resposta da API para verificação
+            console.log('Resposta da API:', response.data);
+    
+            // Filtrando os conteúdos com base no trailId
             const filteredContents = response.data.filter(content => content.trail === trailId);
+    
+            // Log do conteúdo filtrado
+            console.log('Conteúdos filtrados:', filteredContents);
+    
             setContents(filteredContents);
         } catch (error) {
             console.error('Erro ao buscar conteúdos:', error);
         }
     };
+    
 
     const handleSelectContent = async (id: string) => {
         try {
-            const response = await axios.get<Content>(`${process.env.NEXT_PUBLIC_API2_URL}contents/${id}`);
+            const response = await axios.get<Content>(`${process.env.NEXT_PUBLIC_API_URL_STUDIO}contents/${id}`);
             setMarkdown(response.data.body);
             setSelectedContentId(id);
         } catch (error) {

@@ -59,3 +59,4 @@ const Sidebar: React.FC<SideBarProps> = ({ handleDrawerOpen, open }) => {
 };
 
 export default Sidebar;
+

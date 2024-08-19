@@ -8,9 +8,9 @@ import roboProfessor from '@/public/robo_professor.png';
 import { useSession } from 'next-auth/react';
 
 export default function LandingPage() {
-  const session = useSession();
-  
-  if (session.data) {
+  const { data: session } = useSession();
+
+  if (session) {
     window.location.href = '/home';
   }
 
