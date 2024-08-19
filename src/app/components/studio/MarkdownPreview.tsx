@@ -6,17 +6,17 @@ import remarkMath from 'remark-math';
 import 'katex/dist/katex.min.css';
 
 interface PreviewProps {
-    markdown: string;
+  markdown: string;
 }
 
 const MarkdownPreview: React.FC<PreviewProps> = ({ markdown }) => (
-    <ReactMarkdown
-        className="prose prose-lg"
-        remarkPlugins={[remarkMath, remarkGfm]}
-        rehypePlugins={[rehypeKatex]}
-    >
-        {markdown}
-    </ReactMarkdown>
+  <ReactMarkdown
+    className="prose prose-lg"
+    remarkPlugins={[remarkMath, remarkGfm]}
+    rehypePlugins={[rehypeKatex]}
+  >
+    {markdown}
+  </ReactMarkdown>
 );
 
 export default MarkdownPreview;
