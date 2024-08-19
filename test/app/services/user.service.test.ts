@@ -1,4 +1,4 @@
-import api from '@/services/api.service';
+import {userApi} from '@/services/apis.service';
 import {
   createUser,
   loginWithEmailAndPassword,
@@ -7,8 +7,8 @@ import {
 } from '@/services/user.service';
 import { UserRole } from '@/lib/enum/userRole.enum';
 
-jest.mock('@/services/api.service');
-const mockedApi = api as jest.Mocked<typeof api>;
+jest.mock('@/services/apis.service');
+const mockedApi = userApi as jest.Mocked<typeof userApi>;
 
 describe('User Service', () => {
   describe('updateUserRole', () => {

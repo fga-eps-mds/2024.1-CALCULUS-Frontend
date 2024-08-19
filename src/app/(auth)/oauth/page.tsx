@@ -8,11 +8,20 @@ import { Suspense } from 'react';
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import loadImage from '@/public/loading.gif';
-import Image from 'next/image';
+import { CircularProgress } from '@mui/material';
 
-
-const signInWithToken = async (token: string) => {
-  const result = await signIn('credentials', { token, redirect: false });
+const signInWithToken = async ({
+  token,
+  refresh,
+}: {
+  token: string;
+  refresh: string;
+}) => {
+  const result = await signIn('credentials', {
+    token,
+    refresh,
+    redirect: false,
+  });
   if (!result?.error) {
     return result;
   } else {
@@ -26,12 +35,18 @@ const OAuthContent = () => {
   const [message, setMessage] = useState('Carregando...');
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
+  const refresh = searchParams.get('refresh');
 
   const { mutate, isPending } = useMutation({
     mutationFn: signInWithToken,
     onSuccess: () => {
       setMessage('Login efetuado com sucesso! redirecionando');
-      window.location.href = '/home';
+      localStorage.setItem('token', JSON.stringify(session?.user.accessToken));
+      localStorage.setItem(
+        'refresh',
+        JSON.stringify(session?.user.refreshToken),
+      );
+      router.push('/home');
     },
     onError: () => {
       toast.error('Erro ao efetuar login, por favor tente novamente!');
@@ -40,8 +55,8 @@ const OAuthContent = () => {
   });
 
   useEffect(() => {
-    if (token && !session) {
-      mutate(token);
+    if (token && refresh && !session) {
+      mutate({ token, refresh });
     }
   }, [token, session, mutate]);
 
@@ -52,7 +67,7 @@ const OAuthContent = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      {isPending ? <Image src={loadImage.src} alt="Carregando..." /> : message}
+      {isPending ? <CircularProgress /> : message}
     </div>
   );
 };
