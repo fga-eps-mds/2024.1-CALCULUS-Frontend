@@ -73,7 +73,7 @@ const TrailTable: React.FC<TrailTableProps> = ({
                       Editar Trilha
                     </MenuItem>
                     <MenuItem
-                      onClick={() => router.push(`/trail/${trail._id}`)}
+                      onClick={() => router.push(`/studio/${trail._id}`)}
                     >
                       Gerenciar Conteúdos
                     </MenuItem>
