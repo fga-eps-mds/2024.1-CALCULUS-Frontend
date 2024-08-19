@@ -1,10 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import NavBar from './navBar.component';
 import Sidebar from './sidebar.component';
-import { Box, Toolbar } from '@mui/material';
+import { Box } from '@mui/material';
 import { useSession } from 'next-auth/react';
 
 export default function ClientLayout({

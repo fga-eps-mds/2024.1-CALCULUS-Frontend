@@ -1,9 +1,8 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
-import JourneyTable from '@/components/journey/JourneyTable'
-import SearchBar from '@/components/admin/SearchBar';
+import { useQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import {
-  CircularProgress,
   Box,
   Dialog,
   DialogActions,
@@ -11,90 +10,125 @@ import {
   DialogTitle,
   Button,
   Typography,
+  CircularProgress,
   TextField,
 } from '@mui/material';
-
-type Journey = {
-    title: string;
-    description: string;
-    user?: string;
-  };
+import ButtonRed from '@/components/ui/buttons/red.button';
+import SearchBar from '@/components/admin/SearchBar';
+import JourneyTable from '@/components/tables/journey.table';
+import { Journey } from '@/lib/interfaces/journey.interface';
+import { UserRole } from '@/lib/enum/userRole.enum';
+import {
+  deleteJourney,
+  getJourneys,
+  getJourneysByUser,
+} from '@/services/studioMaker.service';
+import Popup from '@/components/ui/popup';
+import { CreateJourneyForm } from '@/components/forms/createJourney.form';
+import { UpdateJourneyForm } from '@/components/forms/editJourney.form';
+import { toast } from 'sonner';
 
 const JourneyPage: React.FC = () => {
+  const { data: session } = useSession();
+  const fetchJourneys = async (): Promise<Journey[]> => {
+    const journeys = !session?.user.role.includes(UserRole.ADMIN)
+      ? await getJourneysByUser(session?.user.id!)
+      : await getJourneys();
+    setListJourneys(journeys);
+    setFilteredJourneys(journeys);
+    return journeys;
+  };
 
-  const journeyTestArray = [{title: '1', description:'description1'}, {title:'2', description:'description2'}, {title: '3', description:'description3'}, {title: '11', description:'description1'}];
+  const {
+    data: journeys = [],
+    isLoading,
 
-  const [journeys, setJourneys] = useState<Journey[]>([]);
-  const [filteredJourneys, setfilteredJourneys] = useState<Journey[]>([]);
-  const [selectedJourney, setSelectedJourney] = useState<Journey | null>(null);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [exclusionDialogOpen, setExclusionDialogOpen] = useState<boolean>(false);
-  const [editionDialogOpen, seteditionDialogOpen] = useState<boolean>(false);
+    error,
+  } = useQuery<Journey[], Error>({
+    queryKey: ['journeys'],
+    queryFn: fetchJourneys,
+  });
+
+  const [listJourneys, setListJourneys] = useState<Journey[]>([]);
+  const [filteredJourneys, setFilteredJourneys] = useState<Journey[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
+
+  const [selectedJourney, setSelectedJourney] = useState<Journey | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [exclusionDialogOpen, setExclusionDialogOpen] =
+    useState<boolean>(false);
+  const [editionDialogOpen, setEditionDialogOpen] = useState<boolean>(false);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   useEffect(() => {
-    /* const fetchJourneys = async () => {};
-    fetchJourneys(); */
-    setJourneys(journeyTestArray);
-    setfilteredJourneys(filteredJourneys);
-  }, []);
+    if (searchQuery === '') {
+      setFilteredJourneys(listJourneys);
+    } else {
+      const lowercasedQuery = searchQuery.toLowerCase();
+      const filtered = listJourneys.filter(
+        (journey) =>
+          journey.title.toLowerCase().includes(lowercasedQuery) ||
+          journey.description.toLowerCase().includes(lowercasedQuery),
+      );
+      setFilteredJourneys(filtered);
+    }
+  }, [searchQuery, listJourneys]);
 
-  useEffect(() => {
-    const lowercasedQuery = searchQuery.toLowerCase();
-    const newFilteredJourneys = journeys.filter(
-      (journey) =>
-        journey.title.toLowerCase().includes(lowercasedQuery) ||
-        journey.description.toLowerCase().includes(lowercasedQuery),
-    );
-    setfilteredJourneys(newFilteredJourneys);
-  }, [searchQuery, journeys]);
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  }
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>, journey: Journey) => {
+  const handleMenuOpen = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    journey: Journey,
+  ) => {
     setAnchorEl(event.currentTarget);
     setSelectedJourney(journey);
   };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
-    setSelectedJourney(null);
-  };
-
-  const handleEdtionDialogClose = () => {
-    seteditionDialogOpen(false);
-    handleMenuClose();
   };
 
   const handleJourneyAction = (action: string) => {
-    if(action === 'editar'){
-      seteditionDialogOpen(true);
-    }
-    if(action === 'gerenciar'){
-      alert("to redirect to selected journey's trails");
-    }
-    if(action === 'excluir'){
-      setExclusionDialogOpen(true);
-    }
-  }
+    if (action === 'editar') setEditionDialogOpen(true);
+    if (action === 'gerenciar') alert("Redirect to selected journey's trails");
+    if (action === 'excluir') setExclusionDialogOpen(true);
+  };
 
-  const cancelJourneyExclusion = () => {
-    setExclusionDialogOpen(false);
-    handleMenuClose();
-  }
+  const addJourney = (journey: Journey) => {
+    setListJourneys([...listJourneys, journey]);
+  };
 
-  const excludeJourney = () => {
-    if(selectedJourney){
-      alert('to exclude journey');
+  const updateJourney = (journey: Journey) => {
+    setListJourneys(
+      listJourneys.map((j) => (j._id === journey._id ? journey : j)),
+    );
+  };
+
+  const handleRemoveJourney = async (journey: Journey) => {
+    const response = await deleteJourney({
+      id: journey._id,
+      token: JSON.parse(localStorage.getItem('token')!),
+    });
+    if (response.data) {
+      toast.success('Jornada excluída com sucesso!');
+      setListJourneys(listJourneys.filter((j) => j._id !== journey._id));
       setExclusionDialogOpen(false);
-      setAnchorEl(null);
+    } else {
+      toast.error('Erro ao excluir jornada. Tente novamente mais tarde!');
     }
+  };
+
+  const handleCloseCreateDialog = () => {
+    setCreateDialogOpen(false);
+  };
+  if (isLoading) {
+    return <CircularProgress />;
   }
 
-  const handleNewJourney = () => {
-    alert('to create a new journey');
+  if (error) {
+    return (
+      <Typography>
+        Error fetching journeys: {(error as Error).message}
+      </Typography>
+    );
   }
 
   return (
@@ -106,117 +140,68 @@ const JourneyPage: React.FC = () => {
         alignItems: 'center',
       }}
     >
+      <Typography variant="h2">Jornadas</Typography>
+      <Box sx={{ width: '100%', maxWidth: 800, marginBottom: 2 }}>
+        <SearchBar value={searchQuery} onChange={setSearchQuery} />
+      </Box>
 
-    <Typography variant='h2'>Jornadas</Typography>
-
-    <Box sx={{ width: '100%', maxWidth: 800, marginBottom: 2 }}>
-      <SearchBar value={searchQuery} onChange={handleSearch} />
-    </Box>
-
-    <JourneyTable
+      <JourneyTable
         journeys={filteredJourneys}
-        anchorEl= {anchorEl}
+        anchorEl={anchorEl}
         onMenuClick={handleMenuOpen}
         onMenuClose={handleMenuClose}
         onJourneyAction={handleJourneyAction}
-    />
+      />
 
-    <Dialog
-            open={editionDialogOpen}
-            onClose={handleEdtionDialogClose}
-            PaperProps={{
-              component: 'form',
-              onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-                if(selectedJourney){
-                  event.preventDefault();
-                  const formData = new FormData(event.currentTarget);
-                  const formJson = Object.fromEntries((formData as any).entries());
-                  const title = formJson.title;
-                  const description = formJson.description;
-                  console.log(`${title}  ${description}`);
-                  alert('to edit selected journey')
-                  handleEdtionDialogClose();
-                }
-              },
-            }}
-          >
-            <DialogTitle>Editar Jornada</DialogTitle>
-              <DialogContent>
-                <TextField
-                  name='title'
-                  fullWidth
-                  variant="outlined"
-                  label="Nome da Jornada"
-                  margin="normal"
-                  type='text'
-                  required
-                  sx={{ bgcolor: 'white' }}
-                />
-                <TextField
-                  name='description'
-                  fullWidth
-                  variant="outlined"
-                  label="Breve descrição da jornada"
-                  margin="normal"
-                  type='text'
-                  sx={{ bgcolor: 'white' }}
-                  multiline
-                  rows={4}
-                  maxRows={8}
-                />
-              </DialogContent>
-            <DialogActions>
-              <Button onClick={handleEdtionDialogClose}>Cancelar</Button>
-              <Button type="submit">Confirmar</Button>
-            </DialogActions>
-      </Dialog>
-
-    <Button
-        onClick={handleNewJourney}
-        variant="contained"
-        sx={{
-          fontWeight: 'bold',
-          position: 'fixed',
-          bottom: 16,
-          right: 44,
-          bgcolor: 'red',
-          color: 'white',
-          py: 2,
-          px: 4,
-          borderRadius: '50px',
-          textTransform: 'none',
-          width: 'auto',
-          minWidth: '200px',
-          maxWidth: '300px',
-          transition: 'background-color 0.3s',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
-          '&:hover': {
-            bgcolor: 'darkred',
-          },
-        }}
-      >
+      <ButtonRed onClick={() => setCreateDialogOpen(true)}>
         Nova Jornada
-    </Button>
+      </ButtonRed>
 
-    <Dialog open={exclusionDialogOpen} onClose={cancelJourneyExclusion}>
+      <Popup
+        openPopup={editionDialogOpen}
+        setPopup={setEditionDialogOpen}
+        title="Editar Jornada"
+      >
+        <UpdateJourneyForm
+          updateJourney={updateJourney}
+          journey={selectedJourney!}
+          setDialog={setEditionDialogOpen}
+        />
+      </Popup>
+
+      <Popup
+        openPopup={createDialogOpen}
+        setPopup={setCreateDialogOpen}
+        title="Criar Nova Jornada"
+      >
+        <CreateJourneyForm
+          addJourney={addJourney}
+          setDialog={setCreateDialogOpen}
+        />
+      </Popup>
+
+      <Dialog
+        open={exclusionDialogOpen}
+        onClose={() => setExclusionDialogOpen(false)}
+      >
         <DialogTitle>Confirmar Exclusão de Jornada</DialogTitle>
         <DialogContent>
           {selectedJourney && (
-            <Typography variant="h6">
-              {`Excluir ${selectedJourney.title}?`}
-            </Typography>
+            <Typography variant="h6">{`Excluir ${selectedJourney.title}?`}</Typography>
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={cancelJourneyExclusion} color="error">
+          <Button onClick={() => setExclusionDialogOpen(false)} color="error">
             Cancelar
           </Button>
-          <Button onClick={excludeJourney} color="primary">
+          <Button
+            onClick={() => handleRemoveJourney(selectedJourney!)}
+            color="primary"
+          >
             Confirmar
           </Button>
         </DialogActions>
       </Dialog>
-
     </Box>
   );
 };

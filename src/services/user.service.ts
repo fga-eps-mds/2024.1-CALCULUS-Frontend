@@ -1,11 +1,11 @@
 'use server';
 
-import api from '@/services/api.service';
+import { userApi } from '@/services/apis.service';
 
 export const createUser = async (data: any) => {
   console.log(data);
   try {
-    const response = await api.post('users', data);
+    const response = await userApi.post('users', data);
     return {
       data: response.data,
     };
@@ -24,7 +24,7 @@ export const loginWithEmailAndPassword = async (
 ) => {
   try {
     console.log(`Login email: ${email}, password: ${password}`);
-    const response = await api.post('auth/login', { email, password });
+    const response = await userApi.post('auth/login', { email, password });
     return response;
   } catch (error) {
     console.log(error);
@@ -34,7 +34,7 @@ export const loginWithEmailAndPassword = async (
 
 export const loginWithFederatedProvider = async (accessToken: string) => {
   try {
-    const response = await api.post('auth/login/federated', {
+    const response = await userApi.post('auth/login/federated', {
       accessToken,
     });
     console.log('Login response: ', response.data);
@@ -47,7 +47,7 @@ export const loginWithFederatedProvider = async (accessToken: string) => {
 
 export const getUsers = async (token: string) => {
   try {
-    const response = await api.get('/users', {
+    const response = await userApi.get('/users', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -62,7 +62,7 @@ export const getUsers = async (token: string) => {
 
 export const updateUserRole = async (userId: string, newRole: string) => {
   try {
-    const response = await api.patch(`/users/${userId}/role`, {
+    const response = await userApi.patch(`/users/${userId}/role`, {
       role: newRole,
     });
     return response.data;
@@ -75,7 +75,7 @@ export const updateUserRole = async (userId: string, newRole: string) => {
 export const forgotPassword = async (data: any) => {
   console.log('forgot data', data);
   try {
-    const response = await api.post('/auth/forgot-password', data);
+    const response = await userApi.post('/auth/forgot-password', data);
   } catch (error) {
     throw error;
   }
@@ -84,7 +84,7 @@ export const forgotPassword = async (data: any) => {
 export const resetPassword = async (data: any) => {
   console.log('reset data', data);
   try {
-    const response = await api.put('/auth/reset-password', data);
+    const response = await userApi.put('/auth/reset-password', data);
     return response.data;
   } catch (error) {
     throw error;

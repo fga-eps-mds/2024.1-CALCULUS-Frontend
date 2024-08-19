@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Poppins } from 'next/font/google';
 import '../styles/globals.css';
 import SessionProvider from '@/providers/session.provider';
 import './globals.css';
@@ -7,7 +7,7 @@ import ClientLayout from '@/components/clientLayout';
 import { Toaster } from 'sonner';
 import ReactQueryProvider from '@/providers/reactQueryProvider.provider';
 
-const inter = Inter({ subsets: ['latin'] });
+const poppins = Poppins({ subsets: ['latin'], weight: ['400', '600', '700'] });
 
 export const metadata: Metadata = {
   title: 'Calculus',
@@ -20,8 +20,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={poppins.className}>
+      <body>
         <SessionProvider>
           <ClientLayout>
             <ReactQueryProvider>{children}</ReactQueryProvider>
