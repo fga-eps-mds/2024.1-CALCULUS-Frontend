@@ -7,7 +7,7 @@ import { signIn } from 'next-auth/react';
 
 export function GoogleAuthButton() {
   const handleClick = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/google/callback`;
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL_USER}/auth/google/callback`;
   };
 
   return (

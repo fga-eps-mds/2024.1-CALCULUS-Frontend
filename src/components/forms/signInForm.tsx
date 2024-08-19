@@ -18,17 +18,22 @@ import { signIn, useSession } from 'next-auth/react';
 import { toast } from 'sonner';
 
 export function SingInForm() {
-  const session = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    if (session.data) {
+    if (session) {
+      localStorage.setItem('token', JSON.stringify(session?.user.accessToken));
+      localStorage.setItem(
+        'refresh',
+        JSON.stringify(session?.user.refreshToken),
+      );
       toast.success('Login realizado com sucesso!');
       router.push('/home');
     }
-  }, [session.data]);
+  }, [session]);
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -97,7 +102,7 @@ export function SingInForm() {
       />
       <p className="text-[18px] font-light">
         Esqueceu sua senha?
-        <Link href="#" className="text-indigo-700 block">
+        <Link href="/forgot-password" className="text-indigo-700 block">
           Recuperar senha
         </Link>
       </p>
