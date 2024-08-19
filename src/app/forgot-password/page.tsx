@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Box, TextField, Button, Alert } from '@mui/material';
+import { Box, TextField, Button } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import calcuclusLogo from '@/public/calculus-logo.svg';
 import { forgotPassword } from '@/services/user.service';

@@ -15,31 +15,31 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Journey } from '@/lib/interfaces/journey.interface';
+import { Trail } from '@/lib/interfaces/trails.interface';
 
-interface JourneyTableProps {
-  journeys: Journey[];
+interface TrailTableProps {
+  trails: Trail[];
   anchorEl: null | HTMLElement;
   onMenuClick: (
     event: React.MouseEvent<HTMLButtonElement>,
-    journey: Journey,
+    trail: Trail,
   ) => void;
   onMenuClose: () => void;
-  onJourneyAction: (action: string) => void;
+  onTrailAction: (action: string) => void;
 }
 
-const JourneyTable: React.FC<JourneyTableProps> = ({
-  journeys,
+const TrailTable: React.FC<TrailTableProps> = ({
+  trails,
   anchorEl,
   onMenuClick,
   onMenuClose,
-  onJourneyAction,
+  onTrailAction,
 }) => {
   const open = Boolean(anchorEl);
   const router = useRouter();
 
   const handleMenuItemClick = (action: string) => {
-    onJourneyAction(action);
+    onTrailAction(action);
     onMenuClose();
   };
 
@@ -50,18 +50,16 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
           <TableHead>
             <TableRow>
               <TableCell sx={{ fontWeight: 'bold' }}>Nome</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Descrição</TableCell>
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {journeys.map((journey) => (
-              <TableRow key={journey._id}>
-                <TableCell align="left">{journey.title}</TableCell>
-                <TableCell align="left">{journey.description}</TableCell>
+            {trails.map((trail) => (
+              <TableRow key={trail._id}>
+                <TableCell align="left">{trail.name}</TableCell>
                 <TableCell align="right">
                   <IconButton
-                    onClick={(e) => onMenuClick(e, journey)}
+                    onClick={(e) => onMenuClick(e, trail)}
                     color="primary"
                   >
                     <MoreVertIcon />
@@ -72,12 +70,12 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
                     onClose={onMenuClose}
                   >
                     <MenuItem onClick={() => handleMenuItemClick('editar')}>
-                      Editar Jornada
+                      Editar Trilha
                     </MenuItem>
                     <MenuItem
-                      onClick={() => router.push(`/journey/${journey._id}`)}
+                      onClick={() => router.push(`/trail/${trail._id}`)}
                     >
-                      Gerenciar trilhas
+                      Gerenciar Conteúdos
                     </MenuItem>
                     <MenuItem onClick={() => handleMenuItemClick('excluir')}>
                       Excluir
@@ -93,4 +91,4 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
   );
 };
 
-export default JourneyTable;
+export default TrailTable;
