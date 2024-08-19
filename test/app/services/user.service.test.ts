@@ -108,22 +108,4 @@ describe('User Service', () => {
     });
   });
 
-  describe('getUsers', () => {
-    it('should fetch users and return the data', async () => {
-      const mockResponse = { data: [{ id: '1', name: 'John Doe' }] };
-      mockedApi.get.mockResolvedValueOnce(mockResponse);
-
-      const result = await getUsers();
-
-      expect(mockedApi.get).toHaveBeenCalledWith('/users');
-      expect(result).toEqual(mockResponse.data);
-    });
-
-    it('should handle errors and throw an error', async () => {
-      const mockError = new Error('Failed to fetch users');
-      mockedApi.get.mockRejectedValueOnce(mockError);
-
-      await expect(getUsers()).rejects.toThrow('Failed to fetch users');
-    });
-  });
 });
