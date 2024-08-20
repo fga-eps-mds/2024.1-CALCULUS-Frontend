@@ -1,8 +1,10 @@
 /* Estilos gerais */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;600;700;800;900&display=swap');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:wght@400;700&display=swap');
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 * {
   margin: 0;
@@ -11,7 +13,8 @@
 }
 
 body {
-  @apply m-0 font-sans bg-white text-black;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
   background-color: #fffafa; 
   color: rgb(var(--foreground-rgb));
 }
@@ -37,6 +40,7 @@ a {
   box-sizing: border-box;
   overflow-y: auto;
   background-color: #FFF5EE;
+  font-family: 'Old Standard TT', serif;
 }
 
 .preview h1 {
