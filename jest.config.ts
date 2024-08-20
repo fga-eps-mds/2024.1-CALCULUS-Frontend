@@ -2,7 +2,7 @@ import type { Config } from 'jest';
 import nextJest from 'next/jest';
 
 const createJestConfig = nextJest({
-  dir: './src',
+  dir: './', 
 });
 
 const config: Config = {
@@ -11,6 +11,7 @@ const config: Config = {
   preset: 'ts-jest',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', 
   },
   reporters: [
     'default',
@@ -22,6 +23,7 @@ const config: Config = {
       },
     ],
   ],
+  testMatch: ['<rootDir>/test/**/*.(test|spec).ts?(x)'], 
 };
 
 export default createJestConfig(config);

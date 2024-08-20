@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import '../styles/globals.css';
 import SessionProvider from '@/providers/session.provider';
-import './globals.css';
+import '@/styles/globals.css';
 import ClientLayout from '@/components/clientLayout';
 import { Toaster } from 'sonner';
 import ReactQueryProvider from '@/providers/reactQueryProvider.provider';
