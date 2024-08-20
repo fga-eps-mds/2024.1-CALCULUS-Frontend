@@ -1,11 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import LandingPage from '@/app/page';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import '@testing-library/jest-dom';
 
 jest.mock('next-auth/react');
-jest.mock('next/router', () => ({
+jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
