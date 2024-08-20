@@ -37,11 +37,17 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
 }) => {
   const open = Boolean(anchorEl);
   const router = useRouter();
+  const [selectedJourney, setSelectedJourney] = React.useState<Journey | null>(null);
 
   const handleMenuItemClick = (action: string) => {
     onJourneyAction(action);
     onMenuClose();
   };
+
+  const handleItem = (e: any, journey: Journey) => {
+    onMenuClick(e, journey)
+    setSelectedJourney(journey)
+  }
 
   return (
     <Box sx={{ width: '100%', maxWidth: 800 }}>
@@ -61,7 +67,7 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
                 <TableCell align="left">{journey.description}</TableCell>
                 <TableCell align="right">
                   <IconButton
-                    onClick={(e) => onMenuClick(e, journey)}
+                    onClick={(e) => handleItem(e, journey)}
                     color="primary"
                   >
                     <MoreVertIcon />
@@ -75,7 +81,7 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
                       Editar Jornada
                     </MenuItem>
                     <MenuItem
-                      onClick={() => router.push(`/journey/${journey._id}`)}
+                      onClick={() => router.push(`/journey/${selectedJourney?._id}`)}
                     >
                       Gerenciar trilhas
                     </MenuItem>

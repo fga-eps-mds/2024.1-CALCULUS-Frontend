@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { insertTextAtSelection } from '../utils/insertTextAtSelection';
 import { Content } from '../MarkdownPage';
+import { toast } from 'sonner';
 
 const useMarkdownEditor = () => {
   const { data: session } = useSession();
@@ -38,7 +39,7 @@ const useMarkdownEditor = () => {
 
   const handleSave = async (trailId: string) => {
     if (!session) {
-      alert('Você precisa estar logado para salvar o conteúdo.');
+      toast.error('Você precisa estar logado para salvar o conteúdo.');
       return;
     }
 
@@ -62,7 +63,7 @@ const useMarkdownEditor = () => {
             },
           },
         );
-        alert('Conteúdo atualizado!');
+        toast.success('Conteúdo atualizado!');
       } else {
         const contentResponse = await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL_STUDIO}contents`,
@@ -84,19 +85,19 @@ const useMarkdownEditor = () => {
             },
           },
         );
-        alert('Conteúdo salvo e adicionado à trilha!');
+        toast.success('Conteúdo salvo e adicionado à trilha!');
       }
       fetchContents(trailId);
     } catch (error) {
       console.log('TOKEN:', session.user.accessToken);
       console.error('Erro ao salvar conteúdo:', error);
-      alert('Erro ao salvar conteúdo.');
+      toast.error('Erro ao salvar conteúdo.');
     }
   };
 
   const handleDelete = async (id: string, trailId: string) => {
     if (!trailId) {
-      alert('Trilha não definida.');
+      toast.error('Trilha não definida.');
       return;
     }
 
@@ -120,13 +121,13 @@ const useMarkdownEditor = () => {
         },
       );
 
-      alert('Conteúdo deletado e removido da trilha!');
+      toast.success('Conteúdo deletado e removido da trilha!');
       setMarkdown('');
       setSelectedContentId(null);
       fetchContents(trailId);
     } catch (error) {
       console.error('Erro ao deletar conteúdo:', error);
-      alert('Erro ao deletar conteúdo.');
+      toast.error('Erro ao deletar conteúdo.');
     }
   };
 

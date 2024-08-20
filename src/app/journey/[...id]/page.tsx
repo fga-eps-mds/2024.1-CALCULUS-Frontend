@@ -46,7 +46,7 @@ export default function ManageTrack({ params }: { params: { id: string } }) {
   return (
     <>
       <Box className="flex flex-col items-center mt-8">
-        <h1 className="text-black font-bold text-4xl">{jorney.title}</h1>
+        <h1 className="text-blac font-bold text-4xl">{jorney.title}</h1>
         <JorneyTrailsListPage trails={trails} journeyId={params.id} />
       </Box>
     </>
