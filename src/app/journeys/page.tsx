@@ -40,7 +40,7 @@ const JourneyPage: React.FC = () => {
   };
 
   const {
-    data: journeys = [],
+    data = [],
     isLoading,
 
     error,
