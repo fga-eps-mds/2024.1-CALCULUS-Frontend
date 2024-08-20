@@ -3,16 +3,19 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import roboProfessor from '@/public/robo_professor.png';
-
 import { useSession } from 'next-auth/react';
 
 export default function LandingPage() {
   const { data: session } = useSession();
+  const router = useRouter();
 
-  if (session) {
-    window.location.href = '/home';
-  }
+  React.useEffect(() => {
+    if (session) {
+      router.push('/home');
+    }
+  }, [session, router]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffafa]">
