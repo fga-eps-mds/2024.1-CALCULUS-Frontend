@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, AppBar, Toolbar } from '@mui/material';
@@ -37,7 +37,7 @@ const MarkdownPage: React.FC<MarkdownPageProps> = ({ trailId }) => {
     handleSave,
     handleDelete,
     handleSelectContent,
-    fetchContents
+    fetchContents,
   } = useMarkdownEditor();
 
   useEffect(() => {
@@ -46,20 +46,34 @@ const MarkdownPage: React.FC<MarkdownPageProps> = ({ trailId }) => {
       try {
         await fetchContents(trailId);
       } catch (error) {
-        console.error("Erro ao buscar os conteúdos:", error);
+        console.error('Erro ao buscar os conteúdos:', error);
       }
     };
 
     loadContents();
   }, [session, setContents]);
 
-  const handleInsertTextAtSelection = (before: string, after: string, defaultText: string) => {
-    insertTextAtSelection(textareaRef, markdown, setMarkdown, before, after, defaultText);
+  const handleInsertTextAtSelection = (
+    before: string,
+    after: string,
+    defaultText: string,
+  ) => {
+    insertTextAtSelection(
+      textareaRef,
+      markdown,
+      setMarkdown,
+      before,
+      after,
+      defaultText,
+    );
   };
 
   return (
     <Box className="relative flex flex-col h-screen">
-      <AppBar position="static" className="bg-[#f8f3f3] border-b border-[#D9D9D9]">
+      <AppBar
+        position="static"
+        className="bg-[#f8f3f3] border-b border-[#D9D9D9]"
+      >
         <Toolbar className="flex justify-between items-center">
           <MarkdownToolbar
             toggleSidebar={toggleSidebar}
@@ -81,7 +95,11 @@ const MarkdownPage: React.FC<MarkdownPageProps> = ({ trailId }) => {
           trailId={trailId}
         />
         <Box className="editor flex-1 flex bg-[#FFFAFA] border-r border-[#E0E0E0] relative">
-          <MarkdownEditor markdown={markdown} handleChange={handleChange} textareaRef={textareaRef} />
+          <MarkdownEditor
+            markdown={markdown}
+            handleChange={handleChange}
+            textareaRef={textareaRef}
+          />
         </Box>
         <Box className="preview flex-1 overflow-y-auto p-4 bg-white">
           <MarkdownPreview markdown={markdown} />
