@@ -10,6 +10,9 @@ import { toast } from 'sonner';
 
 import { createUser } from '@/services/user.service';
 
+import Mybutton from '@/components/ui/buttons/myButton.component';
+import MyInput from '@/components/ui/inputs/myInput.component';
+
 export function SingUpForm() {
   const router = useRouter();
   const {
@@ -37,58 +40,46 @@ export function SingUpForm() {
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-      <TextField
+      <MyInput
         fullWidth
-        variant="outlined"
         label="Email"
-        margin="normal"
-        sx={{ bgcolor: 'white' }}
-        {...register('email')}
+        bgcolor='white'
+        register={register('email')}
         error={!!errors.email}
         helperText={errors.email?.message}
       />
       <Box display="flex" gap={2} width="100%">
-        <TextField
+
+        <MyInput
           fullWidth
-          variant="outlined"
           label="Name"
-          margin="normal"
-          sx={{ bgcolor: 'white' }}
-          {...register('name')}
+          bgcolor='white'
+          register={register('name')}
           error={!!errors.name}
           helperText={errors.name?.message}
         />
-        <TextField
+        <MyInput
           fullWidth
-          variant="outlined"
           label="Username"
-          margin="normal"
-          sx={{ bgcolor: 'white' }}
-          {...register('username')}
+          bgcolor='white'
+          register={register('username')}
           error={!!errors.username}
           helperText={errors.username?.message}
         />
       </Box>
-      <TextField
-        fullWidth
-        variant="outlined"
-        label="Password"
-        margin="normal"
-        type="password"
-        sx={{ bgcolor: 'white' }}
-        {...register('password')}
-        error={!!errors.password}
-        helperText={errors.password?.message}
-      />
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        sx={{ bgcolor: '#000', mt: 2 }}
-        type="submit"
-      >
+
+      <MyInput
+          fullWidth
+          label="Password"
+          type='password'
+          bgcolor='white'
+          register={register('password')}
+          error={!!errors.password}
+          helperText={errors.password?.message}
+        />
+      <Mybutton type="submit" width="400px" height="61px" color="black" bold>
         {isPending ? 'Loading...' : 'Sign up'}
-      </Button>
+      </Mybutton>
     </Box>
   );
 }

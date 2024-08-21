@@ -4,6 +4,7 @@ import { Box, Button, TextField } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import MyButton from '@/components/ui/buttons/myButton.component';
 
 import { journeySchema, JourneySchemaData } from '@/lib/schemas/journey.schema';
 import { updateJourneyById } from '@/services/studioMaker.service';
@@ -59,15 +60,9 @@ export function UpdateJourneyForm({ updateJourney, journey, setDialog }: any) {
         {...register('description')}
         error={!!errors.description}
       />
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        sx={{ bgcolor: '#000', mt: 2 }}
-        type="submit"
-      >
+      <MyButton type="submit" width="100%" height="50px" color="black" bold>
         Editar
-      </Button>
+      </MyButton>
     </Box>
   );
 }

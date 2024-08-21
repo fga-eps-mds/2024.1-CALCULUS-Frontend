@@ -16,6 +16,8 @@ import { useEffect, useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { signIn, useSession } from 'next-auth/react';
 import { toast } from 'sonner';
+import Mybutton from '@/components/ui/buttons/myButton.component';
+import MyInput from '@/components/ui/inputs/myInput.component';
 
 export function SingInForm() {
   const { data: session } = useSession();
@@ -63,29 +65,22 @@ export function SingInForm() {
       }}
       className="grid gap-4 justify-center m-3"
     >
-      <TextField
-        type="email"
-        placeholder="Email"
+      <MyInput
         label="Email"
+        width="380px"
         required
-        sx={{ width: '380px' }}
-        margin="dense"
-        className="justify-self-center"
-        {...register('email')}
+        register={register('email')}
         error={!!errors.email}
         helperText={errors.email?.message}
       />
-      <TextField
+      <MyInput
         type={showPassword ? 'text' : 'password'}
-        placeholder="Password"
-        required
         label="Password"
-        sx={{ width: '380px' }}
-        {...register('password')}
+        width="380px"
+        required
+        register={register('password')}
         error={!!errors.password}
         helperText={errors.password?.message}
-        margin="dense"
-        className="justify-self-center"
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -106,15 +101,9 @@ export function SingInForm() {
           Recuperar senha
         </Link>
       </p>
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        sx={{ bgcolor: '#000', mt: 2 }}
-        type="submit"
-      >
+      <Mybutton type="submit" width="400px" height="61px" color="black" bold>
         Login
-      </Button>
+      </Mybutton>
     </Box>
   );
 }

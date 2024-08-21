@@ -4,11 +4,11 @@ import Image from 'next/image';
 import {
   Box,
   TextField,
-  Button,
   IconButton,
   InputAdornment,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import MyButton from '@/components/ui/buttons/myButton.component';
 import calculusLogos from '@/public/calculus-logo.svg';
 import { useSearchParams } from 'next/navigation';
 import {
@@ -125,14 +125,9 @@ function SearchParamsComponentWrapper() {
             ),
           }}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          className="bg-black text-white py-3 rounded-full hover:bg-gray-800 transition-colors w-full"
-        >
+        <MyButton type="submit" width="400px" height="61px" color="black" bold>
           Enviar
-        </Button>
+        </MyButton>
       </Box>
     </Box>
   );

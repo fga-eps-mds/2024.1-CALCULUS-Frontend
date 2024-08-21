@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import MyButton from '@/components/ui/buttons/myButton.component';
 import { Box, TextField, Button } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import calcuclusLogo from '@/public/calculus-logo.svg';
@@ -76,14 +77,9 @@ export default function ForgotPassword() {
           error={!!errors.email}
           helperText={errors.email?.message}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          fullWidth
-          className="bg-black text-white py-3 rounded-full hover:bg-gray-800 transition-colors w-full"
-        >
+        <MyButton width="400px" height="61px" color="black" bold type="submit">
           Enviar
-        </Button>
+        </MyButton>
       </Box>
     </Box>
   );

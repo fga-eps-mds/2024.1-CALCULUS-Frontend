@@ -18,7 +18,7 @@ describe('LandingPage', () => {
     expect(screen.getByText('Calculus')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
     expect(screen.getByText(/Matemática que/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /comece aqui/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /começe aqui/i })).toBeInTheDocument();
   });
 
   it('should redirect to /home if the user is authenticated', () => {
@@ -51,10 +51,10 @@ describe('LandingPage', () => {
 
     render(<LandingPage />);
 
-    const startButton = screen.getByRole('button', { name: /comece aqui/i });
+    const startButton = screen.getByRole('button', { name: /começe aqui/i });
     fireEvent.click(startButton);
 
-    const link = screen.getByRole('link', { name: /comece aqui/i });
+    const link = screen.getByRole('link', { name: /começe aqui/i });
     expect(link).toHaveAttribute('href', '/register');
   });
 });

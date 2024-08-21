@@ -1,6 +1,7 @@
 'use client';
 
 import { Box, Button, TextField } from '@mui/material';
+import MyButton from '@/components/ui/buttons/myButton.component';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -45,15 +46,9 @@ export function CreateTrailForm({ addTrail, journeyId, setDialog }: any) {
         {...register('name')}
         error={!!errors.name}
       />
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        sx={{ bgcolor: '#000', mt: 2 }}
-        type="submit"
-      >
+      <MyButton type="submit" width="100%" height="50px" color="black" bold>
         Criar
-      </Button>
+      </MyButton>
     </Box>
   );
 }
