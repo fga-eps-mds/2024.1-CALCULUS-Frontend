@@ -76,6 +76,7 @@ export const forgotPassword = async (data: any) => {
   console.log('forgot data', data);
   try {
     const response = await userApi.post('/auth/forgot-password', data);
+    return response.data;
   } catch (error) {
     throw error;
   }
