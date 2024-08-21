@@ -20,6 +20,6 @@ describe('HomePage', () => {
     render(<AppRouterContextProviderMock router={{ push }}><LoginPage /></AppRouterContextProviderMock>);
     // Verificar se o botão de sair está presente
 
-    expect(screen.getByRole('MyButton', { name: /Login/i })).toBeInTheDocument();});
+    expect(screen.getByRole('button', { name: /Login/i })).toBeInTheDocument();});
 
 });

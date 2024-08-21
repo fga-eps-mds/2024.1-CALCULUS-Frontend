@@ -30,7 +30,7 @@ describe('HomePage', () => {
     expect(screen.getByText('john.doe@example.com')).toBeInTheDocument();
 
     // Verificar se o botão de sair está presente
-    expect(screen.getByRole('MyButton', { name: /Sair/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Sair/i })).toBeInTheDocument();
     
 
   });

@@ -27,6 +27,6 @@ describe('HomePage', () => {
     render(<AppRouterContextProviderMock router={{ push }}><SingUpPage /></AppRouterContextProviderMock>);
     // Verificar se o botão de sair está presente
 
-    expect(screen.getByRole('MyButton', { name: /Sign up/i })).toBeInTheDocument();});
+    expect(screen.getByRole('button', { name: /Sign up/i })).toBeInTheDocument();});
 
 });

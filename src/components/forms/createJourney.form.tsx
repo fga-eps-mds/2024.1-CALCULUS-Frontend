@@ -4,6 +4,7 @@ import { Box, Button, TextField } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import MyButton from '@/components/ui/buttons/myButton.component';
 
 import { journeySchema, JourneySchemaData } from '@/lib/schemas/journey.schema';
 import { createJourney } from '@/services/studioMaker.service';
@@ -55,15 +56,13 @@ export function CreateJourneyForm({ addJourney, setDialog }: any) {
         {...register('description')}
         error={!!errors.description}
       />
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        sx={{ bgcolor: '#000', mt: 2 }}
+      <MyButton
+        width="100%"
+        color="black"
         type="submit"
       >
         Criar
-      </Button>
+      </MyButton>
     </Box>
   );
 }

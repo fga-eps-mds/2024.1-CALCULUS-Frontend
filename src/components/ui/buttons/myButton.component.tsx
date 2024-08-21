@@ -48,6 +48,7 @@ const CustomButton = styled(Button)<{
 const MyButton: React.FC<ButtonProps> = ({ children, color, width, height, type = 'button', radius, onClick, bold = false }) => {
     return (
       <CustomButton
+        role="button"
         variant="contained"
         btncolor={colorMap[color].primary}
         subcolor={colorMap[color].secondary}
