@@ -6,9 +6,9 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 import { createUser } from '@/services/user.service';
-import { toast } from 'sonner';
 
 import Mybutton from '@/components/ui/buttons/myButton.component';
 import MyInput from '@/components/ui/inputs/myInput.component';

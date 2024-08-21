@@ -3,26 +3,29 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import roboProfessor from '@/public/robo_professor.png';
-import Mybutton from '@/components/ui/buttons/myButton.component';
-
+import MyButton from '@/components/ui/buttons/myButton.component';
 import { useSession } from 'next-auth/react';
 
 export default function LandingPage() {
-  const session = useSession();
+  const { data: session } = useSession();
+  const router = useRouter();
 
-  if (session.data) {
-    window.location.href = '/home';
-  }
+  React.useEffect(() => {
+    if (session) {
+      router.push('/home');
+    }
+  }, [session, router]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fffafa]">
       <header className="w-full flex justify-between p-4">
         <h1 className="text-4xl font-bold text-[#1F1F1F]">Calculus</h1>
         <Link href="/login">
-          <Mybutton width="120px" height="50px" color="white" bold>
+          <MyButton width="120px" height="50px" color="white" bold>
             Login
-          </Mybutton>
+          </MyButton>
         </Link>
       </header>
       <main className="flex-grow flex flex-col justify-center items-center px-8">
@@ -47,9 +50,9 @@ export default function LandingPage() {
             </p>
             <div className="flex justify-center md:justify-start">
               <Link href="/register">
-                <Mybutton width="150px" height="50px" color="red" bold>
+                <MyButton width="150px" height="50px" color="red" bold>
                   Começe aqui
-                </Mybutton>
+                </MyButton>
               </Link>
             </div>
           </div>

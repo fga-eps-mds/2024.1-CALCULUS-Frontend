@@ -8,7 +8,7 @@ import MyButton from '@/components/ui/buttons/myButton.component';
 
 export function MicrosoftAuthButton() {
   const handleClick = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/microsoft/callback`;
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL_USER}/auth/microsoft/callback`;
     // signIn('azure-ad');
   };
 
