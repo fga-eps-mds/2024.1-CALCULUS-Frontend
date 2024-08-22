@@ -54,8 +54,8 @@ const useMarkdownEditor = () => {
       );
 
       if (existingContent) {
-        await axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL_STUDIO}contents/${existingContent._id}`,
+        await axios.patch(
+          `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents/${existingContent._id}`,
           { title, content },
           {
             headers: {
@@ -66,7 +66,7 @@ const useMarkdownEditor = () => {
         toast.success('Conteúdo atualizado!');
       } else {
         const contentResponse = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL_STUDIO}contents`,
+          `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents`,
           { title, content, trailId: trailId },
           {
             headers: {
@@ -77,7 +77,7 @@ const useMarkdownEditor = () => {
         const newContentId = contentResponse.data._id;
 
         await axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL_STUDIO}trails/${trailId}/addContent`,
+          `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/trails/${trailId}/addContent`,
           { contentId: newContentId },
           {
             headers: {
@@ -103,7 +103,7 @@ const useMarkdownEditor = () => {
 
     try {
       await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}trails/${trailId}/removeContent`,
+        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/trails/${trailId}/removeContent`,
         { contentId: id },
         {
           headers: {
@@ -113,7 +113,7 @@ const useMarkdownEditor = () => {
       );
 
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}contents/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents/${id}`,
         {
           headers: {
             Authorization: `Bearer ${session?.user.accessToken}`,
@@ -135,7 +135,7 @@ const useMarkdownEditor = () => {
     if (!session) return;
     try {
       const response = await axios.get<Content[]>(
-        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}contents`,
+        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents`,
       );
 
       // Log da resposta da API para verificação
@@ -158,7 +158,7 @@ const useMarkdownEditor = () => {
   const handleSelectContent = async (id: string) => {
     try {
       const response = await axios.get<Content>(
-        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}contents/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents/${id}`,
       );
       setMarkdown(response.data.body);
       setSelectedContentId(id);
