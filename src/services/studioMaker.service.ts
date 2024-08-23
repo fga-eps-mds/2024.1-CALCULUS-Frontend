@@ -205,4 +205,5 @@ export const getJourney = async (id: string): Promise<Journey> => {
     console.error('Failed to fetch users:', error);
     throw error;
   }
+
 };

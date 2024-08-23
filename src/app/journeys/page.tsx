@@ -11,7 +11,6 @@ import {
   Button,
   Typography,
   CircularProgress,
-  TextField,
 } from '@mui/material';
 import ButtonRed from '@/components/ui/buttons/red.button';
 import SearchBar from '@/components/admin/SearchBar';
@@ -42,7 +41,6 @@ const JourneyPage: React.FC = () => {
   const {
     data = [],
     isLoading,
-
     error,
   } = useQuery<Journey[], Error>({
     queryKey: ['journeys'],
@@ -145,13 +143,15 @@ const JourneyPage: React.FC = () => {
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
       </Box>
 
-      <JourneyTable
-        journeys={filteredJourneys}
-        anchorEl={anchorEl}
-        onMenuClick={handleMenuOpen}
-        onMenuClose={handleMenuClose}
-        onJourneyAction={handleJourneyAction}
-      />
+      <Box sx={{ width: '100%', maxWidth: 800, marginBottom: 2 }}>
+        <JourneyTable
+          journeys={filteredJourneys}
+          anchorEl={anchorEl}
+          onMenuClick={handleMenuOpen}
+          onMenuClose={handleMenuClose}
+          onJourneyAction={handleJourneyAction}
+        />
+      </Box>
 
       <ButtonRed onClick={() => setCreateDialogOpen(true)}>
         Nova Jornada
