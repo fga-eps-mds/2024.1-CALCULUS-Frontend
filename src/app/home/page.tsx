@@ -8,8 +8,8 @@ export default function HomePage() {
   const { data: session } = useSession();
 
   return (
-    <div>
-      <div className='m-12 '>
+    <div className='bg-[#F1F1F1]'>
+      <div className='max-w-7xl mx-auto pt-14 px-5'>
           <JourneyPage />
       </div>
     </div>
