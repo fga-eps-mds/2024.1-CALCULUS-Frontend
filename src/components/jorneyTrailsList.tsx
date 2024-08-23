@@ -1,9 +1,12 @@
-import React, { useState, MouseEvent, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
+import {
+  useMaterialReactTable,
+  type MRT_ColumnDef,
+  MRT_TableContainer,
+} from 'material-react-table';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
   Box,
-  InputBase,
-  List,
-  ListItem,
   Typography,
   IconButton,
   Menu,
@@ -17,7 +20,6 @@ import {
 import { Trail } from '@/lib/interfaces/trails.interface';
 import ButtonRed from './ui/buttons/red.button';
 import SearchBar from './admin/SearchBar';
-import TrailTable from './tables/trail.table';
 import Popup from './ui/popup';
 import { UpdateTrailForm } from './forms/trails/editTrails.form';
 import { CreateTrailForm } from './forms/trails/createTrails.form';
@@ -32,14 +34,12 @@ export default function JorneyTrailsListPage({
   journeyId: string;
 }) {
   const [searchQuery, setSearchQuery] = useState('');
-
   const [listTrails, setListTrails] = useState(trails);
   const [filteredTrails, setFilteredTrails] = useState(trails);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedTrail, setSelectedTrail] = useState<Trail | null>(null);
-  const [exclusionDialogOpen, setExclusionDialogOpen] =
-    useState<boolean>(false);
+  const [exclusionDialogOpen, setExclusionDialogOpen] = useState<boolean>(false);
   const [editionDialogOpen, setEditionDialogOpen] = useState<boolean>(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
@@ -69,8 +69,9 @@ export default function JorneyTrailsListPage({
 
   const handleTrailAction = (action: string) => {
     if (action === 'editar') setEditionDialogOpen(true);
-    if (action === 'gerenciar') alert("Redirect to selected trail's trails");
     if (action === 'excluir') setExclusionDialogOpen(true);
+    if (action === 'gerenciar') {
+    }
   };
 
   const addTrail = (trail: Trail) => {
@@ -78,7 +79,7 @@ export default function JorneyTrailsListPage({
   };
 
   const updateTrail = (trail: Trail) => {
-    setListTrails(listTrails.map((j) => (j._id === trail._id ? trail : j)));
+    setListTrails(listTrails.map((t) => (t._id === trail._id ? trail : t)));
   };
 
   const handleRemoveTrail = async (trail: Trail) => {
@@ -88,10 +89,98 @@ export default function JorneyTrailsListPage({
     });
     if (response.data) {
       toast.success('Trilha excluída com sucesso!');
-      setListTrails(listTrails.filter((j) => j._id !== trail._id));
+      setListTrails(listTrails.filter((t) => t._id !== trail._id));
       setExclusionDialogOpen(false);
     } else {
       toast.error('Erro ao excluir Trilha. Tente novamente mais tarde!');
+    }
+  };
+
+  const columns = useMemo<MRT_ColumnDef<Trail>[]>(
+    () => [
+      {
+        accessorKey: 'name',
+        header: 'Nome',
+      },
+      {
+        accessorKey: 'description',
+        header: 'Descrição',
+      },
+      {
+        accessorKey: 'actions',
+        header: '',
+        enableColumnFilter: false,
+        Cell: ({ row }: { row: { original: Trail } }) => (
+          <>
+            <IconButton
+              onClick={(e) => {
+                handleMenuOpen(e, row.original);
+                setSelectedTrail(row.original);
+              }}
+              color="primary"
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={() => handleTrailAction('editar')}>
+                Editar Trilha
+              </MenuItem>
+              <MenuItem onClick={() => handleTrailAction('gerenciar')}>
+                Gerenciar Trilha
+              </MenuItem>
+              <MenuItem onClick={() => handleTrailAction('excluir')}>
+                Excluir
+              </MenuItem>
+            </Menu>
+          </>
+        ),
+      },
+    ],
+    [anchorEl, handleMenuOpen, handleMenuClose, handleTrailAction]
+  );
+
+  const table = useMaterialReactTable({
+    columns,
+    data: filteredTrails,
+    enableRowOrdering: true,
+    muiRowDragHandleProps: ({ table }) => ({
+      onDragEnd: async () => {
+        const { draggingRow, hoveredRow } = table.getState();
+        if (hoveredRow && draggingRow) {
+          const newData = [...filteredTrails];
+          newData.splice(
+            (hoveredRow as MRT_Row<Trail>).index,
+            0,
+            newData.splice(draggingRow.index, 1)[0],
+          );
+          setFilteredTrails(newData);
+          await updateTrailOrder(newData);
+        }
+      },
+    }),
+  });
+
+  const updateTrailOrder = async (updatedTrails: Trail[]) => {
+    try {
+      const response = await fetch('/api/trails/update-trail-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ trails: updatedTrails }), 
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update trail order');
+      }
+  
+      console.log('Order updated successfully');
+    } catch (error) {
+      console.error('Error updating trail order:', error);
     }
   };
 
@@ -108,13 +197,7 @@ export default function JorneyTrailsListPage({
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
       </Box>
 
-      <TrailTable
-        trails={filteredTrails}
-        anchorEl={anchorEl}
-        onMenuClick={handleMenuOpen}
-        onMenuClose={handleMenuClose}
-        onTrailAction={handleTrailAction}
-      />
+      <MRT_TableContainer table={table} />
 
       <ButtonRed onClick={() => setCreateDialogOpen(true)}>
         Nova Trilha

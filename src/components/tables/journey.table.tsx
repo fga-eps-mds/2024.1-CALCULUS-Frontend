@@ -3,6 +3,7 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
   MRT_TableContainer,
+  MRT_Row,
 } from 'material-react-table';
 import { useRouter } from 'next/navigation';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -49,7 +50,7 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
         accessorKey: 'actions',
         header: '',
         enableColumnFilter: false,
-        Cell: ({ row }: any) => (
+        Cell: ({ row }: { row: { original: Journey } }) => (
           <>
             <IconButton
               onClick={(e) => {
@@ -93,7 +94,7 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
     data,
     enableRowOrdering: true,
     muiRowDragHandleProps: ({ table }) => ({
-      onDragEnd: () => {
+      onDragEnd: async () => {
         const { draggingRow, hoveredRow } = table.getState();
         if (hoveredRow && draggingRow) {
           const newData = [...data];
@@ -103,10 +104,31 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
             newData.splice(draggingRow.index, 1)[0],
           );
           setData(newData);
+          await updateJourneyOrder(newData);
         }
       },
     }),
   });
+
+  const updateJourneyOrder = async (updatedJourneys: Journey[]) => {
+    try {
+      const response = await fetch('/api/journeys/update-journey-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ journeys: updatedJourneys }), 
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update journey order');
+      }
+  
+      console.log('Order updated successfully');
+    } catch (error) {
+      console.error('Error updating journey order:', error);
+    }
+  };
 
   return <MRT_TableContainer table={table} />;
 };
