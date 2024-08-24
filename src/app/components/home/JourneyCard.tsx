@@ -19,9 +19,9 @@ const JourneyCard: React.FC<JourneyCardProps> = ({
 }) => {
     if (type === 'emAndamento') {
         return (
-            <div className="bg-[#FFFAFA] border-2 rounded-3xl w-56 h-72 overflow-hidden flex items-center flex-col gap-7 justify-center cursor-pointer">
-                <Image src={image} alt={title} width={150} height={150} />
-                <h3 className="text-2xl font-bold text-center">{title}</h3>
+            <div className="bg-[#FFFAFA] border-2 rounded-3xl w-44 h-60 overflow-hidden flex items-center flex-col gap-7 justify-center cursor-pointer">
+                <Image src={image} alt={title} width={120} height={120} style={{marginTop:"20px"}}/>
+                <h3 className="text-lg font-bold text-center flex-1">{title}</h3>
             </div>
         );
     } else {
