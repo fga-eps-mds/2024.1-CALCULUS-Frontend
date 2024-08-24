@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import Foto from '@/public/calculus-logo.svg';
-import JourneyCard from '@/app/components/home/JourneyCard';
-import JourneyService from './service/journey.services';
+import JourneyCard from '@/components/home/homeJourneyCard';
+import JourneyService from './service/home.services';
 import SearchBar from './SearchBar';
 import { useSession } from 'next-auth/react';
 
-const JourneyPage = () => {
+const HomePrincipalPage = () => {
   const { data: session } = useSession();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [userJourneys, setUserJourneys] = useState<any[]>([]);
@@ -142,4 +142,4 @@ const JourneyPage = () => {
   );
 };
 
-export default JourneyPage;
+export default HomePrincipalPage;
