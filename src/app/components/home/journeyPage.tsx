@@ -12,26 +12,24 @@ const JourneyPage = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [userJourneys, setUserJourneys] = useState<any[]>([]);
   const [allJourneys, setAllJourneys] = useState<any[]>([]);
-  const [filteredJourneys, setFilteredJourneys] = useState<any[]>([]);
 
   useEffect(() => {
     try {
       const fetchJourneys = async () => {
         const { fetchUserJourneys, fetchJourneyById } = JourneyService();
         const journeyIds = await fetchUserJourneys(session);
-  
+
         const journeysDetails = await Promise.all(
           journeyIds.map(async (id: string) => await fetchJourneyById(id)),
         );
-  
+
         setUserJourneys(journeysDetails.filter((j) => j !== null)); // Filtrar jornadas que foram encontradas
       };
-  
+
       fetchJourneys();
-    } catch(error){
+    } catch (error) {
       console.log(error);
     }
-
   }, [session]);
 
   useEffect(() => {
@@ -39,31 +37,25 @@ const JourneyPage = () => {
       const loadJourneys = async () => {
         const { fetchJourneys } = JourneyService();
         const allJourneys = await fetchJourneys();
-  
+
         setAllJourneys(allJourneys);
-        setFilteredJourneys(allJourneys);
       };
       loadJourneys();
-    } catch(error){
+    } catch (error) {
       console.log(error);
     }
-
   }, []);
 
-  useEffect(() => {
-    const lowercasedQuery = searchQuery.toLowerCase();
-    const newFilteredJourneys = allJourneys.filter(
-      (jornada) =>
-        jornada.title.toLowerCase().includes(lowercasedQuery) ||
-        jornada.description.toLowerCase().includes(lowercasedQuery),
-    );
-
-    setFilteredJourneys(newFilteredJourneys);
-  }, [allJourneys, searchQuery]);
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
+  const filteredJourneys =
+    searchQuery.length > 0
+      ? allJourneys.filter(
+          (jornada) =>
+            jornada.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            jornada.description
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase()),
+        )
+      : [];
 
   const responsive = {
     superLargeDesktop: {
@@ -84,14 +76,16 @@ const JourneyPage = () => {
     },
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  }
+
   return (
     <>
       <h5 className="text-3xl font-bold mb-5">Em andamento</h5>
       {userJourneys.length > 0 ? (
         <>
-          <Carousel
-            responsive={responsive}
-          >
+          <Carousel responsive={responsive}>
             {userJourneys.map((jornada) => (
               <JourneyCard
                 type="emAndamento"
@@ -116,18 +110,33 @@ const JourneyPage = () => {
           <h1 className="text-3xl font-bold my-5">Jornadas</h1>
           <SearchBar value={searchQuery} onChange={handleSearch} />
         </div>
-        <div>
-          {filteredJourneys.map((jornada) => (
-            <JourneyCard
-              type="geral"
-              key={jornada._id}
-              title={jornada.title}
-              description={jornada.description}
-              image={jornada.image || Foto}
-              URL="/"
-            />
-          ))}
-        </div>
+        {searchQuery.length > 0 ? (
+          <div>
+            {filteredJourneys.map((jornada) => (
+              <JourneyCard
+                type="geral"
+                key={jornada._id}
+                title={jornada.title}
+                description={jornada.description}
+                image={jornada.image || Foto}
+                URL="/"
+              />
+            ))}
+          </div>
+        ) : (
+          <div>
+            {allJourneys.map((jornada) => (
+              <JourneyCard
+                type="geral"
+                key={jornada._id}
+                title={jornada.title}
+                description={jornada.description}
+                image={jornada.image || Foto}
+                URL="/"
+              />
+            ))}
+          </div>
+        )}
       </>
     </>
   );
