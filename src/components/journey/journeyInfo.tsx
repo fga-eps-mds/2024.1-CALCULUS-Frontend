@@ -106,7 +106,7 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
         </Box>
 
         <Typography variant="body2">
-          Alunos que completaram a jornada: {completedStudents}
+          Alunos que ingressaram a jornada: {completedStudents}
         </Typography>
       </Box>
       <Box

@@ -3,6 +3,7 @@ export interface Journey {
   title: string;
   description: string;
   user: string;
+  trails: string[];
   createdAt: string;
   updatedAt: string;
 }
