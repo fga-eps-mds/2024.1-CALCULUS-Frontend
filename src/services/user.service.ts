@@ -73,7 +73,7 @@ export const updateUserRole = async (userId: string, newRole: string) => {
 export const forgotPassword = async (data: any) => {
   console.log('forgot data', data);
   try {
-    const response = await userApi.post('/auth/forgot-password', data);
+    const response = await userApi.post('/auth/forgotPassword', data);
     return response.data;
   } catch (error) {
     throw error;
@@ -83,7 +83,7 @@ export const forgotPassword = async (data: any) => {
 export const resetPassword = async (data: any) => {
   console.log('reset data', data);
   try {
-    const response = await userApi.put('/auth/reset-password', data);
+    const response = await userApi.put('/auth/resetPassword', data);
     return response.data;
   } catch (error) {
     throw error;
