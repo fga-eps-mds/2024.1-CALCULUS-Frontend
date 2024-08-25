@@ -51,7 +51,7 @@ export default function LandingPage() {
             <div className="flex justify-center md:justify-start">
               <Link href="/register">
                 <MyButton width="150px" height="50px" color="red" bold>
-                  Começe aqui
+                  Comece aqui
                 </MyButton>
               </Link>
             </div>

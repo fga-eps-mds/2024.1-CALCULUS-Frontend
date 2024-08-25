@@ -36,7 +36,7 @@ const sidebarItems: SidebarItem[] = [
     label: 'Minhas Jornadas',
     href: '/journeys',
     icon: <FollowTheSignsIcon className="h-5 w-5 mr-2" />,
-    roles: ['teacher', 'admin'],
+    roles: ['professor', 'admin'],
   },
 ];
 

@@ -1,23 +1,17 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { SignOutButton } from '@/components/ui/buttons/signOut.button';
+import HomePrincipalPage from '@/components/home/homePage';
+
 
 export default function HomePage() {
   const { data: session } = useSession();
 
   return (
-    <div>
-      <p className="pl-8 pt-4  text-black font-bold text-[#1F1F1F]">
-        {session?.user.name}
-      </p>
-      <p className="pl-8 text-black font-bold text-[#1F1F1F]">
-        {session?.user.email}
-      </p>
-      <p className=" pl-8 text-black font-bold">
-        Esta tela ainda está em desenvolvimento :)
-      </p>
-      <SignOutButton />
+    <div className='bg-[#F1F1F1] min-h-screen'>
+      <div className='bg-[#F1F1F1] max-w-7xl mx-auto pt-14 px-5'>
+          <HomePrincipalPage />
+      </div>
     </div>
   );
 }
