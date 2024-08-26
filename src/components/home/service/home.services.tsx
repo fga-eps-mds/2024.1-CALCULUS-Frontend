@@ -8,7 +8,7 @@ const JourneyService = () => {
             return [];
         }
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_USER}users/${session.user.id}/subscribedJourneys`);
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_USER}/users/${session.user.id}/subscribedJourneys`);
             return response.data;
         } catch (error) {
             console.error('Erro ao buscar jornadas:', error);
