@@ -1,20 +1,32 @@
 'use client';
 
 import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import MyButton from '@/components/ui/buttons/myButton.component';
+import { useSession } from 'next-auth/react';
 
 interface JourneyInfoProps {
   title: string;
   description: string;
   trailCount: number;
+  hasJourney: boolean;
+  onJoin: () => void; 
 }
+
 const JourneyInfo: React.FC<JourneyInfoProps> = ({
   title,
   description,
   trailCount,
+  hasJourney,
+  onJoin,
 }) => {
+  const { data: session } = useSession();
+
+  const handleJoinClick = async () => {
+    await onJoin(); 
+  };
+
   return (
     <Box
       sx={{
@@ -26,7 +38,8 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
         boxShadow: '0 4px 8px rgba(0,0,0,0.5)',
         maxWidth: '650px',
       }}
-    ml={20}>
+      ml={20}
+    >
       <Typography
         variant="h3"
         fontWeight={'bold'}
@@ -59,17 +72,19 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
 
         <Typography variant="body2">Número de trilhas: {trailCount}</Typography>
       </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-        }}
-        ml={55}
-      >
-        <MyButton width="150px" height="50px" color="red" bold>
-          Ingressar
-        </MyButton>
-      </Box>
+      {!hasJourney && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+          }}
+          ml={55}
+        >
+          <MyButton width="150px" height="50px" color="red" bold onClick={handleJoinClick}>
+            Ingressar
+          </MyButton>
+        </Box>
+      )}
     </Box>
   );
 };
