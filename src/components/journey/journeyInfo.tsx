@@ -21,10 +21,9 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
   hasJourney,
   onJoin,
 }) => {
-  const { data: session } = useSession();
 
-  const handleJoinClick = async () => {
-    await onJoin(); 
+  const handleJoinClick = () => {
+    onJoin(); 
   };
 
   return (
