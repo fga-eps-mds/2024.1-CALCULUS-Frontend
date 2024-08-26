@@ -18,7 +18,7 @@ const JourneyService = () => {
 
     const fetchJourneys = async () => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_STUDIO}journeys/`);
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_STUDIO}/journeys/`);
             return response.data;
         } catch (error) {
             console.error('Erro ao buscar jornada:', error);
@@ -28,7 +28,7 @@ const JourneyService = () => {
 
     const fetchJourneyById = async (id: string) => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_STUDIO}journeys/${id}`);
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_STUDIO}/journeys/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Erro ao buscar jornada com ID ${id}:`, error);
