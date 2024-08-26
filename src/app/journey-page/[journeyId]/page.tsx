@@ -9,6 +9,7 @@ import { Journey } from '@/lib/interfaces/journey.interface';
 import { Trail } from '@/lib/interfaces/trails.interface';
 import { useParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import { subscribeJourney, getSubscribedJourneys } from '@/services/user.service';
 
 export default function JourneyPage() {
   const { journeyId } = useParams();
@@ -31,9 +32,10 @@ export default function JourneyPage() {
         setTrails(trailsData);
 
         if (session?.user.id) {
-          const userJourneys = await getJourneysByUser(session.user.id);
-          const journeyExists = userJourneys.some(j => j._id === id);
-          setHasJourney(journeyExists);
+          const userJourneys = await getSubscribedJourneys(session?.user.id);
+          console.log(userJourneys);
+          const filteredJourneys = userJourneys.filter(j => j._id === id);
+          setHasJourney(filteredJourneys.length > 0);
         }
       } catch (err) {
         setError('Failed to fetch journey data');
@@ -46,9 +48,12 @@ export default function JourneyPage() {
   const handleJoin = async () => {
     if (session?.user.id) {
       const id = Array.isArray(journeyId) ? journeyId[0] : journeyId; 
-      await addJourneyToUser({ userId: session.user.id, journeyId: id });
+      console.log(session?.user.accessToken);
+      await subscribeJourney({ userId: session.user.id, journeyId: id, accessToken: session?.user.accessToken});
       setHasJourney(true); 
     }
+
+    
   };
 
   if (error) {
