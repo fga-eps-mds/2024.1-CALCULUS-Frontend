@@ -31,11 +31,16 @@ export default function JourneyPage() {
         const trailsData = await getTrails({ id, token });
         setTrails(trailsData);
 
-        if (session?.user.id) {
-          const userJourneys = await getSubscribedJourneys(session?.user.id);
-          console.log(userJourneys);
-          const filteredJourneys = userJourneys.filter(j => j._id === id);
-          setHasJourney(filteredJourneys.length > 0);
+        if (session?.user?.id) {
+          const userJourneys = await getSubscribedJourneys(session.user.id);
+          console.log('User journeys: ', userJourneys);
+          let isSubscribed = false;
+          userJourneys.forEach(journeyId => {
+            if(journeyId === id) {
+                isSubscribed = true;
+            }
+          });
+          setHasJourney(isSubscribed);
         }
       } catch (err) {
         setError('Failed to fetch journey data');
@@ -43,7 +48,7 @@ export default function JourneyPage() {
     };
 
     fetchJourneyData();
-  }, [journeyId, session?.user.id]);
+  }, [journeyId, session?.user?.id]);
 
   const handleJoin = async () => {
     if (session?.user.id) {
