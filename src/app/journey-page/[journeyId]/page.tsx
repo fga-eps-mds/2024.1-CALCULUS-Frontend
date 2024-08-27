@@ -33,8 +33,7 @@ export default function JourneyPage() {
 
         if (session?.user.id) {
           const userJourneys = await getSubscribedJourneys(session?.user.id);
-          console.log(userJourneys);
-          const filteredJourneys = userJourneys.filter(j => j._id === id);
+          const filteredJourneys = userJourneys.filter((j: { _id: string; }) => j._id === id);
           setHasJourney(filteredJourneys.length > 0);
         }
       } catch (err) {
