@@ -22,6 +22,15 @@ export default function ManageTrack({ params }: { params: { id: string } }) {
     return trails;
   };
 
+  const sortTrail = async ():Promise<Trail[]> => {
+    trails.sort(
+      (a:Trail, b:Trail) => {
+        return b.order - a.order;
+      }
+    );
+    return trails
+  }
+
   const {
     data: trails = [],
     isLoading,

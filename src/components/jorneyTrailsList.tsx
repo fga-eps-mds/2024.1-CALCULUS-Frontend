@@ -25,6 +25,7 @@ import { UpdateTrailForm } from './forms/trails/editTrails.form';
 import { CreateTrailForm } from './forms/trails/createTrails.form';
 import { deleteTrail } from '@/services/studioMaker.service';
 import { toast } from 'sonner';
+import { studioMakerApi } from '@/services/apis.service';
 
 export default function JorneyTrailsListPage({
   trails,
@@ -119,8 +120,10 @@ export default function JorneyTrailsListPage({
               }}
               color="primary"
             >
+              
               <MoreVertIcon />
             </IconButton>
+              {row.original.order}
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
@@ -165,18 +168,14 @@ export default function JorneyTrailsListPage({
   });
 
   const updateTrailOrder = async (updatedTrails: Trail[]) => {
+    for (var i =0; i<updatedTrails.length;i++){
+      updatedTrails[i].order = i;
+    }
     try {
-      const response = await fetch('/api/trails/update-trail-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ trails: updatedTrails }), 
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to update trail order');
-      }
+      alert(JSON.stringify(updatedTrails))
+      const response = await studioMakerApi.put('/trails/update-trail-order', {
+        trails: updatedTrails
+      })
   
       console.log('Order updated successfully');
     } catch (error) {
@@ -198,7 +197,7 @@ export default function JorneyTrailsListPage({
       </Box>
 
       <MRT_TableContainer table={table} />
-
+      
       <ButtonRed onClick={() => setCreateDialogOpen(true)}>
         Nova Trilha
       </ButtonRed>
