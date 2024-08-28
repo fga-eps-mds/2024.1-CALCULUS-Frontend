@@ -14,6 +14,14 @@ jest.mock('next/navigation', () => ({
   useParams: jest.fn(),
 }));
 
+beforeAll(() => {
+  global.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  };
+});
+
 describe('JourneyPage', () => {
   const journeyMock = { _id: '1', title: 'Journey 1', description: 'Description of Journey 1', trails: ['1'] };
   const trailsMock = [{ _id: '1', name: 'Trail 1', journey: '1' }];

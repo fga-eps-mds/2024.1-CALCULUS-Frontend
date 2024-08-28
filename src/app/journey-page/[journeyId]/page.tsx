@@ -76,7 +76,7 @@ export default function JourneyPage() {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#f1f1f1',
-        height: '100vh',
+        height: 'auto',
       }}
     >
       <Box flex={1} pr={2}>

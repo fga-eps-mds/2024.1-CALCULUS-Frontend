@@ -12,45 +12,61 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
   const zigzagOffset = 100;
 
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!svgRef.current) return;
-    const svg = svgRef.current;
-    const svgNS = "http://www.w3.org/2000/svg";
-    const svgWidth = svg.clientWidth;
-    const svgHeight = svg.clientHeight;
+    const drawLines = () => {
+      if (!svgRef.current || !containerRef.current) return;
+      const svg = svgRef.current;
+      const svgNS = "http://www.w3.org/2000/svg";
+      const svgWidth = svg.clientWidth;
+      const container = containerRef.current;
+      const svgHeight = svg.clientHeight;
 
-    while (svg.firstChild) {
-      svg.removeChild(svg.firstChild);
+      while (svg.firstChild) {
+        svg.removeChild(svg.firstChild);
+      }
+
+      trails.forEach((_, index) => {
+        if (index < trails.length - 1) {
+          const isLeft1 = index % 2 === 0;
+          const offsetX1 = isLeft1 ? -zigzagOffset : zigzagOffset;
+          const top1 = 50 + index * nodeSpacing + nodeSize / 2;
+          const left1 = svgWidth / 2 + offsetX1;
+
+          const isLeft2 = (index + 1) % 2 === 0;
+          const offsetX2 = isLeft2 ? -zigzagOffset : zigzagOffset;
+          const top2 = 50 + (index + 1) * nodeSpacing + nodeSize / 2;
+          const left2 = svgWidth / 2 + offsetX2;
+
+          const line = document.createElementNS(svgNS, "line");
+          line.setAttribute("x1", `${left1}`);
+          line.setAttribute("y1", `${top1}`);
+          line.setAttribute("x2", `${left2}`);
+          line.setAttribute("y2", `${top2}`);
+          line.setAttribute("stroke", "silver");
+          line.setAttribute("stroke-width", "20"); 
+
+          svg.appendChild(line);
+        }
+      });
+    };
+    
+    drawLines();
+
+    const resizeObserver = new ResizeObserver(drawLines);
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
     }
 
-    trails.forEach((_, index) => {
-      if (index < trails.length - 1) {
-        const isLeft1 = index % 2 === 0;
-        const offsetX1 = isLeft1 ? -zigzagOffset : zigzagOffset;
-        const top1 = 50 + index * nodeSpacing + nodeSize / 2;
-        const left1 = svgWidth / 2 + offsetX1;
-
-        const isLeft2 = (index + 1) % 2 === 0;
-        const offsetX2 = isLeft2 ? -zigzagOffset : zigzagOffset;
-        const top2 = 50 + (index + 1) * nodeSpacing + nodeSize / 2;
-        const left2 = svgWidth / 2 + offsetX2;
-
-        const line = document.createElementNS(svgNS, "line");
-        line.setAttribute("x1", `${left1}`);
-        line.setAttribute("y1", `${top1}`);
-        line.setAttribute("x2", `${left2}`);
-        line.setAttribute("y2", `${top2}`);
-        line.setAttribute("stroke", "silver");
-        line.setAttribute("stroke-width", "20"); 
-
-        svg.appendChild(line);
-      }
-    });
+    return () => {
+      resizeObserver.disconnect();
+    };
   }, [trails]);
 
   return (
     <Box
+      ref={containerRef}
       flex={1}
       pl={2}
       sx={{
@@ -110,8 +126,7 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
                 transform: 'rotate(45deg)', 
               }}
               onClick={() => console.log(`Clicked on trail: ${trail.name}`)}
-            >
-            </Button>
+            />
             <Typography
               variant="body1"
               sx={{
