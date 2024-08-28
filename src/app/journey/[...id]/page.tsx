@@ -12,25 +12,27 @@ import { useState } from 'react';
 export default function ManageTrack({ params }: { params: { id: string } }) {
   const [jorney, setJorney] = useState<Journey>({} as Journey);
   const fetchTrails = async (): Promise<Trail[]> => {
-    const trails = await getTrails({
+    var trails = await getTrails({
       id: params.id,
       token: JSON.parse(localStorage.getItem('token')!),
     });
-
+    // sorting
+    for (var j=0;j<trails.length;j++){
+      for (var i=0;i<trails.length- j-1;i++){
+        if (trails[i].order>trails[i+1].order){
+          var temp = trails[i]
+          trails[i] = trails[i+1]
+          trails[i+1] = temp
+        }
+      }
+    }
+    console.log(`organizado: ${trails}`)
     const jorney = await getJourney(params.id);
     setJorney(jorney);
     return trails;
   };
 
-  const sortTrail = async ():Promise<Trail[]> => {
-    trails.sort(
-      (a:Trail, b:Trail) => {
-        return b.order - a.order;
-      }
-    );
-    return trails
-  }
-
+  
   const {
     data: trails = [],
     isLoading,

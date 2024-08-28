@@ -173,7 +173,7 @@ export default function JorneyTrailsListPage({
     }
     try {
       alert(JSON.stringify(updatedTrails))
-      const response = await studioMakerApi.put('/trails/update-trail-order', {
+      const response = await studioMakerApi.patch('/trails/update-trail-order', {
         trails: updatedTrails
       })
   
