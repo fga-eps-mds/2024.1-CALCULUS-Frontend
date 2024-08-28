@@ -27,7 +27,7 @@ export default function ManageTrack({ params }: { params: { id: string } }) {
     isLoading,
     error,
   } = useQuery<Trail[], Error>({
-    queryKey: ['trails'],
+    queryKey: ['trails', params.id],
     queryFn: fetchTrails,
   });
 
