@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Divider } from '@mui/material';
+import { Box, CircularProgress, Divider, Typography } from '@mui/material';
 import JourneyInfo from '@/components/journey/journeyInfo';
 import JourneyPath from '@/components/journey/journeyPath';
 import { addJourneyToUser, getJourney, getJourneysByUser, getTrails } from '@/services/studioMaker.service';
@@ -65,7 +65,7 @@ export default function JourneyPage() {
     return <div>{error}</div>;
   }
 
-  if (!journey || !trails.length) {
+  if (!journey) {
     return <CircularProgress />;
   }
 
@@ -90,8 +90,14 @@ export default function JourneyPage() {
       </Box>
 
       <Divider sx={{ height: '80%', marginTop: '100px' }} orientation="vertical" variant="middle" flexItem />
-
-      <JourneyPath trails={trails} />
+      {!trails.length ? (
+        <Typography variant="h3"
+        sx={{ fontFamily: 'Poppins, sans-serif', margin: '250px', color:'silver'}}> Ainda não há trilhas nessa jornada</Typography>
+      ) : (
+        <React.Fragment>
+        <JourneyPath trails={trails} />
+        </React.Fragment>
+      )}
     </Box>
   );
 }
