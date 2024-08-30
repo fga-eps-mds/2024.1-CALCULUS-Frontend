@@ -206,3 +206,22 @@ export const getJourney = async (id: string): Promise<Journey> => {
     throw error;
   }
 };
+
+export const addJourneyToUser = async ({
+  userId,
+  journeyId,
+}: {
+  userId: string;
+  journeyId: string;
+}) => {
+  try {
+    const response = await studioMakerApi.patch(`/journeys/${userId}/add-journey`, {
+      journeyId,
+    });
+    console.log('Journey added to user');
+    return response.data;
+  } catch (error) {
+    console.error('Failed to add journey to user:', error);
+    throw error;
+  }
+};
