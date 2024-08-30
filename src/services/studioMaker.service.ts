@@ -1,6 +1,8 @@
 import { Trail } from '@/lib/interfaces/trails.interface';
 import { studioMakerApi } from './apis.service';
 import { Journey } from '@/lib/interfaces/journey.interface';
+import { Content } from '@/lib/interfaces/content.interface';
+
 
 export const getJourneys = async (): Promise<Journey[]> => {
   try {
@@ -12,7 +14,7 @@ export const getJourneys = async (): Promise<Journey[]> => {
     console.log('Journeys:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch users:', error);
+    console.error('Failed to fetch jpurney:', error);
     throw error;
   }
 };
@@ -120,7 +122,7 @@ export const getTrails = async ({
     console.log('Trails:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch users:', error);
+    console.error('Failed to fetch trails:', error);
     throw error;
   }
 };
@@ -222,6 +224,49 @@ export const addJourneyToUser = async ({
     return response.data;
   } catch (error) {
     console.error('Failed to add journey to user:', error);
+    throw error;
+  }
+};
+
+export const getTrail = async (id: string): Promise<Trail> => {
+  try {
+    const response = await studioMakerApi.get(`/trails/${id}`);
+    console.log('Trail:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch trail:', error);
+    throw error;
+  }
+};
+
+export const findContentsByTrailId = async ({
+  id,
+  token,
+}: {
+  id: string;
+  token: string;
+}): Promise<Content[]> => {
+  try {
+    const response = await studioMakerApi.get(`/contents/trail/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('Contents:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch contents:', error);
+    throw error;
+  }
+};
+
+export const getContent = async (id: string): Promise<Content> => {
+  try {
+    const response = await studioMakerApi.get(`/contents/${id}`);
+    console.log('content:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch content:', error);
     throw error;
   }
 };
