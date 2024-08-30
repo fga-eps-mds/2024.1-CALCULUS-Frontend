@@ -11,7 +11,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Typography,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -25,7 +24,7 @@ interface StartpointTableProps {
     startPoint: StartPoint,
   ) => void;
   onMenuClose: () => void;
-  onStartpointAction: (action: string) => void;
+  onStartPointAction: (action: string) => void;
 }
 
 const StartpointTable: React.FC<StartpointTableProps> = ({
@@ -33,20 +32,20 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
   anchorEl,
   onMenuClick,
   onMenuClose,
-  onStartpointAction,
+  onStartPointAction,
 }) => {
   const open = Boolean(anchorEl);
   const router = useRouter();
-  const [selectedStartpoint, setSelectedStartpoint] = React.useState<StartPoint | null>(null);
+  const [selectedStartPoint, setSelectedStartPoint] = React.useState<StartPoint | null>(null);
 
   const handleMenuItemClick = (action: string) => {
-    onStartpointAction(action);
+    onStartPointAction(action);
     onMenuClose();
   };
 
   const handleItem = (e: any, startPoint: StartPoint) => {
     onMenuClick(e, startPoint)
-    setSelectedStartpoint(startPoint)
+    setSelectedStartPoint(startPoint)
   }
 
   return (
@@ -63,7 +62,7 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
           <TableBody>
             {startPoints.map((startPoint) => (
               <TableRow key={startPoint._id}>
-                <TableCell align="left">{startPoint.title}</TableCell>
+                <TableCell align='left'>{startPoint.name}</TableCell>
                 <TableCell align="left">{startPoint.description}</TableCell>
                 <TableCell align="right">
                   <IconButton
@@ -81,7 +80,7 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
                       Editar Ponto de partida
                     </MenuItem>
                     <MenuItem
-                      onClick={() => router.push(`/journey/${selectedStartpoint?._id}`)}
+                      onClick={() => router.push(`/journey/${selectedStartPoint?._id}`)}
                     >
                       Gerenciar Jornadas
                     </MenuItem>
