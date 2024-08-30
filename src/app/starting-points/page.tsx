@@ -12,6 +12,7 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material';
+import ButtonRed from '@/components/ui/buttons/red.button';
 import SearchBar from '@/components/admin/SearchBar';
 import StartpointTable from '@/components/tables/startingpoints.table'
 import { StartPoint } from '@/lib/interfaces/startPoint.interface';
@@ -21,7 +22,9 @@ import {
   getStartPoints,
   getStartPointsByUser,
 } from '@/services/studioMaker.service';
+import Popup from '@/components/ui/popup';
 import { toast } from 'sonner';
+import { CreateStartPointForm } from '@/components/forms/createStartPoint.form';
 
 const StartPointPage: React.FC = () => {
 
@@ -52,7 +55,7 @@ const StartPointPage: React.FC = () => {
   const [selectedStartPoint, setSelectedStartPoint] = useState<StartPoint | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [exclusionDialogOpen, setExclusionDialogOpen] = useState<boolean>(false);
-  const [editionDialogOpen, setEditionDialogOpen] = useState<boolean>(false);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   useEffect(() => {
     if (searchQuery === '') {
@@ -81,8 +84,6 @@ const StartPointPage: React.FC = () => {
   };
 
   const handleStartPointAction = (action: string) => {
-    if (action === 'editar') setEditionDialogOpen(true);
-    if (action === 'gerenciar') alert("Redirect to selected start point's journeys");
     if (action === 'excluir') setExclusionDialogOpen(true);
   };
 
@@ -144,6 +145,21 @@ const StartPointPage: React.FC = () => {
         onMenuClose={handleMenuClose}
         onStartPointAction={handleStartPointAction}
       />
+
+      <ButtonRed onClick={() => setCreateDialogOpen(true)}>
+        Novo Ponto de Partida
+      </ButtonRed>
+
+      <Popup
+        openPopup={createDialogOpen}
+        setPopup={setCreateDialogOpen}
+        title="Criar Novo Ponto de Partida"
+      >
+        <CreateStartPointForm
+          addStartPoint={addStartPoint}
+          setDialog={setCreateDialogOpen}
+        />
+      </Popup>
 
       <Dialog
         open={exclusionDialogOpen}
