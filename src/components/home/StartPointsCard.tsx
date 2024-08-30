@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import Foto from '@/public/calculus-logo.svg';
 import JourneyService from './service/home.services';
+import { useRouter } from 'next/navigation';
 
 interface StartCardProps {
   title: string;
@@ -12,6 +13,8 @@ interface StartCardProps {
   description?: string;
   Id: string;
 }
+
+
 
 const StartCard: React.FC<StartCardProps> = ({
   title,
@@ -21,6 +24,11 @@ const StartCard: React.FC<StartCardProps> = ({
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [journeys, setJourneys] = useState<any[]>([]);
+  const router = useRouter();
+
+  const handleOnclick = (id: string) => {
+    router.push('/journey-page/' + id);
+  } 
 
   useEffect(() => {
     try {
@@ -83,7 +91,7 @@ const StartCard: React.FC<StartCardProps> = ({
                 key={index}
                 className="h-52 w-58 flex flex-col items-center cursor-pointer "
               >
-                <div className="bg-[#FFFAFA] h-40 w-44 flex place-content-center rounded-3xl border-2 border-[#e5e7eb] hover:border-[#dbdbdb]  shadow-[0_6px_0_#e5e7eb] hover:shadow-[0_6px_0_#dbdbdb] relative">
+                <div className="bg-[#FFFAFA] h-40 w-44 flex place-content-center rounded-3xl border-2 border-[#e5e7eb] hover:border-[#dbdbdb]  shadow-[0_6px_0_#e5e7eb] hover:shadow-[0_6px_0_#dbdbdb] relative" onClick={() => handleOnclick(jornada._id)}>
                   <Image
                     src={jornada.img || Foto}
                     alt={jornada.title}
