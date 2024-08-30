@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   List,
@@ -6,10 +6,17 @@ import {
   ListItemText,
   Divider,
   IconButton,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Content } from './MarkdownPage';
+import AddIcon from '@mui/icons-material/Add';
+import { Content } from '@/lib/interfaces/content.interface';
 
 interface SidebarProps {
   contents: Content[];
@@ -18,6 +25,7 @@ interface SidebarProps {
   selectedContentId: string | null;
   handleSelectContent: (id: string) => void;
   handleDelete: (id: string, trailId: string) => void;
+  handleCreateContent: (title: string, trailId: string) => void;
   trailId: string;
 }
 
@@ -28,8 +36,26 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
   selectedContentId,
   handleSelectContent,
   handleDelete,
+  handleCreateContent,
   trailId,
 }) => {
+  const [openPopup, setOpenPopup] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+
+  const handleOpenPopup = () => {
+    setNewTitle('');
+    setOpenPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setOpenPopup(false);
+  };
+
+  const handleSaveNewContent = () => {
+    handleCreateContent(newTitle, trailId);
+    setOpenPopup(false);
+  };
+  
   if (!sidebarOpen) return null;
 
   return (
@@ -69,7 +95,37 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
             </React.Fragment>
           ))}
         </List>
+        <Box textAlign="center" mt={2}>
+          <IconButton
+            style={{
+              color: '#F0F0F0',
+              backgroundColor: '#6667AB',
+            }}
+            onClick={handleOpenPopup}
+          >
+            <AddIcon />
+          </IconButton>
+        </Box>
       </Box>
+      <Dialog open={openPopup} onClose={handleClosePopup}>
+        <DialogTitle>Novo Conteúdo</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Título"
+            fullWidth
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePopup}>Cancelar</Button>
+          <Button onClick={handleSaveNewContent} color="primary">
+            Salvar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

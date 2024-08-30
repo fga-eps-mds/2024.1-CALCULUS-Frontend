@@ -37,63 +37,70 @@ const useMarkdownEditor = () => {
     }
   };
 
-  const handleSave = async (trailId: string) => {
-    if (!session) {
-      toast.error('Você precisa estar logado para salvar o conteúdo.');
+  const handleSave = async () => {
+    if (!session || !selectedContentId) {
+      toast.error('Você precisa estar logado e selecionar um conteúdo para salvar.');
       return;
     }
 
-    const lines = markdown.split('\n');
-    const titleLine = lines.find((line) => line.startsWith('# '));
-    const title = titleLine ? titleLine.substring(2) : 'Sem Título';
     const content = markdown;
 
     try {
-      const existingContent = contents.find(
-        (content) => content.title === title,
+      await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents/${selectedContentId}`,
+        { content },
+        {
+          headers: {
+            Authorization: `Bearer ${session.user.accessToken}`,
+          },
+        },
       );
-
-      if (existingContent) {
-        await axios.patch(
-          `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents/${existingContent._id}`,
-          { title, content },
-          {
-            headers: {
-              Authorization: `Bearer ${session.user.accessToken}`,
-            },
-          },
-        );
-        toast.success('Conteúdo atualizado!');
-      } else {
-        const contentResponse = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents`,
-          { title, content, trailId: trailId },
-          {
-            headers: {
-              Authorization: `Bearer ${session.user.accessToken}`,
-            },
-          },
-        );
-        const newContentId = contentResponse.data._id;
-
-        await axios.put(
-          `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/trails/${trailId}/addContent`,
-          { contentId: newContentId },
-          {
-            headers: {
-              Authorization: `Bearer ${session.user.accessToken}`,
-            },
-          },
-        );
-        toast.success('Conteúdo salvo e adicionado à trilha!');
-      }
-      fetchContents(trailId);
+      toast.success('Conteúdo atualizado!');
     } catch (error) {
-      console.log('TOKEN:', session.user.accessToken);
       console.error('Erro ao salvar conteúdo:', error);
       toast.error('Erro ao salvar conteúdo.');
     }
   };
+
+  const handleCreateContent = async (title: string, trailId: string) => {
+    if (!session) {
+      toast.error('Você precisa estar logado para criar um novo conteúdo.');
+      return;
+    }
+
+    try {
+      const contentResponse = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents`,
+        { title: title, content: ' ', trailId: trailId }, 
+        {
+          headers: {
+            Authorization: `Bearer ${session.user.accessToken}`,
+          },
+        },
+      );
+
+      const newContentId = contentResponse.data._id;
+
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/trails/${trailId}/addContent`,
+        { contentId: newContentId },
+        {
+          headers: {
+            Authorization: `Bearer ${session.user.accessToken}`,
+          },
+        },
+      );
+
+      toast.success('Novo conteúdo criado e adicionado à trilha!');
+      fetchContents(trailId); 
+      setSelectedContentId(newContentId); 
+      setMarkdown(''); 
+    } catch (error) {
+      console.error('Erro ao criar e adicionar conteúdo à trilha:', error);
+      toast.error('Erro ao criar e adicionar conteúdo à trilha.');
+    }
+};
+
 
   const handleDelete = async (id: string, trailId: string) => {
     if (!trailId) {
@@ -178,6 +185,7 @@ const useMarkdownEditor = () => {
     insertTextAtSelection,
     insertImage,
     handleSave,
+    handleCreateContent,
     handleDelete,
     handleSelectContent,
     fetchContents,
