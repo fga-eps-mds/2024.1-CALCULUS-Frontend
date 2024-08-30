@@ -5,7 +5,11 @@ import { Box, Typography, Button, List } from '@mui/material';
 import { Content } from '@/lib/interfaces/content.interface';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { getContent } from '@/services/studioMaker.service';
-import MarkdownRender from '@/components/trail-page/markdownRender';
+import ReactMarkdown from 'react-markdown';
+import rehypeKatex from 'rehype-katex';
+import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
+import 'katex/dist/katex.min.css';
 
 interface trailContentProps {
     contentId: string;
@@ -45,15 +49,15 @@ const ContentRender: React.FC<trailContentProps> = ({ contentId }) => {
             <Box sx={{
                 alignItems: 'center',
                 padding: '55px',
+                fontFamily: "'KaTeX_Main', serif",
             }}>
-
-                <Typography variant="h2">
-                    {content.title}
-                </Typography>
-
-                <MarkdownRender markdown={content.content}>
-                </MarkdownRender>
-
+                <ReactMarkdown
+                    className="prose prose-lg"
+                    remarkPlugins={[remarkMath, remarkGfm]}
+                    rehypePlugins={[rehypeKatex]}
+                >
+                    {content.content}
+                </ReactMarkdown>
             </Box>
         </>
     );
