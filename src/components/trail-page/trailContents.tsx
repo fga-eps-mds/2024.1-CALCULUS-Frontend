@@ -9,6 +9,7 @@ interface TrailContentProps {
   journeyName: string;
   trailName: string;
   renderContent: (id: string) => void;
+  currentContentId: string;
 }
 
 const TrailContents: React.FC<TrailContentProps> = ({
@@ -16,6 +17,7 @@ const TrailContents: React.FC<TrailContentProps> = ({
   journeyName,
   trailName,
   renderContent,
+  currentContentId,
 }) => {
   return (
     <Box
@@ -40,21 +42,27 @@ const TrailContents: React.FC<TrailContentProps> = ({
       </Typography>
 
       <Box sx={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {contents.map((content, index) => (
-          <Button
-            variant="text"
-            key={index}
-            sx={{
-              fontSize: '16px',
-              textAlign: 'left',
-              color: 'gray',
-              justifyContent: 'flex-start',
-            }}
-            onClick={() => renderContent(content._id)}
-          >
-            {content.title}
-          </Button>
-        ))}
+        {contents.map((content, index) => {
+          const isClickable = index <= contents.findIndex(c => c._id === currentContentId); // Apenas as trilhas passadas e a atual são clicáveis
+          
+          return (
+            <Button
+              variant="text"
+              key={index}
+              sx={{
+                fontSize: '16px',
+                textAlign: 'left',
+                color: content._id === currentContentId ? 'black' : 'gray', 
+                justifyContent: 'flex-start',
+                padding: '10px',
+              }}
+              onClick={() => isClickable && renderContent(content._id)} 
+              disabled={!isClickable}
+            >
+              {content.title}
+            </Button>
+          );
+        })}
       </Box>
     </Box>
   );

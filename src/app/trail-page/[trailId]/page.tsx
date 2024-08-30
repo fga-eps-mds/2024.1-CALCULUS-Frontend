@@ -24,7 +24,11 @@ function TrailPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const contentClick = (id: string) => {
-    setContentId(id);
+    const index = contents.findIndex(content => content._id === id);
+    if (index !== -1) {
+      setContentId(id);
+      setCurrentIndex(index);
+    }
   };
 
   useEffect(() => {
@@ -42,10 +46,10 @@ function TrailPage() {
         const contentsData = await findContentsByTrailId({ id, token });
         setContents(contentsData);
 
-        if(contentsData.length > 0) {
-            setContentId(contentsData[0]._id);
+        if (contentsData.length > 0) {
+          setContentId(contentsData[0]._id);
+          setCurrentIndex(0); 
         }
-
       } catch (error) {
         setError('Failed to fetch trail data');
       }
@@ -54,22 +58,28 @@ function TrailPage() {
     fetchTrailData();
   }, [trailId]);
 
-  const handlePreviousContent = () => {
-    if(currentIndex > 0) {
-        const newIndex = currentIndex - 1;
-        setCurrentIndex(newIndex);
-        setContentId(contents[newIndex]._id);
+  useEffect(() => {
+    const index = contents.findIndex(content => content._id === contentId);
+    if (index !== -1) {
+      setCurrentIndex(index);
     }
-  }
+  }, [contentId, contents]);
+
+  const handlePreviousContent = () => {
+    if (currentIndex > 0) {
+      const newIndex = currentIndex - 1;
+      setCurrentIndex(newIndex);
+      setContentId(contents[newIndex]._id);
+    }
+  };
 
   const handleNextContent = () => {
-    if(currentIndex < contents.length - 1) {
-        const newIndex = currentIndex + 1;
-        setCurrentIndex(newIndex);
-        setContentId(contents[newIndex]._id);
+    if (currentIndex < contents.length - 1) {
+      const newIndex = currentIndex + 1;
+      setCurrentIndex(newIndex);
+      setContentId(contents[newIndex]._id);
     }
-  }
-
+  };
 
   if (error) {
     return <Box className="error-message">{error}</Box>;
@@ -102,6 +112,7 @@ function TrailPage() {
           journeyName={journey.title}
           trailName={trail.name}
           renderContent={contentClick}
+          currentContentId={contentId}
         />
       </Box>
 
@@ -114,9 +125,19 @@ function TrailPage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
+          overflow: 'hidden',
         }}
       >
-        <ContentRender contentId={contentId} />
+        <Box
+          sx={{
+            flexGrow: 1,
+            overflow: 'auto',
+            maxHeight: 'calc(100vh - 100px)',
+            paddingRight: '10px',
+          }}
+        >
+          <ContentRender contentId={contentId} />
+        </Box>
 
         <Box
           sx={{
@@ -125,10 +146,24 @@ function TrailPage() {
             marginTop: '20px',
           }}
         >
-          <MyButton width="150px" height="50px" color="purple" bold onClick={handlePreviousContent} disabled={currentIndex === 0}>
+          <MyButton
+            width="150px"
+            height="50px"
+            color="purple"
+            bold
+            onClick={handlePreviousContent}
+            disabled={currentIndex === 0}
+          >
             Conteúdo anterior
           </MyButton>
-          <MyButton width="150px" height="50px" color="purple" bold onClick={handleNextContent} disabled={currentIndex === contents.length - 1}>
+          <MyButton
+            width="150px"
+            height="50px"
+            color="purple"
+            bold
+            onClick={handleNextContent}
+            disabled={currentIndex === contents.length - 1}
+          >
             Próximo conteúdo
           </MyButton>
         </Box>
