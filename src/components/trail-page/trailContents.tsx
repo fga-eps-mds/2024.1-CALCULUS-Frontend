@@ -1,60 +1,63 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Box, Typography, Button, List } from '@mui/material';
+import React from 'react';
+import { Box, Typography, Button } from '@mui/material';
 import { Content } from '@/lib/interfaces/content.interface';
-import { Journey } from '@/lib/interfaces/journey.interface';
 
-interface trailContentProps {
-    contents: Content[];
-    journeyName: string;
-    trailName: string;
-    renderContent: (id : string) => void;
+interface TrailContentProps {
+  contents: Content[];
+  journeyName: string;
+  trailName: string;
+  renderContent: (id: string) => void;
 }
 
-const TrailContents: React.FC<trailContentProps> = ({ contents, journeyName, trailName, renderContent }) => {
+const TrailContents: React.FC<TrailContentProps> = ({
+  contents,
+  journeyName,
+  trailName,
+  renderContent,
+}) => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        width: '300px',
+        padding: '20px',
+        textAlign: 'left', 
+      }}
+    >
+      <Typography variant="h6" fontWeight="bold" color="gray" gutterBottom>
+        {journeyName}
+      </Typography>
+      <Typography
+        variant="h5"
+        color="black"
+        fontWeight="bold"
+        sx={{ marginBottom: '20px' }}
+      >
+        {trailName}
+      </Typography>
 
-    return(
-        <>
-        <Box sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: '400px',
-            padding: '20px',
-            textAlign: 'center',
-            marginTop: '100px',
-            marginLeft: '20px',
-        }}>
-
-            <Box sx={{
-                display: 'flex',
-                flexDirection: 'row',
-            }}>
-                <Typography variant="h5" fontWeight="bold" color="gray">
-                    {journeyName} <Typography variant="h4" color="black" fontWeight="bold" sx={{
-                        marginTop: '10px',
-                    }}> {trailName} </Typography>
-                </Typography>
-            
-            </Box>
-            
-            <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-            }}>
-                
-                {contents.map((content,index) => (
-                    <Button variant="text" key={index} sx={{
-                        fontSize: '20px',
-                        textAlign: 'left',
-                        color: 'gray',
-                    }} onClick={() => renderContent(content._id)}>{content.title}</Button>
-                ))}
-            </Box>
-        </Box>
-        </>
-    );
+      <Box sx={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {contents.map((content, index) => (
+          <Button
+            variant="text"
+            key={index}
+            sx={{
+              fontSize: '16px',
+              textAlign: 'left',
+              color: 'gray',
+              justifyContent: 'flex-start',
+            }}
+            onClick={() => renderContent(content._id)}
+          >
+            {content.title}
+          </Button>
+        ))}
+      </Box>
+    </Box>
+  );
 };
-
 
 export default TrailContents;

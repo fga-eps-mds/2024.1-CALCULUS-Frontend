@@ -5,6 +5,7 @@ import { Box, Typography, Button, List } from '@mui/material';
 import { Content } from '@/lib/interfaces/content.interface';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { getContent } from '@/services/studioMaker.service';
+import MarkdownRender from '@/components/trail-page/markdownRender';
 
 interface trailContentProps {
     contentId: string;
@@ -44,16 +45,15 @@ const ContentRender: React.FC<trailContentProps> = ({ contentId }) => {
             <Box sx={{
                 alignItems: 'center',
                 padding: '55px',
-                marginTop: '80px',
             }}>
 
                 <Typography variant="h2">
                     {content.title}
                 </Typography>
 
-                <Typography variant="body1">
-                    {content.content}
-                </Typography>
+                <MarkdownRender markdown={content.content}>
+                </MarkdownRender>
+
             </Box>
         </>
     );
