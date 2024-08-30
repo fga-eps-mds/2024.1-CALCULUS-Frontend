@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { Trail } from '@/lib/interfaces/trails.interface';
+import { useRouter } from 'next/navigation';
 
 interface JourneyPathProps {
   trails: Trail[];
@@ -13,6 +14,7 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
 
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const drawLines = () => {
@@ -63,6 +65,10 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
       resizeObserver.disconnect();
     };
   }, [trails]);
+
+  const handleClick = (trailId: string) => {
+     router.push(`/trail-page/${trailId}`);
+  };
 
   return (
     <Box
@@ -125,7 +131,7 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
                 zIndex: 1, 
                 transform: 'rotate(45deg)', 
               }}
-              onClick={() => console.log(`Clicked on trail: ${trail.name}`)}
+              onClick={() => handleClick(trail._id)}
             />
             <Typography
               variant="body1"

@@ -125,10 +125,10 @@ function TrailPage() {
             marginTop: '20px',
           }}
         >
-          <MyButton width="150px" height="50px" color="purple" bold onClick={handlePreviousContent} disable={currentIndex === 0}>
+          <MyButton width="150px" height="50px" color="purple" bold onClick={handlePreviousContent} disabled={currentIndex === 0}>
             Conteúdo anterior
           </MyButton>
-          <MyButton width="150px" height="50px" color="purple" bold onClick={handleNextContent} disable={currentIndex === contents.length - 1}>
+          <MyButton width="150px" height="50px" color="purple" bold onClick={handleNextContent} disabled={currentIndex === contents.length - 1}>
             Próximo conteúdo
           </MyButton>
         </Box>

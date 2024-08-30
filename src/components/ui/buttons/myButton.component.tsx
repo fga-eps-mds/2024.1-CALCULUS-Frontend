@@ -9,6 +9,7 @@ type ButtonProps = {
   type?: 'button' | 'submit';
   radius?: string;
   bold?: boolean;
+  disabled?: boolean;
   onClick?: () => void;
 };
 
@@ -29,7 +30,7 @@ const CustomButton = styled(Button)<{
   hovercolor: string;
   radius?: string;
   bold?: boolean;
-}>(({ width, height, btncolor, radius, subcolor, bold, hovercolor}) => ({
+}>(({ width, height, btncolor, radius, subcolor, bold, hovercolor }) => ({
   width: width || '100%',
   height: height || '50px',
   borderRadius: radius || height || '5px',
@@ -45,24 +46,25 @@ const CustomButton = styled(Button)<{
   },
 }));
 
-const MyButton: React.FC<ButtonProps> = ({ children, color, width, height, type = 'button', radius, onClick, bold = false }) => {
-    return (
-      <CustomButton
-        role="button"
-        variant="contained"
-        btncolor={colorMap[color].primary}
-        subcolor={colorMap[color].secondary}
-        hovercolor={colorMap[color].hovercolor}
-        width={width}
-        height={height}
-        type={type}
-        bold={bold}
-        radius={radius}
-        onClick={onClick}
-      >
-        {children}
-      </CustomButton>
-    );
-  };
-  
-  export default MyButton;
+const MyButton: React.FC<ButtonProps> = ({ children, color, width, height, type = 'button', radius, onClick, bold = false, disabled = false }) => {
+  return (
+    <CustomButton
+      role="button"
+      variant="contained"
+      btncolor={colorMap[color].primary}
+      subcolor={colorMap[color].secondary}
+      hovercolor={colorMap[color].hovercolor}
+      width={width}
+      height={height}
+      type={type}
+      bold={bold}
+      radius={radius}
+      onClick={disabled ? undefined : onClick} 
+      disabled={disabled} 
+    >
+      {children}
+    </CustomButton>
+  );
+};
+
+export default MyButton;
