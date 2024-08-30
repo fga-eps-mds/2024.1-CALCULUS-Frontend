@@ -8,7 +8,12 @@ import {
     updateTrailById,
     createTrail,
     deleteTrail,
-    getJourney
+    getJourney,
+    getStartPoints,
+    getStartPointsByUser,
+    createStartPoint,
+    updateStartPointById,
+    deleteStartPoint
 } from '@/services/studioMaker.service';
 import { studioMakerApi } from '@/services/apis.service';
 
@@ -18,6 +23,116 @@ describe('Serviço de Jornadas e Trilhas', () => {
 
     afterEach(() => {
         jest.clearAllMocks();
+    });
+
+    test('Deve retornar todas os pontos de partida com sucesso', async () => {
+        const mockData = [{ id: '1', name: 'Test Start Point', description: 'Start Point Test Description' }];
+        (studioMakerApi.get as jest.Mock).mockResolvedValue({ data: mockData });
+
+        const startPoints = await getStartPoints();
+        expect(startPoints).toEqual(mockData);
+        expect(studioMakerApi.get).toHaveBeenCalledWith('/points');
+    });
+
+    test('Deve falhar ao buscar pontos de partida', async () => {
+        (studioMakerApi.get as jest.Mock).mockRejectedValue(new Error('Falha ao buscar pontos de partida'));
+
+        await expect(getStartPoints()).rejects.toThrow('Falha ao buscar pontos de partida');
+    });
+
+    test('Deve retornar pontos de partida do usuário com sucesso', async () => {
+        const mockData = [{ id: '1', name: 'User Start Point', description: 'User Start Point Description' }];
+        const userId = '321';
+        (studioMakerApi.get as jest.Mock).mockResolvedValue({ data: mockData });
+
+        const startPoints = await getStartPointsByUser(userId);
+        expect(startPoints).toEqual(mockData);
+        expect(studioMakerApi.get).toHaveBeenCalledWith(`/points/user/${userId}`);
+    });
+
+    test('Deve falhar ao buscar pontos de partida do usuário', async () => {
+        const userId = '321';
+        (studioMakerApi.get as jest.Mock).mockRejectedValue(new Error('Falha ao buscar pontos de partida do usuário'));
+
+        await expect(getStartPointsByUser(userId)).rejects.toThrow('Falha ao buscar pontos de partida do usuário');
+    });
+
+    test('Deve criar um novo ponto de partida com sucesso', async () => {
+        const mockData = [{ id: '1', name: 'Test Start Point', description: 'Start Point Test Description' }];
+        const token = 'fake-token';
+        (studioMakerApi.post as jest.Mock).mockResolvedValue({ data: mockData });
+
+        const result = await createStartPoint({ data: mockData, token });
+        expect(result.data).toEqual(mockData);
+        expect(studioMakerApi.post).toHaveBeenCalledWith('/points', mockData, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    });
+
+    test('Deve falhar ao criar um novo ponto de partida', async () => {
+        const token = 'fake-token';
+        (studioMakerApi.post as jest.Mock).mockRejectedValue(new Error('Falha ao criar ponto de partida'));
+
+        const result = await createStartPoint({ data: {}, token });
+
+        if (result.error instanceof Error) {
+            expect(result.error.message).toBe('Falha ao criar ponto de partida');
+        } else {
+            throw new Error('Erro esperado não é uma instância de Error');
+        }
+    });
+
+    test('Deve atualizar um ponto de partida por ID com sucesso', async () => {
+        const mockData = [{ id: '1', name: 'Update Test Start Point', description: 'Start Point Update Test Description' }];
+        const id = '1';
+        const token = 'fake-token';
+        (studioMakerApi.put as jest.Mock).mockResolvedValue({ data: mockData });
+
+        const result = await updateStartPointById({ id, data: mockData, token });
+        expect(result.data).toEqual(mockData);
+        expect(studioMakerApi.put).toHaveBeenCalledWith(`/points/${id}`, mockData, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    });
+
+    test('Deve falhar ao atualizar um ponto de partida', async () => {
+        const id = '1';
+        const token = 'fake-token';
+        (studioMakerApi.put as jest.Mock).mockRejectedValue(new Error('Falha ao atualizar ponto de partida'));
+
+        const result = await updateStartPointById({ id, data: {}, token });
+        if (result.error instanceof Error) {
+            expect(result.error.message).toBe('Falha ao atualizar ponto de partida');
+        } else {
+            throw new Error('Erro esperado não é uma instância de Error');
+        }
+    });
+
+    test('Deve excluir um ponto de partida por ID com sucesso', async () => {
+        const mockData = [{ id: '1', name: 'Delete Test Start Point', description: 'Start Point Delete Test Description' }];
+        const id = '1';
+        const token = 'fake-token';
+        (studioMakerApi.delete as jest.Mock).mockResolvedValue({ data: mockData });
+
+        const result = await deleteStartPoint({ id, token });
+        expect(result.data).toEqual(mockData);
+        expect(studioMakerApi.delete).toHaveBeenCalledWith(`/points/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+    });
+
+    test('Deve falhar ao excluir um ponto de partida', async () => {
+        const id = '1';
+        const token = 'fake-token';
+        (studioMakerApi.delete as jest.Mock).mockRejectedValue(new Error('Falha ao excluir ponto de partida'));
+
+        const result = await deleteStartPoint({ id, token });
+
+        if (result.error instanceof Error) {
+            expect(result.error.message).toBe('Falha ao excluir ponto de partida');
+        } else {
+            throw new Error('Erro esperado não é uma instância de Error');
+        }
     });
 
     test('Deve retornar todas as jornadas com sucesso', async () => {
@@ -116,15 +231,15 @@ describe('Serviço de Jornadas e Trilhas', () => {
         });
     });
 
-    test('Deve falhar ao atualizar uma jornada', async () => {
+    test('Deve falhar ao excluir uma jornada', async () => {
         const id = '1';
         const token = 'fake-token';
-        (studioMakerApi.put as jest.Mock).mockRejectedValue(new Error('Falha ao atualizar jornada'));
+        (studioMakerApi.delete as jest.Mock).mockRejectedValue(new Error('Falha ao excluir jornada'));
 
-        const result = await updateJourneyById({ id, data: {}, token });
+        const result = await deleteJourney({ id, token });
 
         if (result.error instanceof Error) {
-            expect(result.error.message).toBe('Falha ao atualizar jornada');
+            expect(result.error.message).toBe('Falha ao excluir jornada');
         } else {
             throw new Error('Erro esperado não é uma instância de Error');
         }
