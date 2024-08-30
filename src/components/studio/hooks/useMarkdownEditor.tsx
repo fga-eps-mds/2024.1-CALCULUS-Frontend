@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { insertTextAtSelection } from '../utils/insertTextAtSelection';
-import { Content } from '../MarkdownPage';
+import { Content } from '@/lib/interfaces/content.interface';
 import { toast } from 'sonner';
 
 const useMarkdownEditor = () => {
@@ -138,15 +138,12 @@ const useMarkdownEditor = () => {
         `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents`,
       );
 
-      // Log da resposta da API para verificação
       console.log('Resposta da API:', response.data);
 
-      // Filtrando os conteúdos com base no trailId
       const filteredContents = response.data.filter(
         (content) => content.trail === trailId,
       );
 
-      // Log do conteúdo filtrado
       console.log('Conteúdos filtrados:', filteredContents);
 
       setContents(filteredContents);
@@ -160,7 +157,7 @@ const useMarkdownEditor = () => {
       const response = await axios.get<Content>(
         `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents/${id}`,
       );
-      setMarkdown(response.data.body);
+      setMarkdown(response.data.content);
       setSelectedContentId(id);
     } catch (error) {
       console.error('Erro ao carregar conteúdo:', error);

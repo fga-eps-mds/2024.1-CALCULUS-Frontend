@@ -1,6 +1,6 @@
 'use client';
 
-import MarkdownPage from '@/app/components/studio/MarkdownPage';
+import MarkdownPage from '@/components/studio/MarkdownPage';
 import { useParams } from 'next/navigation';
 export default function StudioPage() {
   const { trailId } = useParams();

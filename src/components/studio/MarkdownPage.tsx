@@ -9,13 +9,6 @@ import MarkdownEditor from './MarkdownEditor';
 import MarkdownPreview from './MarkdownPreview';
 import useMarkdownEditor from './hooks/useMarkdownEditor';
 
-export interface Content {
-  _id: string;
-  title: string;
-  body: string;
-  trail: string;
-}
-
 interface MarkdownPageProps {
   trailId: string;
 }

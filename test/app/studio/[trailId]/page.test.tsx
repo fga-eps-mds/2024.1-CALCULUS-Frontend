@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import StudioPage from '@/app/studio/[trailId]/page'; 
 import { useParams } from 'next/navigation';
 
-jest.mock('@/app/components/studio/MarkdownPage', () => ({
+jest.mock('@/components/studio/MarkdownPage', () => ({
   __esModule: true,
   default: jest.fn(() => <div>Mock MarkdownPage</div>),
 }));
