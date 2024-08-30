@@ -21,6 +21,7 @@ function TrailPage() {
   const [contents, setContents] = useState<Content[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [contentId, setContentId] = useState('');
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const contentClick = (id: string) => {
     setContentId(id);
@@ -40,6 +41,11 @@ function TrailPage() {
 
         const contentsData = await findContentsByTrailId({ id, token });
         setContents(contentsData);
+
+        if(contentsData.length > 0) {
+            setContentId(contentsData[0]._id);
+        }
+
       } catch (error) {
         setError('Failed to fetch trail data');
       }
@@ -47,6 +53,23 @@ function TrailPage() {
 
     fetchTrailData();
   }, [trailId]);
+
+  const handlePreviousContent = () => {
+    if(currentIndex > 0) {
+        const newIndex = currentIndex - 1;
+        setCurrentIndex(newIndex);
+        setContentId(contents[newIndex]._id);
+    }
+  }
+
+  const handleNextContent = () => {
+    if(currentIndex < contents.length - 1) {
+        const newIndex = currentIndex + 1;
+        setCurrentIndex(newIndex);
+        setContentId(contents[newIndex]._id);
+    }
+  }
+
 
   if (error) {
     return <Box className="error-message">{error}</Box>;
@@ -102,10 +125,10 @@ function TrailPage() {
             marginTop: '20px',
           }}
         >
-          <MyButton width="150px" height="50px" color="purple" bold>
+          <MyButton width="150px" height="50px" color="purple" bold onClick={handlePreviousContent} disable={currentIndex === 0}>
             Conteúdo anterior
           </MyButton>
-          <MyButton width="150px" height="50px" color="purple" bold>
+          <MyButton width="150px" height="50px" color="purple" bold onClick={handleNextContent} disable={currentIndex === contents.length - 1}>
             Próximo conteúdo
           </MyButton>
         </Box>
