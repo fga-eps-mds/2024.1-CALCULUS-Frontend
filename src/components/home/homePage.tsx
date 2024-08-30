@@ -12,40 +12,41 @@ const HomePrincipalPage = () => {
   const { data: session } = useSession();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [userJourneys, setUserJourneys] = useState<any[]>([]);
-  const [allJourneys, setAllJourneys] = useState<any[]>([]);
+  const [allPoints, setAllPoints] = useState<any[]>([]);
 
-  // useEffect(() => {
-  //   try {
-  //     const fetchJourneys = async () => {
-  //       const { fetchUserJourneys, fetchJourneyById } = JourneyService();
-  //       const journeyIds = await fetchUserJourneys(session);
+  useEffect(() => {
+    try {
+      const fetchJourneys = async () => {
+        const { fetchUserJourneys, fetchJourneyById } = JourneyService();
+        const journeyIds = await fetchUserJourneys(session);
 
-  //       const journeysDetails = await Promise.all(
-  //         journeyIds.map(async (id: string) => await fetchJourneyById(id)),
-  //       );
+        const journeysDetails = await Promise.all(
+          journeyIds.map(async (id: string) => await fetchJourneyById(id)),
+        );
 
-  //       setUserJourneys(journeysDetails.filter((j) => j !== null)); // Filtrar jornadas que foram encontradas
-  //     };
+        setUserJourneys(journeysDetails.filter((j) => j !== null));
+      };
 
-  //     fetchJourneys();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }, [session]);
+      fetchJourneys();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [session]);
 
-  // useEffect(() => {
-  //   try {
-  //     const loadJourneys = async () => {
-  //       const { fetchJourneys } = JourneyService();
-  //       const allJourneys = await fetchJourneys();
 
-  //       setAllJourneys(allJourneys);
-  //     };
-  //     loadJourneys();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }, []);
+  useEffect(() => {
+    try {
+      const loadPoints = async () => {
+        const { fetchPoints } = JourneyService();
+        const allPoints = await fetchPoints();
+
+        setAllPoints(allPoints);
+      };
+      loadPoints();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   const allStartPointsTest = [
     {
@@ -110,11 +111,11 @@ const HomePrincipalPage = () => {
     },
   ];
   
-  const filteredJourneys =
+  const filteredPoints =
     searchQuery.length > 0
-      ? allStartPointsTest.filter(
+      ? allPoints.filter(
           (jornada) =>
-            jornada.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            jornada.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             jornada.description
               .toLowerCase()
               .includes(searchQuery.toLowerCase()),
@@ -144,67 +145,14 @@ const HomePrincipalPage = () => {
     setSearchQuery(query);
   };
 
-  const userJourneysTest = [
-    {
-      _id: '1',
-      title: 'Jornada 1',
-      image: Foto,
-    },
-    {
-      _id: '2',
-      title: 'Jornada 2',
-      image: Foto,
-    },
-    {
-      _id: '3',
-      title: 'Jornada 3',
-      image: Foto,
-    },
-    {
-      _id: '4',
-      title: 'Jornada 4',
-      image: Foto,
-    },
-    {
-      _id: '5',
-      title: 'Jornada 5',
-      image: Foto,
-    },
-    {
-      _id: '6',
-      title: 'Jornada 6',
-      image: Foto,
-    },
-    {
-      _id: '7',
-      title: 'Jornada 7',
-      image: Foto,
-    },
-    {
-      _id: '8',
-      title: 'Jornada 8',
-      image: Foto,
-    },
-    {
-      _id: '9',
-      title: 'Jornada 9',
-      image: Foto,
-    },
-    {
-      _id: '10',
-      title: 'Jornada 10',
-      image: Foto,
-    },
-  ];
-
 
   return (
     <>
       <h5 className="text-3xl font-bold mb-5">Em andamento</h5>
-      {userJourneysTest.length > 0 ? (
+      {userJourneys.length > 0 ? (
         <>
           <Carousel responsive={responsive}>
-            {userJourneysTest.map((jornada) => (
+            {userJourneys.map((jornada) => (
               <JourneyCard
                 key={jornada._id}
                 title={jornada.title}
@@ -230,25 +178,25 @@ const HomePrincipalPage = () => {
         </div>
         {searchQuery.length > 0 ? (
           <div>
-            {filteredJourneys.map((jornada) => (
+            {filteredPoints.map((jornada) => (
               <StartCard
               key={jornada._id}
-              title={jornada.title}
+              title={jornada.name}
               description={jornada.description}
               image={jornada.image || Foto}
-              Id="/"
+              Id={jornada._id}
             />
             ))}
           </div>
         ) : (
           <div>
-            {allStartPointsTest.map((jornada) => (
+            {allPoints.map((jornada) => (
               <StartCard
                 key={jornada._id}
-                title={jornada.title}
+                title={jornada.name}
                 description={jornada.description}
                 image={jornada.image || Foto}
-                Id="/"
+                Id={jornada._id}
               />
             ))}
           </div>
