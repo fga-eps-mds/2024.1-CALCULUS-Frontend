@@ -1,149 +1,102 @@
-'use client';
-import { EditJourneyModal } from '@/components/journey/EditJourneyModal';
-import { createColumns, Journey } from '@/components/journey/columns';
-import { Input } from '@/components/ui/shadcnUi/input';
+import React from 'react';
 import {
+  Box,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
-  TableHeader,
   TableRow,
-} from '@/components/ui/shadcnUi/table';
-import {
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
-import * as React from 'react';
+  Paper,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@mui/material';
+import { useRouter } from 'next/navigation';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { StartPoint } from '@/lib/interfaces/startPoint.interface';
 
-export function DataTable({ data }: { data: Journey[] }) {
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [selectedJourney, setSelectedJourney] = React.useState<Journey | null>(
-    null,
-  );
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+interface StartpointTableProps {
+  startPoints: StartPoint[];
+  anchorEl: null | HTMLElement;
+  onMenuClick: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    startPoint: StartPoint,
+  ) => void;
+  onMenuClose: () => void;
+  onStartpointAction: (action: string) => void;
+}
 
-  const handleEditClick = (journey: Journey) => {
-    setSelectedJourney(journey);
-    setIsModalOpen(true);
+const StartpointTable: React.FC<StartpointTableProps> = ({
+  startPoints,
+  anchorEl,
+  onMenuClick,
+  onMenuClose,
+  onStartpointAction,
+}) => {
+  const open = Boolean(anchorEl);
+  const router = useRouter();
+  const [selectedStartpoint, setSelectedStartpoint] = React.useState<StartPoint | null>(null);
+
+  const handleMenuItemClick = (action: string) => {
+    onStartpointAction(action);
+    onMenuClose();
   };
 
-  const handleDeleteJourney = (journey: Journey) => {
-    console.log('Deletando jornada:', journey.name);
-    // Adicione a lógica de exclusão aqui
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    setSelectedJourney(null);
-  };
-
-  const handleModalConfirm = (name: string, description: string) => {
-    console.log('Atualizando jornada:', name, description);
-    setIsModalOpen(false);
-  };
-
-  const table = useReactTable({
-    data,
-    columns: createColumns(handleEditClick, handleDeleteJourney),
-    getCoreRowModel: getCoreRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    state: { columnFilters },
-  });
+  const handleItem = (e: any, startPoint: StartPoint) => {
+    onMenuClick(e, startPoint)
+    setSelectedStartpoint(startPoint)
+  }
 
   return (
-    <>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filtrar por nome..."
-          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('name')?.setFilterValue(event.target.value)
-          }
-          className="w-full"
-        />
-      </div>
-      <div className="rounded-md border">
+    <Box sx={{ width: '100%', maxWidth: 800 }}>
+      <TableContainer component={Paper}>
         <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="border-none">
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="p-4 border-b-0">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 'bold' }}>Nome</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Descrição</TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableHead>
           <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  className="hover:bg-transparent border-none"
-                >
-                  <TableCell
-                    colSpan={row.getVisibleCells().length}
-                    className="p-0 border-none"
+            {startPoints.map((startPoint) => (
+              <TableRow key={startPoint._id}>
+                <TableCell align="left">{startPoint.title}</TableCell>
+                <TableCell align="left">{startPoint.description}</TableCell>
+                <TableCell align="right">
+                  <IconButton
+                    onClick={(e) => handleItem(e, startPoint)}
+                    color="primary"
                   >
-                    <div className="my-2 px-6 py-3 mx-2 bg-white rounded-lg shadow-md border border-gray-300">
-                      <div className="flex justify-between">
-                        {row.getVisibleCells().map((cell) => (
-                          <div key={cell.id} className="flex-1 p-2">
-                            <span
-                              className={
-                                cell.column.id === 'name'
-                                  ? 'font-medium'
-                                  : 'font-normal'
-                              }
-                            >
-                              {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext(),
-                              )}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={table.getVisibleLeafColumns().length}
-                  className="h-24 text-center"
-                >
-                  Nenhum resultado encontrado.
+                    <MoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={onMenuClose}
+                  >
+                    <MenuItem onClick={() => handleMenuItemClick('editar')}>
+                      Editar Ponto de partida
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => router.push(`/journey/${selectedStartpoint?._id}`)}
+                    >
+                      Gerenciar Jornadas
+                    </MenuItem>
+                    <MenuItem onClick={() => handleMenuItemClick('excluir')}>
+                      Excluir
+                    </MenuItem>
+                  </Menu>
                 </TableCell>
               </TableRow>
-            )}
+            ))}
           </TableBody>
         </Table>
-      </div>
-      {selectedJourney && (
-        <EditJourneyModal
-          isOpen={isModalOpen}
-          onClose={handleModalClose}
-          onConfirm={handleModalConfirm}
-          initialName={selectedJourney.name}
-          initialDescription={selectedJourney.description}
-        />
-      )}
-    </>
+      </TableContainer>
+    </Box>
   );
-}
+};
+
+export default StartpointTable;
