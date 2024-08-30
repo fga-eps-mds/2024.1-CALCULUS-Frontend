@@ -84,7 +84,7 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
                     >
                       Gerenciar Jornadas
                     </MenuItem>
-                    <MenuItem onClick={() => handleMenuItemClick('excluir')}>
+                    <MenuItem onClick={() => handleMenuItemClick('excluir')} sx={{color:'crimson'}}>
                       Excluir
                     </MenuItem>
                   </Menu>

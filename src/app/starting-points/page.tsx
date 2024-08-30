@@ -25,6 +25,7 @@ import {
 import Popup from '@/components/ui/popup';
 import { toast } from 'sonner';
 import { CreateStartPointForm } from '@/components/forms/createStartPoint.form';
+import { UpdateStartPointForm } from '@/components/forms/editStartPoint.form';
 
 const StartPointPage: React.FC = () => {
 
@@ -55,6 +56,7 @@ const StartPointPage: React.FC = () => {
   const [selectedStartPoint, setSelectedStartPoint] = useState<StartPoint | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [exclusionDialogOpen, setExclusionDialogOpen] = useState<boolean>(false);
+  const [editionDialogOpen, setEditionDialogOpen] = useState<boolean>(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   useEffect(() => {
@@ -84,6 +86,7 @@ const StartPointPage: React.FC = () => {
   };
 
   const handleStartPointAction = (action: string) => {
+    if (action === 'editar') setEditionDialogOpen(true);
     if (action === 'excluir') setExclusionDialogOpen(true);
   };
 
@@ -158,6 +161,18 @@ const StartPointPage: React.FC = () => {
         <CreateStartPointForm
           addStartPoint={addStartPoint}
           setDialog={setCreateDialogOpen}
+        />
+      </Popup>
+
+      <Popup
+        openPopup={editionDialogOpen}
+        setPopup={setEditionDialogOpen}
+        title="Editar Ponto de Partida"
+      >
+        <UpdateStartPointForm
+          updateStartPoint={updateStartPoint}
+          startPoint={selectedStartPoint!}
+          setDialog={setEditionDialogOpen}
         />
       </Popup>
 
