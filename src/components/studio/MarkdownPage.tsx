@@ -74,6 +74,7 @@ const MarkdownPage: React.FC<MarkdownPageProps> = ({ trailId }) => {
             insertTextAtSelection={handleInsertTextAtSelection}
             insertImage={insertImage}
             handleSave={handleSave}
+            handleCreateContent={handleCreateContent}
             trailId={trailId}
           />
         </Toolbar>
@@ -86,7 +87,6 @@ const MarkdownPage: React.FC<MarkdownPageProps> = ({ trailId }) => {
           selectedContentId={selectedContentId}
           handleSelectContent={handleSelectContent}
           handleDelete={handleDelete}
-          handleCreateContent={handleCreateContent}
           trailId={trailId}
         />
         <Box className="editor flex-1 flex bg-[#FFFAFA] border-r border-[#E0E0E0] relative">
