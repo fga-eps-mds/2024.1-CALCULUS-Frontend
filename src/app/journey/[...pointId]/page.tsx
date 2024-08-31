@@ -20,19 +20,18 @@ import { UserRole } from '@/lib/enum/userRole.enum';
 import {
   deleteJourney,
   getJourneys,
-  getJourneysByUser,
+  getJourneysByPoint,
 } from '@/services/studioMaker.service';
 import Popup from '@/components/ui/popup';
 import { CreateJourneyForm } from '@/components/forms/createJourney.form';
 import { UpdateJourneyForm } from '@/components/forms/editJourney.form';
 import { toast } from 'sonner';
 
-const JourneyPage: React.FC = () => {
+export default function JourneyPage ({ params }: { params: { pointId: string } }) {
   const { data: session } = useSession();
+
   const fetchJourneys = async (): Promise<Journey[]> => {
-    const journeys = !session?.user.role.includes(UserRole.ADMIN)
-      ? await getJourneysByUser(session?.user.id!)
-      : await getJourneys();
+    const journeys = await getJourneysByPoint(params.pointId)
     setListJourneys(journeys);
     setFilteredJourneys(journeys);
     return journeys;
@@ -43,7 +42,7 @@ const JourneyPage: React.FC = () => {
     isLoading,
     error,
   } = useQuery<Journey[], Error>({
-    queryKey: ['journeys'],
+    queryKey: ['journeys', params.pointId],
     queryFn: fetchJourneys,
   });
 
@@ -86,7 +85,7 @@ const JourneyPage: React.FC = () => {
 
   const handleJourneyAction = (action: string) => {
     if (action === 'editar') setEditionDialogOpen(true);
-    if (action === 'gerenciar') alert("Redirect to selected journey's trails");
+    if (action === 'gerenciar') {};
     if (action === 'excluir') setExclusionDialogOpen(true);
   };
 
@@ -205,5 +204,3 @@ const JourneyPage: React.FC = () => {
     </Box>
   );
 };
-
-export default JourneyPage;

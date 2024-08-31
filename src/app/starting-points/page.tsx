@@ -45,7 +45,7 @@ const StartPointPage: React.FC = () => {
 
     error,
   } = useQuery<StartPoint[], Error>({
-    queryKey: ['startpoints'],
+    queryKey: ['startpoints', session?.user.id],
     queryFn: fetchStartPoints,
   });
 

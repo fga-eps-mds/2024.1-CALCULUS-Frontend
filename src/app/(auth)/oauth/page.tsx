@@ -47,10 +47,10 @@ const OAuthContent = () => {
         router.push('/login');
       }
 
-      localStorage.setItem('token', JSON.stringify(session?.user.accessToken));
+      localStorage.setItem('token', JSON.stringify(token));
       localStorage.setItem(
         'refresh',
-        JSON.stringify(session?.user.refreshToken),
+        JSON.stringify(refresh),
       );
       router.push('/home');
     }

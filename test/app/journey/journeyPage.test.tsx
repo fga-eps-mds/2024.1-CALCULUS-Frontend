@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom'; 
 import { useSession } from 'next-auth/react';
 import { AppRouterContextProviderMock } from '../../context/app-router-context-mock';
-import JourneyPage from '@/app/journeys/page';
+import JourneyPage from '@/app/journey/[...pointId]/page';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { useQuery } from '@tanstack/react-query';
 

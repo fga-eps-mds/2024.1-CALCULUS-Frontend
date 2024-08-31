@@ -1,3 +1,5 @@
+'use client';
+
 import { studioMakerApi } from './apis.service';
 import { StartPoint } from '../lib/interfaces/startPoint.interface'
 import { Journey } from '@/lib/interfaces/journey.interface';
@@ -112,9 +114,9 @@ export const getJourneys = async (): Promise<Journey[]> => {
   }
 };
 
-export const getJourneysByUser = async (id: string): Promise<Journey[]> => {
+export const getJourneysByPoint = async (id: string): Promise<Journey[]> => {
   try {
-    const response = await studioMakerApi.get(`/journeys/user/${id}`, {
+    const response = await studioMakerApi.get(`/journeys/point/${id}`, {
       // headers: {
       //   Authorization: `Bearer ${token}`,
       // },
@@ -206,11 +208,12 @@ export const getTrails = async ({
   id: string;
   token: string;
 }): Promise<Trail[]> => {
+  console.log(id, token);
   try {
     const response = await studioMakerApi.get(`/trails/journey/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
     });
     console.log('Trails:', response.data);
     return response.data;

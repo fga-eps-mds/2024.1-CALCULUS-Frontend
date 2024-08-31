@@ -3,6 +3,7 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
   MRT_TableContainer,
+  MRT_Row,
 } from 'material-react-table';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
@@ -26,6 +27,7 @@ import { CreateTrailForm } from './forms/trails/createTrails.form';
 import { deleteTrail } from '@/services/studioMaker.service';
 import { toast } from 'sonner';
 import { studioMakerApi } from '@/services/apis.service';
+import { useRouter } from 'next/navigation';
 
 export default function JorneyTrailsListPage({
   trails,
@@ -34,6 +36,7 @@ export default function JorneyTrailsListPage({
   trails: Trail[];
   journeyId: string;
 }) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [listTrails, setListTrails] = useState(trails);
   const [filteredTrails, setFilteredTrails] = useState(trails);
@@ -71,7 +74,8 @@ export default function JorneyTrailsListPage({
   const handleTrailAction = (action: string) => {
     if (action === 'editar') setEditionDialogOpen(true);
     if (action === 'excluir') setExclusionDialogOpen(true);
-    if (action === 'gerenciar') {
+    if (action === 'gerenciar') { 
+      router.push(`/studio/${selectedTrail!._id}`);
     }
   };
 
@@ -102,10 +106,6 @@ export default function JorneyTrailsListPage({
       {
         accessorKey: 'name',
         header: 'Nome',
-      },
-      {
-        accessorKey: 'description',
-        header: 'Descrição',
       },
       {
         accessorKey: 'actions',

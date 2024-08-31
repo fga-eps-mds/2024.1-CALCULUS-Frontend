@@ -42,10 +42,7 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
         accessorKey: 'title',
         header: 'Nome',
       },
-      {
-        accessorKey: 'description',
-        header: 'Descrição',
-      },
+
       {
         accessorKey: 'actions',
         header: '',
@@ -72,7 +69,7 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
               <MenuItem
                 onClick={() => {
                   if (selectedJourney) {
-                    router.push(`/journey/${selectedJourney._id}`);
+                    router.push(`/trail/${selectedJourney._id}`);
                   }
                 }}
               >

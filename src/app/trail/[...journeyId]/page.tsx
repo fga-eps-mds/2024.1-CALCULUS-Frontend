@@ -8,26 +8,18 @@ import { getJourney, getTrails } from '../../../services/studioMaker.service';
 import { Trail } from '@/lib/interfaces/trails.interface';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 
-export default function ManageTrack({ params }: { params: { id: string } }) {
+export default function ManageTrack({ params }: { params: { journeyId: string } }) {
+  const {data: session} = useSession();
   const [jorney, setJorney] = useState<Journey>({} as Journey);
   const fetchTrails = async (): Promise<Trail[]> => {
     var trails = await getTrails({
-      id: params.id,
+      id: params.journeyId,
       token: JSON.parse(localStorage.getItem('token')!),
     });
-    // sorting
-    for (var j=0;j<trails.length;j++){
-      for (var i=0;i<trails.length- j-1;i++){
-        if (trails[i].order>trails[i+1].order){
-          var temp = trails[i]
-          trails[i] = trails[i+1]
-          trails[i+1] = temp
-        }
-      }
-    }
-    console.log(`organizado: ${trails}`)
-    const jorney = await getJourney(params.id);
+    trails.sort((a, b) => a.order - b.order);
+    const jorney = await getJourney(params.journeyId);
     setJorney(jorney);
     return trails;
   };
@@ -38,7 +30,7 @@ export default function ManageTrack({ params }: { params: { id: string } }) {
     isLoading,
     error,
   } = useQuery<Trail[], Error>({
-    queryKey: ['trails'],
+    queryKey: ['trails', params.journeyId],
     queryFn: fetchTrails,
   });
 
@@ -58,7 +50,7 @@ export default function ManageTrack({ params }: { params: { id: string } }) {
     <>
       <Box className="flex flex-col items-center mt-8">
         <h1 className="text-blac font-bold text-4xl">{jorney.title}</h1>
-        <JorneyTrailsListPage trails={trails} journeyId={params.id} />
+        <JorneyTrailsListPage trails={trails} journeyId={params.journeyId} />
       </Box>
     </>
   );
