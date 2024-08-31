@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { Trail } from '@/lib/interfaces/trails.interface';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { getCompletedTrails } from '@/services/user.service';
 
 interface JourneyPathProps {
   trails: Trail[];
@@ -15,20 +17,17 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
-  const [completedTrails, setCompletedTrails] = useState([]);
+  const [completedTrails, setCompletedTrails] = useState<string[]>([]);
+  const { data: session } = useSession();
 
   useEffect(() => {
-
-    
-
-
     const drawLines = () => {
       if (!svgRef.current || !containerRef.current) return;
       const svg = svgRef.current;
-      const svgNS = "http://www.w3.org/2000/svg";
+      const svgNS = 'http://www.w3.org/2000/svg';
       const svgWidth = svg.clientWidth;
-      const container = containerRef.current;
       const svgHeight = svg.clientHeight;
+      const container = containerRef.current;
 
       while (svg.firstChild) {
         svg.removeChild(svg.firstChild);
@@ -46,19 +45,19 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
           const top2 = 50 + (index + 1) * nodeSpacing + nodeSize / 2;
           const left2 = svgWidth / 2 + offsetX2;
 
-          const line = document.createElementNS(svgNS, "line");
-          line.setAttribute("x1", `${left1}`);
-          line.setAttribute("y1", `${top1}`);
-          line.setAttribute("x2", `${left2}`);
-          line.setAttribute("y2", `${top2}`);
-          line.setAttribute("stroke", "silver");
-          line.setAttribute("stroke-width", "20"); 
+          const line = document.createElementNS(svgNS, 'line');
+          line.setAttribute('x1', `${left1}`);
+          line.setAttribute('y1', `${top1}`);
+          line.setAttribute('x2', `${left2}`);
+          line.setAttribute('y2', `${top2}`);
+          line.setAttribute('stroke', 'silver');
+          line.setAttribute('stroke-width', '20');
 
           svg.appendChild(line);
         }
       });
     };
-    
+
     drawLines();
 
     const resizeObserver = new ResizeObserver(drawLines);
@@ -72,10 +71,8 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
   }, [trails]);
 
   const handleClick = (trailId: string) => {
-     router.push(`/trail-page/${trailId}`);
+    router.push(`/trail-page/${trailId}`);
   };
-
-  console.log(trails);
 
   return (
     <Box
@@ -84,8 +81,9 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
       pl={2}
       sx={{
         position: 'relative',
-        height: `${trails.length * nodeSpacing + nodeSize + 50}px`,
+        height: `${Math.max(trails.length * nodeSpacing + nodeSize + 50, 400)}px`,
         backgroundColor: '#f0f0f0',
+        overflow: 'hidden', 
       }}
     >
       <svg
@@ -96,7 +94,7 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
           left: 0,
           width: '100%',
           height: '100%',
-          zIndex: 0, 
+          zIndex: 0,
           pointerEvents: 'none',
         }}
       />
@@ -113,9 +111,9 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
               top: `${50 + index * nodeSpacing}px`,
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center', 
+              alignItems: 'center',
               transform: 'translateX(-50%)',
-              zIndex: 1, 
+              zIndex: 1,
             }}
           >
             <Button
@@ -123,7 +121,7 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
               sx={{
                 width: `${nodeSize}px`,
                 height: `${nodeSize}px`,
-                backgroundColor: 'lightgray',
+                backgroundColor: completedTrails.includes(trail._id) ? 'green' : 'lightgray',
                 borderRadius: '10px',
                 boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
                 color: 'black',
@@ -135,19 +133,19 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
                 justifyContent: 'center',
                 textAlign: 'center',
                 lineHeight: '1.2',
-                zIndex: 1, 
-                transform: 'rotate(45deg)', 
+                zIndex: 1,
+                transform: 'rotate(45deg)',
               }}
               onClick={() => handleClick(trail._id)}
             />
             <Typography
               variant="body1"
               sx={{
-                marginTop: '20px', 
+                marginTop: '20px',
                 textAlign: 'center',
                 whiteSpace: 'nowrap',
                 fontWeight: 'bold',
-                fontSize: '20px', 
+                fontSize: '20px',
                 color: '#333',
               }}
             >

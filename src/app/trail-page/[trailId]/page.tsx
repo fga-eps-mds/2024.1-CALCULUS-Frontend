@@ -96,15 +96,9 @@ function TrailPage() {
       if (trailIndex < journey.trails.length - 1) {
         const nextTrailId = journey.trails[trailIndex + 1];
         router.push(`/trail-page/${nextTrailId}`);
-      } else if (trailIndex === journey.trails.length - 1) {
-        triggerCompletion();
       }
     }
   };
-
-  const triggerCompletion = async () => {
-      await completeTrail({ userId: session!.user.id, trailId: trailId as string, accessToken: session!.user.accessToken});
-  }
 
   if (error) {
     return <Box className="error-message">{error}</Box>;

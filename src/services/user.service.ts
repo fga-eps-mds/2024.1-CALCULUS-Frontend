@@ -130,6 +130,16 @@ export const resetPassword = async (data: any) => {
 
   };
 
+  export const getCompletedTrails = async (userId: string) => {
+    try {
+      const response = await userApi.get(`/users/${userId}/completedTrails`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Trails");
+      throw error;
+    }
+  };
+
   export const completeTrail = async ({
     userId,
     trailId,
