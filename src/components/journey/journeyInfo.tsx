@@ -39,6 +39,7 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
         backgroundColor: '#FFF',
         boxShadow: '0 4px 8px rgba(0,0,0,0.5)',
         maxWidth: '650px',
+        marginTop: '100px',
       }}
       ml={20}
     >
@@ -82,9 +83,6 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
           }}
           ml={55}
         >
-          <MyButton width="150px" height="50px" color="red" bold onClick={handleJoinClick}>
-            Ingressar
-          </MyButton>
         </Box>
       ) : (
         <Box>

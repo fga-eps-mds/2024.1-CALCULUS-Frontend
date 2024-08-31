@@ -4,11 +4,19 @@ import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress, Divider, Typography } from '@mui/material';
 import JourneyInfo from '@/components/journey/journeyInfo';
 import JourneyPath from '@/components/journey/journeyPath';
-import { addJourneyToUser, getJourney, getJourneysByUser, getTrails } from '@/services/studioMaker.service';
+import {
+  addJourneyToUser,
+  getJourney,
+  getJourneysByUser,
+  getTrails,
+} from '@/services/studioMaker.service';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { Trail } from '@/lib/interfaces/trails.interface';
 import { useParams } from 'next/navigation';
-import { subscribeJourney, getSubscribedJourneys } from '@/services/user.service';
+import {
+  subscribeJourney,
+  getSubscribedJourneys,
+} from '@/services/user.service';
 import { useSession } from 'next-auth/react';
 import { getCompletedTrails } from '@/services/user.service';
 
@@ -68,7 +76,11 @@ export default function JourneyPage() {
   const handleJoin = async () => {
     if (session?.user.id) {
       const id = Array.isArray(journeyId) ? journeyId[0] : journeyId;
-      await subscribeJourney({ userId: session.user.id, journeyId: id, accessToken: session?.user.accessToken });
+      await subscribeJourney({
+        userId: session.user.id,
+        journeyId: id,
+        accessToken: session?.user.accessToken,
+      });
       setHasJourney(true);
     }
   };
@@ -82,44 +94,58 @@ export default function JourneyPage() {
   }
 
   const completedTrailsInJourney = completedTrails.filter((trailId) =>
-    trails.some((trail) => trail._id === trailId)
+    trails.some((trail) => trail._id === trailId),
   );
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f1f1f1',
-        height: '100vh',
-        width: '100vw',
-      }}
-    >
-      <Box flex={1} pr={2}>
-        <JourneyInfo
-          title={journey.title}
-          description={journey.description}
-          trailCount={trails.length}
-          hasJourney={hasJourney}
-          onJoin={handleJoin}
-          completedTrailsCount={completedTrailsInJourney.length}
-        />
-      </Box>
+    <Box sx={{
+      backgroundColor: '#f1f1f1',
+      height: '100vh',
+    }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          backgroundColor: '#f1f1f1',
+          height: 'auto',
+          width: '100vw',
+          overflow: 'hidden',
+        }}
+      >
+        <Box flex={1} pr={2}>
+          <JourneyInfo
+            title={journey.title}
+            description={journey.description}
+            trailCount={trails.length}
+            hasJourney={hasJourney}
+            onJoin={handleJoin}
+            completedTrailsCount={completedTrailsInJourney.length}
+          />
+        </Box>
 
-      <Divider sx={{ height: '80%', marginTop: '100px' }} orientation="vertical" variant="middle" flexItem />
-      {!trails.length ? (
-        <Typography
-          variant="h3"
-          sx={{ fontFamily: 'Poppins, sans-serif', margin: '250px', color: 'silver' }}
-        >
-          Ainda não há trilhas nessa jornada
-        </Typography>
-      ) : (
-        <React.Fragment>
-          <JourneyPath trails={trails} />
-        </React.Fragment>
-      )}
+        <Divider
+          sx={{ marginBottom: '100px', marginTop: '100px' }}
+          orientation="vertical"
+          variant="middle"
+          flexItem
+        />
+        {!trails.length ? (
+          <Typography
+            variant="h3"
+            sx={{
+              fontFamily: 'Poppins, sans-serif',
+              margin: '250px',
+              color: 'silver',
+            }}
+          >
+            Ainda não há trilhas nessa jornada
+          </Typography>
+        ) : (
+          <React.Fragment>
+            <JourneyPath trails={trails} />
+          </React.Fragment>
+        )}
+      </Box>
     </Box>
   );
 }
