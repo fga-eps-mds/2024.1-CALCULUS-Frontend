@@ -92,6 +92,17 @@ function TrailPage() {
       setCurrentIndex(newIndex);
       setContentId(contents[newIndex]._id);
     } else if (trail && journey) {
+      if (trail && journey) {
+        try {
+          await completeTrail({
+            userId: session?.user.id as string,
+            trailId: trail._id,
+            accessToken: session?.user.accessToken as  string
+          });
+        } catch (error) {
+          console.error('Failed to complete trail:', error);
+        }
+      }
       const trailIndex = journey.trails.findIndex(t => t === trail._id);
       if (trailIndex < journey.trails.length - 1) {
         const nextTrailId = journey.trails[trailIndex + 1];

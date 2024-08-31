@@ -21,6 +21,21 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
   const { data: session } = useSession();
 
   useEffect(() => {
+    const fetchCompletedTrails = async () => {
+      if (session?.user.id) {
+        try {
+          const completed = await getCompletedTrails(session.user.id);
+          setCompletedTrails(completed);
+        } catch (error) {
+          console.error('Error fetching completed trails:', error);
+        }
+      }
+    };
+
+    fetchCompletedTrails();
+  }, [session]);
+
+  useEffect(() => {
     const drawLines = () => {
       if (!svgRef.current || !containerRef.current) return;
       const svg = svgRef.current;
