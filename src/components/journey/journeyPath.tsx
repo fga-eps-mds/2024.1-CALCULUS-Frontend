@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { Trail } from '@/lib/interfaces/trails.interface';
+import { useRouter } from 'next/navigation';
 
 interface JourneyPathProps {
   trails: Trail[];
@@ -137,7 +138,7 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
                 zIndex: 1, 
                 transform: 'rotate(45deg)', 
               }}
-              onClick={() => console.log(`Clicked on trail: ${trail.name}`)}
+              onClick={() => handleClick(trail._id)}
             />
             <Typography
               variant="body1"
