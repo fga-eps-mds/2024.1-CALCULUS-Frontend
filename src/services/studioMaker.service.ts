@@ -1,6 +1,101 @@
-import { Trail } from '@/lib/interfaces/trails.interface';
 import { studioMakerApi } from './apis.service';
+import { StartPoint } from '../lib/interfaces/startPoint.interface'
 import { Journey } from '@/lib/interfaces/journey.interface';
+import { Trail } from '@/lib/interfaces/trails.interface';
+
+export const getStartPoints = async (): Promise<StartPoint[]> => {
+  try {
+    const response = await studioMakerApi.get('/points');
+    console.log('Start Points:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch Start Points:', error);
+    throw error;
+  }
+};
+
+export const getStartPointsByUser = async (id: string): Promise<StartPoint[]> => {
+  try {
+    const response = await studioMakerApi.get(`/points/user/${id}`);
+    console.log('Journeys:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch start points:', error);
+    throw error;
+  }
+};
+
+export const createStartPoint = async ({
+  data,
+  token,
+}: {
+  data: any;
+  token: string;
+}) => {
+  try {
+    console.log(data);
+    const response = await studioMakerApi.post('/points', data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('Start point created:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to create start point:', error);
+    return { error: error };
+  }
+};
+
+export const updateStartPointById = async ({
+  id,
+  data,
+  token,
+}: {
+  id: string;
+  data: any;
+  token: string;
+}) => {
+  try {
+    const response = await studioMakerApi.put(`/points/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('Start point updated:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to update start point:', error);
+    return { error: error };
+  }
+};
+
+export const deleteStartPoint = async ({
+  id,
+  token,
+}: {
+  id: string;
+  token: string;
+}) => {
+  try {
+    const response = await studioMakerApi.delete(`/points/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('Start point deleted:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to delete start points:', error);
+    return { error: error };
+  }
+};
 
 export const getJourneys = async (): Promise<Journey[]> => {
   try {
