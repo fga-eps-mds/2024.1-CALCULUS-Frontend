@@ -56,11 +56,7 @@ export function CreateJourneyForm({ addJourney, setDialog }: any) {
         {...register('description')}
         error={!!errors.description}
       />
-      <MyButton
-        width="100%"
-        color="black"
-        type="submit"
-      >
+      <MyButton width="100%" color="black" type="submit">
         Criar
       </MyButton>
     </Box>

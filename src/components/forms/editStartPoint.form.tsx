@@ -6,10 +6,17 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import MyButton from '@/components/ui/buttons/myButton.component';
 
-import { startPointSchema, StartPointSchemaData } from '@/lib/schemas/start-point.schema';
+import {
+  startPointSchema,
+  StartPointSchemaData,
+} from '@/lib/schemas/start-point.schema';
 import { updateStartPointById } from '@/services/studioMaker.service';
 
-export function UpdateStartPointForm({ updateStartPoint, startPoint, setDialog }: any) {
+export function UpdateStartPointForm({
+  updateStartPoint,
+  startPoint,
+  setDialog,
+}: any) {
   const {
     register,
     handleSubmit,

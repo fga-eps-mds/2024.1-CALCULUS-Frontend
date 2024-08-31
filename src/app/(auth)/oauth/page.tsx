@@ -33,7 +33,6 @@ const OAuthContent = () => {
   const refresh = searchParams.get('refresh');
   const [isPending, setIsPending] = useState(true);
 
-
   useEffect(() => {
     const fetchSession = async () => {
       const result = await signIn('credentials', {
@@ -48,15 +47,12 @@ const OAuthContent = () => {
       }
 
       localStorage.setItem('token', JSON.stringify(token));
-      localStorage.setItem(
-        'refresh',
-        JSON.stringify(refresh),
-      );
+      localStorage.setItem('refresh', JSON.stringify(refresh));
       router.push('/home');
-    }
+    };
     fetchSession();
-  }, [])
-  
+  }, []);
+
   if (!token) {
     toast.error('Erro ao efetuar login, por favor tente novamente!');
     router.push('/login');

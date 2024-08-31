@@ -12,7 +12,9 @@ type ButtonProps = {
   onClick?: () => void;
 };
 
-const colorMap: { [key: string]: { primary: string; secondary: string; hovercolor: string } } = {
+const colorMap: {
+  [key: string]: { primary: string; secondary: string; hovercolor: string };
+} = {
   white: { primary: '#FFFAFA', secondary: '#CECECE', hovercolor: '#F4EDED' },
   black: { primary: '#2F2F2F', secondary: '#1F1F1F', hovercolor: '#252525' },
   green: { primary: '#29CC57', secondary: '#007C23', hovercolor: '#26B54F' },
@@ -29,7 +31,7 @@ const CustomButton = styled(Button)<{
   hovercolor: string;
   radius?: string;
   bold?: boolean;
-}>(({ width, height, btncolor, radius, subcolor, bold, hovercolor}) => ({
+}>(({ width, height, btncolor, radius, subcolor, bold, hovercolor }) => ({
   width: width || '100%',
   height: height || '50px',
   borderRadius: radius || height || '5px',
@@ -45,24 +47,33 @@ const CustomButton = styled(Button)<{
   },
 }));
 
-const MyButton: React.FC<ButtonProps> = ({ children, color, width, height, type = 'button', radius, onClick, bold = false }) => {
-    return (
-      <CustomButton
-        role="button"
-        variant="contained"
-        btncolor={colorMap[color].primary}
-        subcolor={colorMap[color].secondary}
-        hovercolor={colorMap[color].hovercolor}
-        width={width}
-        height={height}
-        type={type}
-        bold={bold}
-        radius={radius}
-        onClick={onClick}
-      >
-        {children}
-      </CustomButton>
-    );
-  };
-  
-  export default MyButton;
+const MyButton: React.FC<ButtonProps> = ({
+  children,
+  color,
+  width,
+  height,
+  type = 'button',
+  radius,
+  onClick,
+  bold = false,
+}) => {
+  return (
+    <CustomButton
+      role="button"
+      variant="contained"
+      btncolor={colorMap[color].primary}
+      subcolor={colorMap[color].secondary}
+      hovercolor={colorMap[color].hovercolor}
+      width={width}
+      height={height}
+      type={type}
+      bold={bold}
+      radius={radius}
+      onClick={onClick}
+    >
+      {children}
+    </CustomButton>
+  );
+};
+
+export default MyButton;

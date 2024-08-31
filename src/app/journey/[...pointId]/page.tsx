@@ -1,7 +1,7 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import {
   Box,
   Dialog,
@@ -16,10 +16,8 @@ import ButtonRed from '@/components/ui/buttons/red.button';
 import SearchBar from '@/components/admin/SearchBar';
 import JourneyTable from '@/components/tables/journey.table';
 import { Journey } from '@/lib/interfaces/journey.interface';
-import { UserRole } from '@/lib/enum/userRole.enum';
 import {
   deleteJourney,
-  getJourneys,
   getJourneysByPoint,
 } from '@/services/studioMaker.service';
 import Popup from '@/components/ui/popup';
@@ -27,11 +25,15 @@ import { CreateJourneyForm } from '@/components/forms/createJourney.form';
 import { UpdateJourneyForm } from '@/components/forms/editJourney.form';
 import { toast } from 'sonner';
 
-export default function JourneyPage ({ params }: { params: { pointId: string } }) {
-  const { data: session } = useSession();
+export default function JourneyPage({
+  params,
+}: {
+  params: { pointId: string };
+}) {
 
   const fetchJourneys = async (): Promise<Journey[]> => {
-    const journeys = await getJourneysByPoint(params.pointId)
+    let journeys = await getJourneysByPoint(params.pointId);
+    journeys.sort((a, b) => a.order - b.order);
     setListJourneys(journeys);
     setFilteredJourneys(journeys);
     return journeys;
@@ -85,7 +87,8 @@ export default function JourneyPage ({ params }: { params: { pointId: string } }
 
   const handleJourneyAction = (action: string) => {
     if (action === 'editar') setEditionDialogOpen(true);
-    if (action === 'gerenciar') {};
+    if (action === 'gerenciar') {
+    }
     if (action === 'excluir') setExclusionDialogOpen(true);
   };
 
@@ -116,6 +119,7 @@ export default function JourneyPage ({ params }: { params: { pointId: string } }
   const handleCloseCreateDialog = () => {
     setCreateDialogOpen(false);
   };
+
   if (isLoading) {
     return <CircularProgress />;
   }
@@ -203,4 +207,4 @@ export default function JourneyPage ({ params }: { params: { pointId: string } }
       </Dialog>
     </Box>
   );
-};
+}

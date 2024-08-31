@@ -1,7 +1,7 @@
 'use client';
 
 import { studioMakerApi } from './apis.service';
-import { StartPoint } from '../lib/interfaces/startPoint.interface'
+import { StartPoint } from '../lib/interfaces/startPoint.interface';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { Trail } from '@/lib/interfaces/trails.interface';
 
@@ -16,7 +16,9 @@ export const getStartPoints = async (): Promise<StartPoint[]> => {
   }
 };
 
-export const getStartPointsByUser = async (id: string): Promise<StartPoint[]> => {
+export const getStartPointsByUser = async (
+  id: string,
+): Promise<StartPoint[]> => {
   try {
     const response = await studioMakerApi.get(`/points/user/${id}`);
     console.log('Journeys:', response.data);
@@ -303,5 +305,21 @@ export const getJourney = async (id: string): Promise<Journey> => {
     console.error('Failed to fetch users:', error);
     throw error;
   }
+};
 
+export const updateTrailsOrder = async (
+  updatedTrails: Trail[],
+): Promise<any> => {
+  try {
+    const response = await studioMakerApi.patch('/trails/update-trail-order', {
+      trails: updatedTrails,
+    });
+    console.log('Trails updated:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to update trails:', error);
+    return { error: error };
+  }
 };

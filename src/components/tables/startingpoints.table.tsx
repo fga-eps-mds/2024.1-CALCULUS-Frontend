@@ -36,7 +36,8 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
 }) => {
   const open = Boolean(anchorEl);
   const router = useRouter();
-  const [selectedStartPoint, setSelectedStartPoint] = React.useState<StartPoint | null>(null);
+  const [selectedStartPoint, setSelectedStartPoint] =
+    React.useState<StartPoint | null>(null);
 
   const handleMenuItemClick = (action: string) => {
     onStartPointAction(action);
@@ -44,9 +45,9 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
   };
 
   const handleItem = (e: any, startPoint: StartPoint) => {
-    onMenuClick(e, startPoint)
-    setSelectedStartPoint(startPoint)
-  }
+    onMenuClick(e, startPoint);
+    setSelectedStartPoint(startPoint);
+  };
 
   return (
     <Box sx={{ width: '100%', maxWidth: 800 }}>
@@ -62,7 +63,7 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
           <TableBody>
             {startPoints.map((startPoint) => (
               <TableRow key={startPoint._id}>
-                <TableCell align='left'>{startPoint.name}</TableCell>
+                <TableCell align="left">{startPoint.name}</TableCell>
                 <TableCell align="left">{startPoint.description}</TableCell>
                 <TableCell align="right">
                   <IconButton
@@ -80,11 +81,16 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
                       Editar Ponto de partida
                     </MenuItem>
                     <MenuItem
-                      onClick={() => router.push(`/journey/${selectedStartPoint?._id}`)}
+                      onClick={() =>
+                        router.push(`/journey/${selectedStartPoint?._id}`)
+                      }
                     >
                       Gerenciar Jornadas
                     </MenuItem>
-                    <MenuItem onClick={() => handleMenuItemClick('excluir')} sx={{color:'crimson'}}>
+                    <MenuItem
+                      onClick={() => handleMenuItemClick('excluir')}
+                      sx={{ color: 'crimson' }}
+                    >
                       Excluir
                     </MenuItem>
                   </Menu>

@@ -6,9 +6,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import MyButton from '@/components/ui/buttons/myButton.component';
 
-
 import { createStartPoint } from '@/services/studioMaker.service';
-import { startPointSchema, StartPointSchemaData } from '@/lib/schemas/start-point.schema';
+import {
+  startPointSchema,
+  StartPointSchemaData,
+} from '@/lib/schemas/start-point.schema';
 
 export function CreateStartPointForm({ addStartPoint, setDialog }: any) {
   const {
@@ -57,11 +59,7 @@ export function CreateStartPointForm({ addStartPoint, setDialog }: any) {
         {...register('description')}
         error={!!errors.description}
       />
-      <MyButton
-        width="100%"
-        color="black"
-        type="submit"
-      >
+      <MyButton width="100%" color="black" type="submit">
         Criar
       </MyButton>
     </Box>

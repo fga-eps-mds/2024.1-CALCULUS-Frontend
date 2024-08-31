@@ -12,7 +12,7 @@ export function AppleAuthButton() {
   };
 
   return (
-    <MyButton width='120px' height='55px' color='white'>
+    <MyButton width="120px" height="55px" color="white">
       <Image
         src={appleIcon}
         width={0}
@@ -22,5 +22,5 @@ export function AppleAuthButton() {
         onClick={handleClick}
       />
     </MyButton>
-  )
-};
+  );
+}

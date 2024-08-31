@@ -58,6 +58,7 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
             >
               <MoreVertIcon />
             </IconButton>
+            {row.original.order}
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
@@ -83,7 +84,14 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
         ),
       },
     ],
-    [anchorEl, onJourneyAction, onMenuClick, onMenuClose, router, selectedJourney]
+    [
+      anchorEl,
+      onJourneyAction,
+      onMenuClick,
+      onMenuClose,
+      router,
+      selectedJourney,
+    ],
   );
 
   const table = useMaterialReactTable({
@@ -114,13 +122,13 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ journeys: updatedJourneys }), 
+        body: JSON.stringify({ journeys: updatedJourneys }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to update journey order');
       }
-  
+
       console.log('Order updated successfully');
     } catch (error) {
       console.error('Error updating journey order:', error);

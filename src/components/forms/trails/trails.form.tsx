@@ -5,9 +5,9 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { TrailSchemaData, trailsSchema } from '@/lib/schemas/trail.schema';
-import { updateTrailById } from '@/services/studioMaker.service';
+import { createTrail, updateTrailById } from '@/services/studioMaker.service';
 
-export function UpdateTrailForm({ updateTrail, trail, setDialog }: any) {
+export function TrailForm({ callback, trail, setDialog, journeyId }: any) {
   const {
     register,
     handleSubmit,
@@ -15,19 +15,25 @@ export function UpdateTrailForm({ updateTrail, trail, setDialog }: any) {
   } = useForm<TrailSchemaData>({
     resolver: zodResolver(trailsSchema),
     defaultValues: {
-      name: trail.name,
+      name: trail ? trail.name : '',
     },
   });
 
   const onSubmit: SubmitHandler<TrailSchemaData> = async (data) => {
-    const response = await updateTrailById({
+    const response =trail ? await updateTrailById({
       id: trail._id,
       data,
       token: JSON.parse(localStorage.getItem('token')!),
+    }) : await createTrail({
+      data: {
+        journeyId: journeyId,
+        ...data,
+      },
+      token: JSON.parse(localStorage.getItem('token')!),
     });
     if (response.data) {
-      toast.success('Trail atualizada com sucesso!');
-      updateTrail(response.data);
+      toast.success('Trail com sucesso!');
+      callback(response.data);
       setDialog(false);
     } else {
       toast.error('Ocorreu um erro tente novamente');
@@ -53,7 +59,7 @@ export function UpdateTrailForm({ updateTrail, trail, setDialog }: any) {
         sx={{ bgcolor: '#000', mt: 2 }}
         type="submit"
       >
-        Editar
+        {trail ? 'Atualizar' : 'Criar'}
       </Button>
     </Box>
   );

@@ -78,7 +78,7 @@ const HomePrincipalPage = () => {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-  }
+  };
 
   return (
     <>

@@ -1,12 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import {
-  Box,
-  TextField,
-  IconButton,
-  InputAdornment,
-} from '@mui/material';
+import { Box, TextField, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import MyButton from '@/components/ui/buttons/myButton.component';
 import calculusLogos from '@/public/calculus-logo.svg';

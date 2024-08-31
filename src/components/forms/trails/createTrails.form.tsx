@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { TrailSchemaData, trailsSchema } from '@/lib/schemas/trail.schema';
 import { createTrail, updateTrailById } from '@/services/studioMaker.service';
 
-export function CreateTrailForm({ addTrail, journeyId, setDialog }: any) {
+export function CreateTrailForm({ callback, journeyId, setDialog }: any) {
   const {
     register,
     handleSubmit,
@@ -27,7 +27,7 @@ export function CreateTrailForm({ addTrail, journeyId, setDialog }: any) {
     });
     if (response.data) {
       toast.success('Trail criada com sucesso!');
-      addTrail(response.data);
+      callback(response.data);
       setDialog(false);
     } else {
       toast.error('Ocorreu um erro tente novamente');

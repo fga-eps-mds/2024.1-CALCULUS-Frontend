@@ -22,14 +22,12 @@ import { Trail } from '@/lib/interfaces/trails.interface';
 import ButtonRed from './ui/buttons/red.button';
 import SearchBar from './admin/SearchBar';
 import Popup from './ui/popup';
-import { UpdateTrailForm } from './forms/trails/editTrails.form';
-import { CreateTrailForm } from './forms/trails/createTrails.form';
-import { deleteTrail } from '@/services/studioMaker.service';
+import { TrailForm } from './forms/trails/trails.form';
+import { deleteTrail, updateTrailsOrder } from '@/services/studioMaker.service';
 import { toast } from 'sonner';
-import { studioMakerApi } from '@/services/apis.service';
 import { useRouter } from 'next/navigation';
 
-export default function JorneyTrailsListPage({
+export default function TrailsListPage({
   trails,
   journeyId,
 }: {
@@ -123,7 +121,6 @@ export default function JorneyTrailsListPage({
               
               <MoreVertIcon />
             </IconButton>
-              {row.original.order}
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
@@ -168,19 +165,17 @@ export default function JorneyTrailsListPage({
   });
 
   const updateTrailOrder = async (updatedTrails: Trail[]) => {
-    for (var i =0; i<updatedTrails.length;i++){
-      updatedTrails[i].order = i;
+    updatedTrails.forEach((trail, index) => {
+      trail.order = index;
+    });
+
+    const response = await updateTrailsOrder(updatedTrails);
+
+    if(response.error) {
+      toast.error('Error ao atualizar order da trilha'); 
+      return;
     }
-    try {
-      alert(JSON.stringify(updatedTrails))
-      const response = await studioMakerApi.patch('/trails/update-trail-order', {
-        trails: updatedTrails
-      })
-  
-      console.log('Order updated successfully');
-    } catch (error) {
-      console.error('Error updating trail order:', error);
-    }
+    toast.success('Order da trilha atualizada com sucesso');
   };
 
   return (
@@ -207,8 +202,8 @@ export default function JorneyTrailsListPage({
         setPopup={setEditionDialogOpen}
         title="Editar Trilha"
       >
-        <UpdateTrailForm
-          updateTrail={updateTrail}
+        <TrailForm
+          callback={updateTrail}
           trail={selectedTrail!}
           setDialog={setEditionDialogOpen}
         />
@@ -219,8 +214,8 @@ export default function JorneyTrailsListPage({
         setPopup={setCreateDialogOpen}
         title="Criar Nova Trilha"
       >
-        <CreateTrailForm
-          addTrail={addTrail}
+        <TrailForm
+          callback={addTrail}
           journeyId={journeyId}
           setDialog={setCreateDialogOpen}
         />

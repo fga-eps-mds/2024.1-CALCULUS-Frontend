@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import ButtonRed from '@/components/ui/buttons/red.button';
 import SearchBar from '@/components/admin/SearchBar';
-import StartpointTable from '@/components/tables/startingpoints.table'
+import StartpointTable from '@/components/tables/startingpoints.table';
 import { StartPoint } from '@/lib/interfaces/startPoint.interface';
 import { UserRole } from '@/lib/enum/userRole.enum';
 import {
@@ -28,7 +28,6 @@ import { CreateStartPointForm } from '@/components/forms/createStartPoint.form';
 import { UpdateStartPointForm } from '@/components/forms/editStartPoint.form';
 
 const StartPointPage: React.FC = () => {
-
   const { data: session } = useSession();
   const fetchStartPoints = async (): Promise<StartPoint[]> => {
     const startPoints = !session?.user.role.includes(UserRole.ADMIN)
@@ -50,12 +49,16 @@ const StartPointPage: React.FC = () => {
   });
 
   const [listStartPoints, setListStartPoints] = useState<StartPoint[]>([]);
-  const [filteredStartPoints, setFilteredStartPoints] = useState<StartPoint[]>([]);
+  const [filteredStartPoints, setFilteredStartPoints] = useState<StartPoint[]>(
+    [],
+  );
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const [selectedStartPoint, setSelectedStartPoint] = useState<StartPoint | null>(null);
+  const [selectedStartPoint, setSelectedStartPoint] =
+    useState<StartPoint | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [exclusionDialogOpen, setExclusionDialogOpen] = useState<boolean>(false);
+  const [exclusionDialogOpen, setExclusionDialogOpen] =
+    useState<boolean>(false);
   const [editionDialogOpen, setEditionDialogOpen] = useState<boolean>(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
@@ -107,10 +110,14 @@ const StartPointPage: React.FC = () => {
     });
     if (response.data) {
       toast.success('Ponto de partida excluído com sucesso!');
-      setListStartPoints(listStartPoints.filter((p) => p._id !== startPoint._id));
+      setListStartPoints(
+        listStartPoints.filter((p) => p._id !== startPoint._id),
+      );
       setExclusionDialogOpen(false);
     } else {
-      toast.error('Erro ao excluir ponto de partida. Tente novamente mais tarde!');
+      toast.error(
+        'Erro ao excluir ponto de partida. Tente novamente mais tarde!',
+      );
     }
   };
 
@@ -127,8 +134,7 @@ const StartPointPage: React.FC = () => {
   }
 
   return (
-      
-      <Box
+    <Box
       sx={{
         padding: 2,
         display: 'flex',
@@ -200,5 +206,5 @@ const StartPointPage: React.FC = () => {
       </Dialog>
     </Box>
   );
-}
+};
 export default StartPointPage;
