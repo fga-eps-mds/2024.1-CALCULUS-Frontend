@@ -1,5 +1,3 @@
-'use server';
-
 import { userApi } from '@/services/apis.service';
 
 export const createUser = async (data: any) => {

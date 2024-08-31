@@ -39,6 +39,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.1",
     "react-markdown": "^9.0.1",
+    "react-multi-carousel": "^2.8.5",
     "react-toastify": "^10.0.5",
     "rehype-katex": "^7.0.0",
     "rehype-raw": "^7.0.0",
@@ -51,7 +52,7 @@
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.51.21",
-    "@testing-library/jest-dom": "^6.4.8",
+    "@testing-library/jest-dom": "^6.5.0",
     "@testing-library/react": "^16.0.0",
     "@types/cookie": "^0.6.0",
     "@types/jest": "^29.5.12",
