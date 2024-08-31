@@ -41,11 +41,8 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.52.1",
     "react-markdown": "^9.0.1",
-<<<<<<< HEAD
     "react-table": "^7.8.0",
-=======
     "react-multi-carousel": "^2.8.5",
->>>>>>> 3b83a306217dac45893256069c19d9dd0cad3157
     "react-toastify": "^10.0.5",
     "rehype-katex": "^7.0.0",
     "rehype-raw": "^7.0.0",
