@@ -202,7 +202,7 @@ export const getJourney = async (id: string): Promise<Journey> => {
     console.log('Journey:', response.data);
     return response.data;
   } catch (error) {
-    console.error('Failed to fetch users:', error);
+    console.error('Failed to fetch journey:', error);
     throw error;
   }
 };

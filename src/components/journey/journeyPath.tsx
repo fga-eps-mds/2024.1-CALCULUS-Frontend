@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { Trail } from '@/lib/interfaces/trails.interface';
 
@@ -13,8 +13,14 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
 
   const svgRef = useRef<SVGSVGElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
+  const [completedTrails, setCompletedTrails] = useState([]);
 
   useEffect(() => {
+
+    
+
+
     const drawLines = () => {
       if (!svgRef.current || !containerRef.current) return;
       const svg = svgRef.current;
@@ -63,6 +69,12 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
       resizeObserver.disconnect();
     };
   }, [trails]);
+
+  const handleClick = (trailId: string) => {
+     router.push(`/trail-page/${trailId}`);
+  };
+
+  console.log(trails);
 
   return (
     <Box

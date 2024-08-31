@@ -61,6 +61,7 @@ export default function JorneyTrailsListPage({
   ) => {
     setAnchorEl(event.currentTarget);
     setSelectedTrail(trail);
+    console.log(trail);
   };
 
   const handleMenuClose = () => {

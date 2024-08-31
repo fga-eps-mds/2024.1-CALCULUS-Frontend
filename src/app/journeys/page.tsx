@@ -45,7 +45,7 @@ const JourneyPage: React.FC = () => {
 
     error,
   } = useQuery<Journey[], Error>({
-    queryKey: ['journeys'],
+    queryKey: ['journeys',],
     queryFn: fetchJourneys,
   });
 
