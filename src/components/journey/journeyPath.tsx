@@ -26,6 +26,7 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
         try {
           const completed = await getCompletedTrails(session.user.id);
           setCompletedTrails(completed);
+          console.log("resultado do completed: ", completed);
         } catch (error) {
           console.error('Error fetching completed trails:', error);
         }

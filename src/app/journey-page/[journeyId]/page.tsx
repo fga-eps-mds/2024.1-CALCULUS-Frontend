@@ -8,8 +8,9 @@ import { addJourneyToUser, getJourney, getJourneysByUser, getTrails } from '@/se
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { Trail } from '@/lib/interfaces/trails.interface';
 import { useParams } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { subscribeJourney, getSubscribedJourneys } from '@/services/user.service';
+import { useSession } from 'next-auth/react';
+import { getCompletedTrails } from '@/services/user.service';
 
 export default function JourneyPage() {
   const { journeyId } = useParams();
@@ -18,6 +19,21 @@ export default function JourneyPage() {
   const [error, setError] = useState<string | null>(null);
   const [hasJourney, setHasJourney] = useState(false);
   const { data: session } = useSession();
+  const [completedTrails, setCompletedTrails] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchCompletedTrails = async () => {
+      if (session?.user.id) {
+        try {
+          const completed = await getCompletedTrails(session.user.id);
+          setCompletedTrails(completed);
+        } catch (error) {
+          console.error('Error fetching completed trails:', error);
+        }
+      }
+    };
+    fetchCompletedTrails();
+  }, [session]);
 
   useEffect(() => {
     const fetchJourneyData = async () => {
@@ -33,11 +49,10 @@ export default function JourneyPage() {
 
         if (session?.user?.id) {
           const userJourneys = await getSubscribedJourneys(session.user.id);
-          console.log('User journeys: ', userJourneys);
           let isSubscribed = false;
           userJourneys.forEach((journeyId: string) => {
-            if(journeyId === id) {
-                isSubscribed = true;
+            if (journeyId === id) {
+              isSubscribed = true;
             }
           });
           setHasJourney(isSubscribed);
@@ -52,13 +67,10 @@ export default function JourneyPage() {
 
   const handleJoin = async () => {
     if (session?.user.id) {
-      const id = Array.isArray(journeyId) ? journeyId[0] : journeyId; 
-      console.log(session?.user.accessToken);
-      await subscribeJourney({ userId: session.user.id, journeyId: id, accessToken: session?.user.accessToken});
-      setHasJourney(true); 
+      const id = Array.isArray(journeyId) ? journeyId[0] : journeyId;
+      await subscribeJourney({ userId: session.user.id, journeyId: id, accessToken: session?.user.accessToken });
+      setHasJourney(true);
     }
-
-    
   };
 
   if (error) {
@@ -69,6 +81,10 @@ export default function JourneyPage() {
     return <CircularProgress />;
   }
 
+  const completedTrailsInJourney = completedTrails.filter((trailId) =>
+    trails.some((trail) => trail._id === trailId)
+  );
+
   return (
     <Box
       sx={{
@@ -76,7 +92,8 @@ export default function JourneyPage() {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#f1f1f1',
-        height: 'auto',
+        height: '100vh',
+        width: '100vw',
       }}
     >
       <Box flex={1} pr={2}>
@@ -86,16 +103,21 @@ export default function JourneyPage() {
           trailCount={trails.length}
           hasJourney={hasJourney}
           onJoin={handleJoin}
+          completedTrailsCount={completedTrailsInJourney.length}
         />
       </Box>
 
       <Divider sx={{ height: '80%', marginTop: '100px' }} orientation="vertical" variant="middle" flexItem />
       {!trails.length ? (
-        <Typography variant="h3"
-        sx={{ fontFamily: 'Poppins, sans-serif', margin: '250px', color:'silver'}}> Ainda não há trilhas nessa jornada</Typography>
+        <Typography
+          variant="h3"
+          sx={{ fontFamily: 'Poppins, sans-serif', margin: '250px', color: 'silver' }}
+        >
+          Ainda não há trilhas nessa jornada
+        </Typography>
       ) : (
         <React.Fragment>
-        <JourneyPath trails={trails} />
+          <JourneyPath trails={trails} />
         </React.Fragment>
       )}
     </Box>
