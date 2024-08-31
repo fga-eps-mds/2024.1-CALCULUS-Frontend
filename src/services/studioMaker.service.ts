@@ -323,3 +323,23 @@ export const updateTrailsOrder = async (
     return { error: error };
   }
 };
+
+export const updateJourneysOrder = async (
+  updatedTrails: Journey[],
+): Promise<any> => {
+  try {
+    const response = await studioMakerApi.patch(
+      '/journeys/update-journeys-order',
+      {
+        journeys: updatedTrails,
+      },
+    );
+    console.log('Trails updated:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to update trails:', error);
+    return { error: error };
+  }
+};

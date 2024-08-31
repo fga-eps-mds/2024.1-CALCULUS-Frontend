@@ -20,17 +20,19 @@ export function TrailForm({ callback, trail, setDialog, journeyId }: any) {
   });
 
   const onSubmit: SubmitHandler<TrailSchemaData> = async (data) => {
-    const response =trail ? await updateTrailById({
-      id: trail._id,
-      data,
-      token: JSON.parse(localStorage.getItem('token')!),
-    }) : await createTrail({
-      data: {
-        journeyId: journeyId,
-        ...data,
-      },
-      token: JSON.parse(localStorage.getItem('token')!),
-    });
+    const response = trail
+      ? await updateTrailById({
+          id: trail._id,
+          data,
+          token: JSON.parse(localStorage.getItem('token')!),
+        })
+      : await createTrail({
+          data: {
+            journeyId: journeyId,
+            ...data,
+          },
+          token: JSON.parse(localStorage.getItem('token')!),
+        });
     if (response.data) {
       toast.success('Trail com sucesso!');
       callback(response.data);

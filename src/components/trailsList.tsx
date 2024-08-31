@@ -22,7 +22,7 @@ import { Trail } from '@/lib/interfaces/trails.interface';
 import ButtonRed from './ui/buttons/red.button';
 import SearchBar from './admin/SearchBar';
 import Popup from './ui/popup';
-import { TrailForm } from './forms/trails/trails.form';
+import { TrailForm } from './forms/trails.form';
 import { deleteTrail, updateTrailsOrder } from '@/services/studioMaker.service';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -41,7 +41,8 @@ export default function TrailsListPage({
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedTrail, setSelectedTrail] = useState<Trail | null>(null);
-  const [exclusionDialogOpen, setExclusionDialogOpen] = useState<boolean>(false);
+  const [exclusionDialogOpen, setExclusionDialogOpen] =
+    useState<boolean>(false);
   const [editionDialogOpen, setEditionDialogOpen] = useState<boolean>(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
@@ -72,13 +73,13 @@ export default function TrailsListPage({
   const handleTrailAction = (action: string) => {
     if (action === 'editar') setEditionDialogOpen(true);
     if (action === 'excluir') setExclusionDialogOpen(true);
-    if (action === 'gerenciar') { 
+    if (action === 'gerenciar') {
       router.push(`/studio/${selectedTrail!._id}`);
     }
   };
 
   const addTrail = (trail: Trail) => {
-    setListTrails([...listTrails, trail]);
+    setListTrails([...listTrails, trail].sort((a, b) => a.order - b.order));
   };
 
   const updateTrail = (trail: Trail) => {
@@ -118,7 +119,6 @@ export default function TrailsListPage({
               }}
               color="primary"
             >
-              
               <MoreVertIcon />
             </IconButton>
             <Menu
@@ -140,7 +140,7 @@ export default function TrailsListPage({
         ),
       },
     ],
-    [anchorEl, handleMenuOpen, handleMenuClose, handleTrailAction]
+    [anchorEl, handleMenuOpen, handleMenuClose, handleTrailAction],
   );
 
   const table = useMaterialReactTable({
@@ -171,8 +171,8 @@ export default function TrailsListPage({
 
     const response = await updateTrailsOrder(updatedTrails);
 
-    if(response.error) {
-      toast.error('Error ao atualizar order da trilha'); 
+    if (response.error) {
+      toast.error('Error ao atualizar order da trilha');
       return;
     }
     toast.success('Order da trilha atualizada com sucesso');
@@ -192,7 +192,7 @@ export default function TrailsListPage({
       </Box>
 
       <MRT_TableContainer table={table} />
-      
+
       <ButtonRed onClick={() => setCreateDialogOpen(true)}>
         Nova Trilha
       </ButtonRed>

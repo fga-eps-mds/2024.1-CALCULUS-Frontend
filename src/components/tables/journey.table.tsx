@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Menu, MenuItem, IconButton } from '@mui/material';
 import { Journey } from '@/lib/interfaces/journey.interface';
+import { toast } from 'sonner';
+import { updateJourneysOrder } from '@/services/studioMaker.service';
 
 interface JourneyTableProps {
   journeys: Journey[];
@@ -58,7 +60,6 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
             >
               <MoreVertIcon />
             </IconButton>
-            {row.original.order}
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
@@ -116,23 +117,15 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
   });
 
   const updateJourneyOrder = async (updatedJourneys: Journey[]) => {
-    try {
-      const response = await fetch('/api/journeys/update-journey-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ journeys: updatedJourneys }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update journey order');
-      }
-
-      console.log('Order updated successfully');
-    } catch (error) {
-      console.error('Error updating journey order:', error);
+    updatedJourneys.forEach((journey, index) => {
+      journey.order = index;
+    });
+    const response = await updateJourneysOrder(updatedJourneys);
+    if (response.error) {
+      toast.error('Error ao atualizar order da trilha');
+      return;
     }
+    toast.success('Order da trilha atualizada com sucesso');
   };
 
   return <MRT_TableContainer table={table} />;

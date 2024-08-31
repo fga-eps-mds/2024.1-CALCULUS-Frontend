@@ -21,8 +21,7 @@ import {
   getJourneysByPoint,
 } from '@/services/studioMaker.service';
 import Popup from '@/components/ui/popup';
-import { CreateJourneyForm } from '@/components/forms/createJourney.form';
-import { UpdateJourneyForm } from '@/components/forms/editJourney.form';
+import { JourneyForm } from '@/components/forms/journey.form';
 import { toast } from 'sonner';
 
 export default function JourneyPage({
@@ -30,7 +29,6 @@ export default function JourneyPage({
 }: {
   params: { pointId: string };
 }) {
-
   const fetchJourneys = async (): Promise<Journey[]> => {
     let journeys = await getJourneysByPoint(params.pointId);
     journeys.sort((a, b) => a.order - b.order);
@@ -93,7 +91,9 @@ export default function JourneyPage({
   };
 
   const addJourney = (journey: Journey) => {
-    setListJourneys([...listJourneys, journey]);
+    setListJourneys(
+      [...listJourneys, journey].sort((a, b) => a.order - b.order),
+    );
   };
 
   const updateJourney = (journey: Journey) => {
@@ -165,8 +165,8 @@ export default function JourneyPage({
         setPopup={setEditionDialogOpen}
         title="Editar Jornada"
       >
-        <UpdateJourneyForm
-          updateJourney={updateJourney}
+        <JourneyForm
+          callback={updateJourney}
           journey={selectedJourney!}
           setDialog={setEditionDialogOpen}
         />
@@ -177,8 +177,9 @@ export default function JourneyPage({
         setPopup={setCreateDialogOpen}
         title="Criar Nova Jornada"
       >
-        <CreateJourneyForm
-          addJourney={addJourney}
+        <JourneyForm
+          callback={addJourney}
+          pointId={params.pointId[0]}
           setDialog={setCreateDialogOpen}
         />
       </Popup>
