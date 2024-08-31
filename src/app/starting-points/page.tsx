@@ -30,9 +30,7 @@ import { UpdateStartPointForm } from '@/components/forms/editStartPoint.form';
 const StartPointPage: React.FC = () => {
   const { data: session } = useSession();
   const fetchStartPoints = async (): Promise<StartPoint[]> => {
-    const startPoints = !session?.user.role.includes(UserRole.ADMIN)
-      ? await getStartPointsByUser(session?.user.id!)
-      : await getStartPoints();
+    const startPoints = await getStartPointsByUser(session?.user.id!);
     setListStartPoints(startPoints);
     setFilteredStartPoints(startPoints);
     return startPoints;
