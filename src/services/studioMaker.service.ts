@@ -4,6 +4,7 @@ import { studioMakerApi } from './apis.service';
 import { StartPoint } from '../lib/interfaces/startPoint.interface';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { Trail } from '@/lib/interfaces/trails.interface';
+import { Content } from '@/lib/interfaces/content.interface';
 
 export const getStartPoints = async (): Promise<StartPoint[]> => {
   try {
@@ -340,6 +341,29 @@ export const updateJourneysOrder = async (
     };
   } catch (error) {
     console.error('Failed to update trails:', error);
+    return { error: error };
+  }
+};
+
+export const getContentsByTrailId = async (trailId: string): Promise<any> => {
+  try {
+    console.log('Fetching contents...');
+    const response = await studioMakerApi.get<Content[]>(
+      `/contents/trail/${trailId}`,
+    );
+    return { data: response.data };
+  } catch (error) {
+    console.error('Erro ao buscar conteúdos:', error);
+    return { error: error };
+  }
+};
+
+export const getContentById = async (id: string): Promise<any> => {
+  try {
+    const response = await studioMakerApi.get<Content>(`/contents/${id}`);
+    return { data: response.data };
+  } catch (error) {
+    console.error('Erro ao buscar conteúdo:', error);
     return { error: error };
   }
 };

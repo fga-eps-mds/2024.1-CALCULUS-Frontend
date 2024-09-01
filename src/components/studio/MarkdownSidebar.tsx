@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Content } from './MarkdownPage';
+import { Content } from '@/lib/interfaces/content.interface';
 
 interface SidebarProps {
   contents: Content[];

@@ -24,7 +24,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleDrawerOpen, open }) => {
           >
             <MenuIcon />
           </IconButton>
-          <CalculusHeader/>
+          <CalculusHeader />
           <SignOutButton />
         </Toolbar>
       </AppBar>
