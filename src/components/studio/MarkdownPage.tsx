@@ -9,13 +9,6 @@ import MarkdownEditor from './MarkdownEditor';
 import MarkdownPreview from './MarkdownPreview';
 import useMarkdownEditor from './hooks/useMarkdownEditor';
 
-export interface Content {
-  _id: string;
-  title: string;
-  body: string;
-  trail: string;
-}
-
 interface MarkdownPageProps {
   trailId: string;
 }
@@ -35,6 +28,7 @@ const MarkdownPage: React.FC<MarkdownPageProps> = ({ trailId }) => {
     insertTextAtSelection,
     insertImage,
     handleSave,
+    handleCreateContent,
     handleDelete,
     handleSelectContent,
     fetchContents,
@@ -80,6 +74,7 @@ const MarkdownPage: React.FC<MarkdownPageProps> = ({ trailId }) => {
             insertTextAtSelection={handleInsertTextAtSelection}
             insertImage={insertImage}
             handleSave={handleSave}
+            handleCreateContent={handleCreateContent}
             trailId={trailId}
           />
         </Toolbar>

@@ -22,11 +22,6 @@ const signInWithToken = async ({
     refresh,
     redirect: false,
   });
-  if (!result?.error) {
-    return result;
-  } else {
-    throw new Error(result.error);
-  }
 };
 
 const OAuthContent = () => {
@@ -36,30 +31,32 @@ const OAuthContent = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const refresh = searchParams.get('refresh');
+  const [isPending, setIsPending] = useState(true);
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: signInWithToken,
-    onSuccess: () => {
-      setMessage('Login efetuado com sucesso! redirecionando');
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const result = await signIn('credentials', {
+        token,
+        refresh,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast.error('Erro ao efetuar login, por favor tente novamente!');
+        router.push('/login');
+      }
+
       localStorage.setItem('token', JSON.stringify(session?.user.accessToken));
       localStorage.setItem(
         'refresh',
         JSON.stringify(session?.user.refreshToken),
       );
       router.push('/home');
-    },
-    onError: () => {
-      toast.error('Erro ao efetuar login, por favor tente novamente!');
-      router.push('/login');
-    },
-  });
-
-  useEffect(() => {
-    if (token && refresh && !session) {
-      mutate({ token, refresh });
     }
-  }, [token, session, mutate]);
-
+    fetchSession();
+  }, [])
+  
   if (!token) {
     toast.error('Erro ao efetuar login, por favor tente novamente!');
     router.push('/login');

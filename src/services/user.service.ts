@@ -1,5 +1,3 @@
-'use server';
-
 import { userApi } from '@/services/apis.service';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { string } from 'zod';

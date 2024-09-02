@@ -3,5 +3,4 @@ export interface Content {
     title: string;
     content: string;
     trail: string;
-  }
-  
+}
