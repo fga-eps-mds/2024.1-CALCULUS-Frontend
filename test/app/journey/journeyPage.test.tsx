@@ -14,6 +14,8 @@ const MockData: Journey[] = [
       user: '1',
       createdAt: '2022-01-01T00:00:00.000Z',
       updatedAt: '2022-01-01T00:00:00.000Z',
+      order: 0,
+      point: '',
     },
     {
       _id: '2',
@@ -22,6 +24,8 @@ const MockData: Journey[] = [
       user: '1',
       createdAt: '2022-01-01T00:00:00.000Z',
       updatedAt: '2022-01-01T00:00:00.000Z',
+      order: 0,
+      point: '',
     },
   ];
 
@@ -44,7 +48,9 @@ describe('HomePage', () => {
     // Render the HomePage component
     render(
       <AppRouterContextProviderMock router={{ push }}>
-        <JourneyPage />
+        <JourneyPage params={{
+          pointId: '123456'
+        }} />
       </AppRouterContextProviderMock>
     );
 
