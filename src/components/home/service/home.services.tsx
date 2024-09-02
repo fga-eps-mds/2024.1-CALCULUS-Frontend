@@ -42,11 +42,33 @@ const JourneyService = () => {
     }
   };
 
-  return {
-    fetchUserJourneys,
-    fetchJourneys,
-    fetchJourneyById,
-  };
+    const fetchPoints = async () =>{
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_STUDIO}/points/`);
+            return response.data;
+        } catch (error) {
+            console.error('Erro ao buscar pontos de partida:', error);
+            return null;
+        }
+    }
+
+    const fetchJourneybyPoint = async (id: string) => {
+        try {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_STUDIO}/points/${id}/journeys`);
+            return response.data;
+        } catch (error) {
+            console.error(`Erro ao buscar jornadas do Ponto de Partida com ID ${id}:`, error);
+            return null;
+        }
+    }
+
+    return {
+        fetchUserJourneys,
+        fetchJourneys,
+        fetchJourneyById,
+        fetchPoints,
+        fetchJourneybyPoint,
+    };
 };
 
 export default JourneyService;
