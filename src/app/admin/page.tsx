@@ -144,10 +144,15 @@ const Admin: React.FC = () => {
           )}
         </DialogContent>
         <DialogActions>
-          <MyButton onClick={cancelRoleChange} color="red" radius='30px' bold>
+          <MyButton onClick={cancelRoleChange} color="red" radius="30px" bold>
             Cancelar
           </MyButton>
-          <MyButton onClick={confirmRoleChange} color="green" radius='30px' bold>
+          <MyButton
+            onClick={confirmRoleChange}
+            color="green"
+            radius="30px"
+            bold
+          >
             Confirmar
           </MyButton>
         </DialogActions>

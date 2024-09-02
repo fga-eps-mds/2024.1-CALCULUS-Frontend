@@ -43,17 +43,16 @@ export function SingUpForm() {
       <MyInput
         fullWidth
         label="Email"
-        bgcolor='white'
+        bgcolor="white"
         register={register('email')}
         error={!!errors.email}
         helperText={errors.email?.message}
       />
       <Box display="flex" gap={2} width="100%">
-
         <MyInput
           fullWidth
           label="Name"
-          bgcolor='white'
+          bgcolor="white"
           register={register('name')}
           error={!!errors.name}
           helperText={errors.name?.message}
@@ -61,7 +60,7 @@ export function SingUpForm() {
         <MyInput
           fullWidth
           label="Username"
-          bgcolor='white'
+          bgcolor="white"
           register={register('username')}
           error={!!errors.username}
           helperText={errors.username?.message}
@@ -69,14 +68,14 @@ export function SingUpForm() {
       </Box>
 
       <MyInput
-          fullWidth
-          label="Password"
-          type='password'
-          bgcolor='white'
-          register={register('password')}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-        />
+        fullWidth
+        label="Password"
+        type="password"
+        bgcolor="white"
+        register={register('password')}
+        error={!!errors.password}
+        helperText={errors.password?.message}
+      />
       <Mybutton type="submit" width="400px" height="61px" color="black" bold>
         {isPending ? 'Loading...' : 'Sign up'}
       </Mybutton>

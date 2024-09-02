@@ -4,12 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, CircularProgress, Divider, Typography } from '@mui/material';
 import JourneyInfo from '@/components/journey/journeyInfo';
 import JourneyPath from '@/components/journey/journeyPath';
-import {
-  addJourneyToUser,
-  getJourney,
-  getJourneysByUser,
-  getTrails,
-} from '@/services/studioMaker.service';
+import { getJourney, getTrails } from '@/services/studioMaker.service';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { Trail } from '@/lib/interfaces/trails.interface';
 import { useParams } from 'next/navigation';

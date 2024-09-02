@@ -13,7 +13,9 @@ type ButtonProps = {
   onClick?: () => void;
 };
 
-const colorMap: { [key: string]: { primary: string; secondary: string; hovercolor: string } } = {
+const colorMap: {
+  [key: string]: { primary: string; secondary: string; hovercolor: string };
+} = {
   white: { primary: '#FFFAFA', secondary: '#CECECE', hovercolor: '#F4EDED' },
   black: { primary: '#2F2F2F', secondary: '#1F1F1F', hovercolor: '#252525' },
   green: { primary: '#29CC57', secondary: '#007C23', hovercolor: '#26B54F' },
@@ -46,7 +48,16 @@ const CustomButton = styled(Button)<{
   },
 }));
 
-const MyButton: React.FC<ButtonProps> = ({ children, color, width, height, type = 'button', radius, onClick, bold = false, disabled = false }) => {
+const MyButton: React.FC<ButtonProps> = ({
+  children,
+  color,
+  width,
+  height,
+  type = 'button',
+  radius,
+  onClick,
+  bold = false,
+}) => {
   return (
     <CustomButton
       role="button"
@@ -59,8 +70,7 @@ const MyButton: React.FC<ButtonProps> = ({ children, color, width, height, type 
       type={type}
       bold={bold}
       radius={radius}
-      onClick={disabled ? undefined : onClick} 
-      disabled={disabled} 
+      onClick={onClick}
     >
       {children}
     </CustomButton>

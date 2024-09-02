@@ -1,13 +1,13 @@
-import { UpdateJourneyForm } from '@/components/forms/editJourney.form';
+import { JourneyForm } from '@/components/forms/journey.form';
 import { render } from '@testing-library/react';
 
-describe('UpdateJourneyForm', () => {
+describe('JourneyForm', () => {
   it('deve passar em um teste falso', () => {
     expect(true).toBe(true);
   });
 
   it('deve renderizar o componente (teste falso)', () => {
-    render(<UpdateJourneyForm updateJourney={() => {}} journey={{ _id: '1234', title: 'Jornada', description: 'Descrição' }} setDialog={() => {}} />);
+    render(<JourneyForm updateJourney={() => {}} journey={{ _id: '1234', title: 'Jornada', description: 'Descrição' }} setDialog={() => {}} />);
     expect(true).toBe(true); 
   });
 

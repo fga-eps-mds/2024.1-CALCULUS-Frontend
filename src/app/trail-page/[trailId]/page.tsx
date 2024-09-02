@@ -78,9 +78,9 @@ function TrailPage() {
       setCurrentIndex(newIndex);
       setContentId(contents[newIndex]._id);
     } else if (trail && journey) {
-      const trailIndex = journey.trails.findIndex(t => t === trail._id);
+      const trailIndex = journey.trails!.findIndex(t => t === trail._id);
       if (trailIndex > 0) {
-        const previousTrailId = journey.trails[trailIndex - 1];
+        const previousTrailId = journey.trails![trailIndex - 1];
         router.push(`/trail-page/${previousTrailId}`);
       }
     }
@@ -103,9 +103,9 @@ function TrailPage() {
           console.error('Failed to complete trail:', error);
         }
       }
-      const trailIndex = journey.trails.findIndex(t => t === trail._id);
-      if (trailIndex < journey.trails.length - 1) {
-        const nextTrailId = journey.trails[trailIndex + 1];
+      const trailIndex = journey.trails!.findIndex(t => t === trail._id);
+      if (trailIndex < journey.trails!.length - 1) {
+        const nextTrailId = journey.trails![trailIndex + 1];
         router.push(`/trail-page/${nextTrailId}`);
       }
     }
@@ -119,8 +119,8 @@ function TrailPage() {
     return <Box>Loading...</Box>;
   }
 
-  const isPreviousDisabled = currentIndex === 0 && journey.trails.findIndex(t => t === trail._id) === 0;
-  const isNextDisabled = currentIndex === contents.length - 1 && journey.trails.findIndex(t => t === trail._id) === journey.trails.length - 1;
+  const isPreviousDisabled = currentIndex === 0 && journey.trails!.findIndex(t => t === trail._id) === 0;
+  const isNextDisabled = currentIndex === contents.length - 1 && journey.trails!.findIndex(t => t === trail._id) === journey.trails!.length - 1;
 
   return (
     <Box

@@ -3,6 +3,7 @@ import { AppBar, Toolbar, IconButton, Typography, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Sidebar from './sidebar.component';
 import { SignOutButton } from './ui/buttons/signOut.button';
+import CalculusHeader from './ui/typography/calculustNavbar.typography';
 
 interface NavBarProps {
   handleDrawerOpen: () => void;
@@ -23,13 +24,7 @@ const NavBar: React.FC<NavBarProps> = ({ handleDrawerOpen, open }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, color: 'black', fontWeight: 'bold' }}
-          >
-            Calculus
-          </Typography>
+          <CalculusHeader />
           <SignOutButton />
         </Toolbar>
       </AppBar>
