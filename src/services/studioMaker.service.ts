@@ -367,3 +367,22 @@ export const getContentById = async (id: string): Promise<any> => {
     return { error: error };
   }
 };
+
+export const updateContentOrder = async (
+  updatedContents: Content[],
+): Promise<any> => {
+  try {
+    const response = await studioMakerApi.patch('/contents/order/update-order',
+      {
+        contents: updatedContents,
+      },
+    );
+    console.log('Trails updated:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to update trails:', error);
+    return { error: error };
+  }
+};

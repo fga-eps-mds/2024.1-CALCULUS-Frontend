@@ -160,7 +160,6 @@ const useMarkdownEditor = () => {
 
   const handleSelectContent = async (id: string) => {
     const response = await getContentById(id);
-    alert(JSON.stringify(response.data));
     if (response.error) {
       toast.error('Erro ao buscar conteúdo. Tente novamente');
       return;

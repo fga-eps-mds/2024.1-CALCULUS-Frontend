@@ -9,6 +9,8 @@ import { Box, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Content } from '@/lib/interfaces/content.interface';
+import { toast } from 'sonner';
+import { updateContentOrder } from '@/services/studioMaker.service';
 
 interface SidebarProps {
   contents: Content[];
@@ -82,7 +84,7 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
     enableRowOrdering: true,
     enableSorting: false,
     muiRowDragHandleProps: ({ table }) => ({
-      onDragEnd: () => {
+      onDragEnd: async () => {
         const { draggingRow, hoveredRow } = table.getState();
         if (hoveredRow && draggingRow) {
           const newData = [...data];
@@ -92,10 +94,23 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
             newData.splice(draggingRow.index, 1)[0]
           );
           setData(newData);
+          await updateOrder(newData);
         }
       },
     }),
   });
+
+  const updateOrder = async (updatedContent: Content[]) => {
+    updatedContent.forEach((journey, index) => {
+      journey.order = index;
+    });
+    const response = await updateContentOrder(updatedContent);
+    if (response.error) {
+      toast.error('Error ao atualizar order da trilha');
+      return;
+    }
+    toast.success('Order da trilha atualizada com sucesso');
+  };
 
   if (!sidebarOpen) return null;
 
@@ -107,7 +122,7 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
         style={{ zIndex: 1200 }}
       />
       <Box
-        className="fixed top-[64px] left-0 bg-[#F0F0F0] border-r border-[#D9D9D9] h-[calc(100vh-64px)] w-64 p-4 overflow-y-auto"
+        className="fixed top-[64px] left-0 bg-[#F0F0F0] border-r border-[#D9D9D9] h-[calc(100vh-64px)] w-72 p-4 overflow-y-auto"
         style={{ zIndex: 1300 }}
       >
         <IconButton
@@ -116,6 +131,7 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
         >
           <CloseIcon />
         </IconButton>
+        
         <Box mt={4} />
         <MRT_TableContainer table={table} />
       </Box>
