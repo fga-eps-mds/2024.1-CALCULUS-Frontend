@@ -7,10 +7,13 @@ import { mocked } from 'jest-mock';
 import { Trail } from '@/lib/interfaces/trails.interface';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
+
+jest.mock('next-auth/react');
 
 const mockPush = jest.fn();
 
@@ -38,6 +41,10 @@ describe('ManageTrack', () => {
   });
 
   test('displays loading indicator when loading', () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: { user: { name: 'John Doe' } },
+      status: 'authenticated',
+    });
     mockUseQuery.mockReturnValue({
       data: undefined,
       isLoading: true,
@@ -49,12 +56,16 @@ describe('ManageTrack', () => {
       status: 'loading',
     } as any);
 
-    render(<ManageTrack params={{ id: '1' }} />);
+    render(<ManageTrack params={{ journeyId: '1' }} />);
 
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
   test('displays error message when there is an error', () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: { user: { name: 'John Doe' } },
+      status: 'authenticated',
+    });
     mockUseQuery.mockReturnValue({
       data: undefined,
       isLoading: false,
@@ -66,7 +77,7 @@ describe('ManageTrack', () => {
       status: 'error',
     } as any);
 
-    render(<ManageTrack params={{ id: '1' }} />);
+    render(<ManageTrack params={{ journeyId: '1' }} />);
 
     expect(screen.getByText('Error fetching journeys: Error fetching journeys')).toBeInTheDocument();
   });

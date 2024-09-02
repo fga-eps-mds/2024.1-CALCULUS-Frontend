@@ -4,7 +4,7 @@ export interface Journey {
   description: string;
   user?: string;
   point?: string;
-  trail?: string[];
+  trails?: string[];
   order: number;
   createdAt: string;
   updatedAt: string;

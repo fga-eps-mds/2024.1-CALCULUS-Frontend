@@ -1,10 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, LinearProgress } from '@mui/material';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import MyButton from '@/components/ui/buttons/myButton.component';
-import { useSession } from 'next-auth/react';
 
 interface JourneyInfoProps {
   title: string;
@@ -12,6 +11,7 @@ interface JourneyInfoProps {
   trailCount: number;
   hasJourney: boolean;
   onJoin: () => void; 
+  completedTrailsCount: number;
 }
 
 const JourneyInfo: React.FC<JourneyInfoProps> = ({
@@ -20,11 +20,14 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
   trailCount,
   hasJourney,
   onJoin,
+  completedTrailsCount,
 }) => {
 
   const handleJoinClick = () => {
     onJoin(); 
   };
+
+  const progressValue = Math.floor(( completedTrailsCount / trailCount ) * 100);
 
   return (
     <Box
@@ -36,6 +39,7 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
         backgroundColor: '#FFF',
         boxShadow: '0 4px 8px rgba(0,0,0,0.5)',
         maxWidth: '650px',
+        marginTop: '100px',
       }}
       ml={20}
     >
@@ -71,7 +75,7 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
 
         <Typography variant="body2">Número de trilhas: {trailCount}</Typography>
       </Box>
-      {!hasJourney && (
+      {!hasJourney ? (
         <Box
           sx={{
             display: 'flex',
@@ -79,9 +83,38 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
           }}
           ml={55}
         >
-          <MyButton width="150px" height="50px" color="red" bold onClick={handleJoinClick}>
-            Ingressar
-          </MyButton>
+        </Box>
+      ) : (
+        <Box>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              mt: 2,
+              mb: 1,
+            }}
+          >
+            <Typography variant="body2">
+              Progresso:
+            </Typography>
+            <Typography variant="body2">
+              {`${progressValue}%`}
+            </Typography>
+          </Box>
+          <LinearProgress
+            variant="determinate"
+            value={progressValue}
+            sx={{
+              height: '8px',
+              borderRadius: '5px',
+              backgroundColor: '#e0e0e0', 
+              '& .MuiLinearProgress-bar': {
+                backgroundColor: 'green',
+                borderRadius: '5px', 
+              },
+            }}
+          />
         </Box>
       )}
     </Box>

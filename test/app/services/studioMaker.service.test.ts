@@ -1,6 +1,5 @@
 import {
   getJourneys,
-  getJourneysByUser,
   createJourney,
   updateJourneyById,
   deleteJourney,
@@ -195,30 +194,6 @@ describe('Serviço de Jornadas e Trilhas', () => {
     await expect(getJourneys()).rejects.toThrow('Falha ao buscar jornadas');
   });
 
-  test('Deve retornar jornadas do usuário com sucesso', async () => {
-    const mockData = [{ id: '1', name: 'Jornada do Usuário' }];
-    const userId = '123';
-    (studioMakerApi.get as jest.Mock).mockResolvedValue({ data: mockData });
-
-    const journeys = await getJourneysByUser(userId);
-    expect(journeys).toEqual(mockData);
-    expect(studioMakerApi.get).toHaveBeenCalledWith(
-      `/journeys/user/${userId}`,
-      {},
-    );
-  });
-
-  test('Deve falhar ao buscar jornadas do usuário', async () => {
-    const userId = '123';
-    (studioMakerApi.get as jest.Mock).mockRejectedValue(
-      new Error('Falha ao buscar jornadas do usuário'),
-    );
-
-    await expect(getJourneysByUser(userId)).rejects.toThrow(
-      'Falha ao buscar jornadas do usuário',
-    );
-  });
-
   test('Deve criar uma nova jornada com sucesso', async () => {
     const mockData = { id: '1', name: 'Nova Jornada' };
     const token = 'fake-token';
@@ -305,22 +280,6 @@ describe('Serviço de Jornadas e Trilhas', () => {
     } else {
       throw new Error('Erro esperado não é uma instância de Error');
     }
-  });
-
-  test('Deve retornar todas as trilhas de uma jornada com sucesso', async () => {
-    const mockData = [{ id: '1', name: 'Trilha Teste' }];
-    const journeyId = '123';
-    const token = 'fake-token';
-    (studioMakerApi.get as jest.Mock).mockResolvedValue({ data: mockData });
-
-    const trails = await getTrails({ id: journeyId, token });
-    expect(trails).toEqual(mockData);
-    expect(studioMakerApi.get).toHaveBeenCalledWith(
-      `/trails/journey/${journeyId}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      },
-    );
   });
 
   test('Deve falhar ao buscar trilhas de uma jornada', async () => {

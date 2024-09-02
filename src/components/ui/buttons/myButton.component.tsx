@@ -9,6 +9,7 @@ type ButtonProps = {
   type?: 'button' | 'submit';
   radius?: string;
   bold?: boolean;
+  disabled?: boolean;
   onClick?: () => void;
 };
 

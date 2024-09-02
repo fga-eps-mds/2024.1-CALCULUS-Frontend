@@ -125,4 +125,39 @@ export const resetPassword = async (data: any) => {
       console.log("Error fetched journeys");
       throw error;
     }
+
+  };
+
+  export const getCompletedTrails = async (userId: string) => {
+    try {
+      const response = await userApi.get(`/users/${userId}/completedTrails`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching Trails");
+      throw error;
+    }
+  };
+
+  export const completeTrail = async ({
+    userId,
+    trailId,
+    accessToken,
+  }:{
+    userId: string;
+    trailId: string;
+    accessToken: string;
+  }) => {
+    try {
+      const response = await userApi.post(`/users/${userId}/complete/${trailId}`,
+        {},
+        {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      return response.data;
+    } catch (err) {
+      console.log("Failed to append trail: ", err);
+      throw err;
+    }
   };
