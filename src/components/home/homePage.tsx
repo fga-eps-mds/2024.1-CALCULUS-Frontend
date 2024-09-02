@@ -157,7 +157,7 @@ const HomePrincipalPage = () => {
                 key={jornada._id}
                 title={jornada.title}
                 image={jornada.image || Foto}
-                Id="/"
+                Id={jornada._id}
               />
             ))}
           </Carousel>
