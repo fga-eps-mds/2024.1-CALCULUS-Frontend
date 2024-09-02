@@ -1,4 +1,6 @@
 import { userApi } from '@/services/apis.service';
+import { Journey } from '@/lib/interfaces/journey.interface';
+import { string } from 'zod';
 
 export const createUser = async (data: any) => {
   console.log(data);
@@ -88,4 +90,39 @@ export const resetPassword = async (data: any) => {
   } catch (error) {
     throw error;
   }
+
 };
+
+  export const subscribeJourney = async ({
+    userId,
+    journeyId,
+    accessToken,
+  }:{
+    userId: string;
+    journeyId: string;
+    accessToken: string;
+  }) => {
+    try {
+      const response = await userApi.post(`/users/${userId}/subscribe/${journeyId}`,
+        {},
+        {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      return response.data;
+    } catch (err) {
+      console.log("Failed to subscribe to journey: ", err);
+      throw err;
+    }
+  };
+
+  export const getSubscribedJourneys = async (userId: string) => {
+    try {
+      const response = await userApi.get(`/users/${userId}/subscribedJourneys`);
+      return response.data;
+    } catch(error) {
+      console.log("Error fetched journeys");
+      throw error;
+    }
+  };

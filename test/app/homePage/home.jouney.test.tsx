@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import JourneyCard from '@/components/home/homeJourneyCard';
+import JourneyCard from '@/components/home/JourneyCard';
+import StartCard from '@/components/home/StartPointsCard';
 import '@testing-library/jest-dom';
 
 jest.mock('next/image', () => ({
@@ -18,14 +19,20 @@ jest.mock('@/components/ui/buttons/myButton.component', () => ({
     ),
 }));
 
+jest.mock('next/navigation', () => ({
+    useRouter: () => ({
+        push: jest.fn(),
+    }),
+}));
+
 describe('JourneyCard Component', () => {
     it('renders emAndamento type correctly', () => {
         render(
             <JourneyCard
-                type="emAndamento"
                 title="Journey in Progress"
                 image="/path/to/image.jpg"
-            />
+                Id="1"
+              />
         );
 
         const title = screen.getByText('Journey in Progress');
@@ -36,46 +43,41 @@ describe('JourneyCard Component', () => {
         expect(image).toHaveAttribute('src', '/path/to/image.jpg');
     });
 
-    it('renders geral type correctly', () => {
+    it('renders Start Points type correctly', () => {
         render(
-            <JourneyCard
-                type="geral"
-                title="General Journey"
-                image="/path/to/general-image.jpg"
-                description="This is a general journey description."
-                URL="/path/to/journey"
+            <StartCard
+              title="General Journey"
+              description="This is a general journey description."
+              image="/path/to/general-image.jpg"
+              Id="1"
             />
         );
 
         const title = screen.getByText('General Journey');
         const image = screen.getByAltText('General Journey');
         const description = screen.getByText('This is a general journey description.');
-        const button = screen.getByText('VER TRILHAS');
 
         expect(title).toBeInTheDocument();
         expect(image).toBeInTheDocument();
         expect(image).toHaveAttribute('src', '/path/to/general-image.jpg');
         expect(description).toBeInTheDocument();
-        expect(button).toBeInTheDocument();
     });
 
-    it('does not render description when not provided for geral type', () => {
+    it('does not render description when not provided for Start Point type', () => {
         render(
-            <JourneyCard
-                type="geral"
-                title="General Journey"
-                image="/path/to/general-image.jpg"
+            <StartCard
+              title="General Journey"
+              image="/path/to/general-image.jpg"
+              Id="1"
             />
         );
 
         const title = screen.getByText('General Journey');
         const image = screen.getByAltText('General Journey');
         const description = screen.queryByText('This is a general journey description.');
-        const button = screen.getByText('VER TRILHAS');
 
         expect(title).toBeInTheDocument();
         expect(image).toBeInTheDocument();
         expect(description).not.toBeInTheDocument();
-        expect(button).toBeInTheDocument();
     });
 });
