@@ -5,7 +5,7 @@ const SignInButton = () => {
 
   if (session && session.user)
     return (
-      <MyButton type="button" color='white'>
+      <MyButton type="button" color="white">
         Sign In
       </MyButton>
     );

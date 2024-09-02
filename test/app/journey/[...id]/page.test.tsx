@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import ManageTrack from '@/app/journey/[...id]/page';
+import ManageTrack from '@/app/trail/[...journeyId]/page';
 import { useQuery } from '@tanstack/react-query';
 import { getJourney, getTrails } from '@/services/studioMaker.service';
 import { mocked } from 'jest-mock';

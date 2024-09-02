@@ -1,21 +1,16 @@
-import React from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from '@mui/material';
+  useMaterialReactTable,
+  type MRT_ColumnDef,
+  MRT_TableContainer,
+  MRT_Row,
+} from 'material-react-table';
 import { useRouter } from 'next/navigation';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Menu, MenuItem, IconButton } from '@mui/material';
 import { Journey } from '@/lib/interfaces/journey.interface';
+import { toast } from 'sonner';
+import { updateJourneysOrder } from '@/services/studioMaker.service';
 
 interface JourneyTableProps {
   journeys: Journey[];
@@ -35,68 +30,106 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
   onMenuClose,
   onJourneyAction,
 }) => {
-  const open = Boolean(anchorEl);
   const router = useRouter();
-  const [selectedJourney, setSelectedJourney] = React.useState<Journey | null>(null);
+  const [selectedJourney, setSelectedJourney] = useState<Journey | null>(null);
+  const [data, setData] = useState<Journey[]>(journeys);
 
-  const handleMenuItemClick = (action: string) => {
-    onJourneyAction(action);
-    onMenuClose();
+  useEffect(() => {
+    setData(journeys);
+  }, [journeys]);
+
+  const columns = useMemo<MRT_ColumnDef<Journey>[]>(
+    () => [
+      {
+        accessorKey: 'title',
+        header: 'Nome',
+      },
+
+      {
+        accessorKey: 'actions',
+        header: '',
+        enableColumnFilter: false,
+        Cell: ({ row }: { row: { original: Journey } }) => (
+          <>
+            <IconButton
+              onClick={(e) => {
+                onMenuClick(e, row.original);
+                setSelectedJourney(row.original);
+              }}
+              color="primary"
+            >
+              <MoreVertIcon />
+            
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={onMenuClose}
+            >
+              <MenuItem onClick={() => onJourneyAction('editar')}>
+                Editar Jornada
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  if (selectedJourney) {
+                    router.push(`/trail/${selectedJourney._id}`);
+                  }
+                }}
+              >
+                Gerenciar trilhas
+              </MenuItem>
+              <MenuItem onClick={() => onJourneyAction('excluir')}>
+                Excluir
+              </MenuItem>
+            </Menu>
+          </>
+        ),
+      },
+    ],
+    [
+      anchorEl,
+      onJourneyAction,
+      onMenuClick,
+      onMenuClose,
+      router,
+      selectedJourney,
+    ],
+  );
+
+  const table = useMaterialReactTable({
+    columns,
+    data,
+    enableRowOrdering: true,
+    muiRowDragHandleProps: ({ table }) => ({
+      onDragEnd: async () => {
+        const { draggingRow, hoveredRow } = table.getState();
+        if (hoveredRow && draggingRow) {
+          const newData = [...data];
+          newData.splice(
+            (hoveredRow as MRT_Row<Journey>).index,
+            0,
+            newData.splice(draggingRow.index, 1)[0],
+          );
+          setData(newData);
+          await updateJourneyOrder(newData);
+        }
+      },
+    }),
+  });
+
+  const updateJourneyOrder = async (updatedJourneys: Journey[]) => {
+    updatedJourneys.forEach((journey, index) => {
+      journey.order = index;
+    });
+    const response = await updateJourneysOrder(updatedJourneys);
+    if (response.error) {
+      toast.error('Error ao atualizar order da trilha');
+      return;
+    }
+    toast.success('Order da trilha atualizada com sucesso');
   };
 
-  const handleItem = (e: any, journey: Journey) => {
-    onMenuClick(e, journey)
-    setSelectedJourney(journey)
-  }
-
-  return (
-    <Box sx={{ width: '100%', maxWidth: 800 }}>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold' }}>Nome</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Descrição</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {journeys.map((journey) => (
-              <TableRow key={journey._id}>
-                <TableCell align="left">{journey.title}</TableCell>
-                <TableCell align="left">{journey.description}</TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    onClick={(e) => handleItem(e, journey)}
-                    color="primary"
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={onMenuClose}
-                  >
-                    <MenuItem onClick={() => handleMenuItemClick('editar')}>
-                      Editar Jornada
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => router.push(`/journey/${selectedJourney?._id}`)}
-                    >
-                      Gerenciar trilhas
-                    </MenuItem>
-                    <MenuItem onClick={() => handleMenuItemClick('excluir')}>
-                      Excluir
-                    </MenuItem>
-                  </Menu>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
-  );
+  return <MRT_TableContainer table={table} />;
 };
 
 export default JourneyTable;

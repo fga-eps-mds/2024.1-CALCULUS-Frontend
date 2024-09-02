@@ -47,69 +47,6 @@ const HomePrincipalPage = () => {
       console.log(error);
     }
   }, []);
-
-  const allStartPointsTest = [
-    {
-      _id: '1',
-      title: 'Ponto de Partida 1',
-      description: '',
-      image: Foto,
-    },
-    {
-      _id: '2',
-      title: 'Ponto de Partida 2',
-      description: 'Descrição da Ponto de Partida 2',
-      image: Foto,
-    },
-    {
-      _id: '3',
-      title: 'Ponto de Partida 3',
-      description: 'Descrição da Ponto de Partida 3',
-      image: Foto,
-    },
-    {
-      _id: '4',
-      title: 'Ponto de Partida 4',
-      description: '',
-      image: Foto,
-    },
-    {
-      _id: '5',
-      title: 'Ponto de Partida 5',
-      description: 'Descrição da Ponto de Partida 5',
-      image: Foto,
-    },
-    {
-      _id: '6',
-      title: 'Ponto de Partida 6',
-      description: '',
-      image: Foto,
-    },
-    {
-      _id: '7',
-      title: 'Ponto de Partida 7',
-      description: 'Descrição da Ponto de Partida 7',
-      image: Foto,
-    },
-    {
-      _id: '8',
-      title: 'Ponto de Partida 8',
-      description: 'Descrição da Ponto de Partida 8',
-      image: Foto,
-    },
-    {
-      _id: '9',
-      title: 'Ponto de Partida 9',
-      description: 'Descrição da Ponto de Partida 9',
-      image: Foto,
-    },
-    {
-      _id: '10',
-      title: 'Ponto de Partida 10',
-      description: '',
-      image: Foto,
-    },
-  ];
   
   const filteredPoints =
     searchQuery.length > 0
@@ -144,7 +81,6 @@ const HomePrincipalPage = () => {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
-
 
   return (
     <>

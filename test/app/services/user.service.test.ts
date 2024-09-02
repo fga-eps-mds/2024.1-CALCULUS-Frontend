@@ -44,7 +44,9 @@ describe('User Service', () => {
         password: 'senha123',
         role: UserRole.ALUNO,
       };
-      const mockError = { response: { data: { message: 'Erro ao criar usuário' } } };
+      const mockError = {
+        response: { data: { message: 'Erro ao criar usuário' } },
+      };
       mockedApi.post.mockRejectedValueOnce(mockError);
 
       const result = await createUser(userData);
@@ -63,7 +65,10 @@ describe('User Service', () => {
 
       const result = await loginWithEmailAndPassword(email, password);
 
-      expect(mockedApi.post).toHaveBeenCalledWith('auth/login', { email, password });
+      expect(mockedApi.post).toHaveBeenCalledWith('auth/login', {
+        email,
+        password,
+      });
       expect(result).toEqual(mockResponse);
     });
 
@@ -75,7 +80,10 @@ describe('User Service', () => {
 
       const result = await loginWithEmailAndPassword(email, password);
 
-      expect(mockedApi.post).toHaveBeenCalledWith('auth/login', { email, password });
+      expect(mockedApi.post).toHaveBeenCalledWith('auth/login', {
+        email,
+        password,
+      });
       expect(result).toBeNull();
     });
   });
@@ -88,7 +96,9 @@ describe('User Service', () => {
 
       const result = await loginWithFederatedProvider(accessToken);
 
-      expect(mockedApi.post).toHaveBeenCalledWith('auth/login/federated', { accessToken });
+      expect(mockedApi.post).toHaveBeenCalledWith('auth/login/federated', {
+        accessToken,
+      });
       expect(result).toEqual(mockResponse);
     });
 
@@ -99,7 +109,9 @@ describe('User Service', () => {
 
       const result = await loginWithFederatedProvider(accessToken);
 
-      expect(mockedApi.post).toHaveBeenCalledWith('auth/login/federated', { accessToken });
+      expect(mockedApi.post).toHaveBeenCalledWith('auth/login/federated', {
+        accessToken,
+      });
       expect(result).toBeNull();
     });
   });
@@ -121,7 +133,9 @@ describe('User Service', () => {
       const mockError = new Error('Falha ao buscar usuários');
       mockedApi.get.mockRejectedValueOnce(mockError);
 
-      await expect(getUsers('valid_token')).rejects.toThrow('Falha ao buscar usuários');
+      await expect(getUsers('valid_token')).rejects.toThrow(
+        'Falha ao buscar usuários',
+      );
     });
   });
 
@@ -135,7 +149,9 @@ describe('User Service', () => {
 
       const resultado = await updateUserRole(userId, newRole);
 
-      expect(mockedApi.patch).toHaveBeenCalledWith(`/users/${userId}/role`, { role: newRole });
+      expect(mockedApi.patch).toHaveBeenCalledWith(`/users/${userId}/role`, {
+        role: newRole,
+      });
       expect(resultado).toEqual(mockResponse.data);
     });
 
@@ -146,19 +162,26 @@ describe('User Service', () => {
 
       mockedApi.patch.mockRejectedValueOnce(mockError);
 
-      await expect(updateUserRole(userId, newRole)).rejects.toThrow('Falha ao atualizar o papel do usuário');
+      await expect(updateUserRole(userId, newRole)).rejects.toThrow(
+        'Falha ao atualizar o papel do usuário',
+      );
     });
   });
 
   describe('forgotPassword', () => {
     it('deve solicitar a redefinição de senha', async () => {
       const data = { email: 'joao@example.com' };
-      const mockResponse = { data: { message: 'Redefinição de senha solicitada' } };
+      const mockResponse = {
+        data: { message: 'Redefinição de senha solicitada' },
+      };
       mockedApi.post.mockResolvedValueOnce(mockResponse);
 
       const resultado = await forgotPassword(data);
 
-      expect(mockedApi.post).toHaveBeenCalledWith('/auth/forgot-password', data);
+      expect(mockedApi.post).toHaveBeenCalledWith(
+        '/auth/forgot-password',
+        data,
+      );
       expect(resultado).toEqual(mockResponse.data);
     });
 
@@ -167,14 +190,18 @@ describe('User Service', () => {
       const mockError = new Error('Falha ao solicitar redefinição de senha');
       mockedApi.post.mockRejectedValueOnce(mockError);
 
-      await expect(forgotPassword(data)).rejects.toThrow('Falha ao solicitar redefinição de senha');
+      await expect(forgotPassword(data)).rejects.toThrow(
+        'Falha ao solicitar redefinição de senha',
+      );
     });
   });
 
   describe('resetPassword', () => {
     it('deve redefinir a senha e retornar a resposta', async () => {
       const data = { token: 'token_redefinicao', newPassword: 'nova_senha' };
-      const mockResponse = { data: { message: 'Senha redefinida com sucesso' } };
+      const mockResponse = {
+        data: { message: 'Senha redefinida com sucesso' },
+      };
       mockedApi.put.mockResolvedValueOnce(mockResponse);
 
       const resultado = await resetPassword(data);
@@ -188,7 +215,9 @@ describe('User Service', () => {
       const mockError = new Error('Falha ao redefinir a senha');
       mockedApi.put.mockRejectedValueOnce(mockError);
 
-      await expect(resetPassword(data)).rejects.toThrow('Falha ao redefinir a senha');
+      await expect(resetPassword(data)).rejects.toThrow(
+        'Falha ao redefinir a senha',
+      );
     });
   });
 });

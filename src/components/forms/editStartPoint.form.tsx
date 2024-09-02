@@ -1,32 +1,43 @@
 'use client';
 
-import { Box, Button, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import MyButton from '@/components/ui/buttons/myButton.component';
 
-import { journeySchema, JourneySchemaData } from '@/lib/schemas/journey.schema';
-import { createJourney } from '@/services/studioMaker.service';
-import { studioMakerApi } from '@/services/apis.service';
+import {
+  startPointSchema,
+  StartPointSchemaData,
+} from '@/lib/schemas/start-point.schema';
+import { updateStartPointById } from '@/services/studioMaker.service';
 
-export function CreateJourneyForm({ addJourney, setDialog }: any) {
+export function UpdateStartPointForm({
+  updateStartPoint,
+  startPoint,
+  setDialog,
+}: any) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<JourneySchemaData>({
-    resolver: zodResolver(journeySchema),
+  } = useForm<StartPointSchemaData>({
+    resolver: zodResolver(startPointSchema),
+    defaultValues: {
+      name: startPoint.name,
+      description: startPoint.description,
+    },
   });
 
-  const onSubmit: SubmitHandler<JourneySchemaData> = async (data) => {
-    const response = await createJourney({
+  const onSubmit: SubmitHandler<StartPointSchemaData> = async (data) => {
+    const response = await updateStartPointById({
+      id: startPoint._id,
       data,
       token: JSON.parse(localStorage.getItem('token')!),
     });
     if (response.data) {
-      toast.success('Jornada criada com sucesso!');
-      addJourney(response.data);
+      toast.success('Ponto de Partida criado com sucesso!');
+      updateStartPoint(response.data);
       setDialog(false);
     } else {
       toast.error('Ocorreu um erro tente novamente');
@@ -38,17 +49,17 @@ export function CreateJourneyForm({ addJourney, setDialog }: any) {
       <TextField
         fullWidth
         variant="outlined"
-        label="Nome da Jornada"
+        label="Nome do Ponto de Partida"
         margin="normal"
         required
         sx={{ bgcolor: 'white' }}
-        {...register('title')}
-        error={!!errors.title}
+        {...register('name')}
+        error={!!errors.name}
       />
       <TextField
         fullWidth
         variant="outlined"
-        label="Breve descrição da jornada"
+        label="Breve descrição do ponto de partida"
         margin="normal"
         multiline
         rows={4}
@@ -56,12 +67,8 @@ export function CreateJourneyForm({ addJourney, setDialog }: any) {
         {...register('description')}
         error={!!errors.description}
       />
-      <MyButton
-        width="100%"
-        color="black"
-        type="submit"
-      >
-        Criar
+      <MyButton type="submit" width="100%" height="50px" color="black" bold>
+        Editar
       </MyButton>
     </Box>
   );

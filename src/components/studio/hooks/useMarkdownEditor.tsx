@@ -1,9 +1,13 @@
 import { useState, useRef } from 'react';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { useSession } from 'next-auth/react';
 import { insertTextAtSelection } from '../utils/insertTextAtSelection';
 import { Content } from '@/lib/interfaces/content.interface';
 import { toast } from 'sonner';
+import {
+  getContentById,
+  getContentsByTrailId,
+} from '@/services/studioMaker.service';
 
 const useMarkdownEditor = () => {
   const { data: session } = useSession();
@@ -39,7 +43,9 @@ const useMarkdownEditor = () => {
 
   const handleSave = async () => {
     if (!session || !selectedContentId) {
-      toast.error('Você precisa estar logado e selecionar um conteúdo para salvar.');
+      toast.error(
+        'Você precisa estar logado e selecionar um conteúdo para salvar.',
+      );
       return;
     }
 
@@ -71,7 +77,7 @@ const useMarkdownEditor = () => {
     try {
       const contentResponse = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents`,
-        { title: title, content: ' ', trailId: trailId }, 
+        { title: title, content: ' ', trailId: trailId },
         {
           headers: {
             Authorization: `Bearer ${session.user.accessToken}`,
@@ -92,15 +98,14 @@ const useMarkdownEditor = () => {
       );
 
       toast.success('Novo conteúdo criado e adicionado à trilha!');
-      fetchContents(trailId); 
-      setSelectedContentId(newContentId); 
-      setMarkdown(''); 
+      fetchContents(trailId);
+      setSelectedContentId(newContentId);
+      setMarkdown('');
     } catch (error) {
       console.error('Erro ao criar e adicionar conteúdo à trilha:', error);
       toast.error('Erro ao criar e adicionar conteúdo à trilha.');
     }
-};
-
+  };
 
   const handleDelete = async (id: string, trailId: string) => {
     if (!trailId) {
@@ -140,35 +145,27 @@ const useMarkdownEditor = () => {
 
   const fetchContents = async (trailId: string) => {
     if (!session) return;
-    try {
-      const response = await axios.get<Content[]>(
-        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents`,
+
+    const response = await getContentsByTrailId(trailId);
+
+    if (response.error) {
+      toast.error(
+        'Erro ao buscar conteúdos vinculados a trilha. Reinicia página',
       );
-
-      console.log('Resposta da API:', response.data);
-
-      const filteredContents = response.data.filter(
-        (content) => content.trail === trailId,
-      );
-
-      console.log('Conteúdos filtrados:', filteredContents);
-
-      setContents(filteredContents);
-    } catch (error) {
-      console.error('Erro ao buscar conteúdos:', error);
+      return;
     }
+    const contents: Content[] = response.data;
+    setContents(contents.sort((a, b) => a.order - b.order));
   };
 
   const handleSelectContent = async (id: string) => {
-    try {
-      const response = await axios.get<Content>(
-        `${process.env.NEXT_PUBLIC_API_URL_STUDIO}/contents/${id}`,
-      );
-      setMarkdown(response.data.content);
-      setSelectedContentId(id);
-    } catch (error) {
-      console.error('Erro ao carregar conteúdo:', error);
+    const response = await getContentById(id);
+    if (response.error) {
+      toast.error('Erro ao buscar conteúdo. Tente novamente');
+      return;
     }
+    setMarkdown(response.data.content);
+    setSelectedContentId(id);
   };
 
   return {

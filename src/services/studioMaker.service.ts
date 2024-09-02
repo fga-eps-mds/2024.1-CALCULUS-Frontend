@@ -1,6 +1,106 @@
-import { Trail } from '@/lib/interfaces/trails.interface';
+'use client';
+
 import { studioMakerApi } from './apis.service';
+import { StartPoint } from '../lib/interfaces/startPoint.interface';
 import { Journey } from '@/lib/interfaces/journey.interface';
+import { Trail } from '@/lib/interfaces/trails.interface';
+import { Content } from '@/lib/interfaces/content.interface';
+
+export const getStartPoints = async (): Promise<StartPoint[]> => {
+  try {
+    const response = await studioMakerApi.get('/points');
+    console.log('Start Points:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch Start Points:', error);
+    throw error;
+  }
+};
+
+export const getStartPointsByUser = async (
+  id: string,
+): Promise<StartPoint[]> => {
+  try {
+    const response = await studioMakerApi.get(`/points/user/${id}`);
+    console.log('Journeys:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch start points:', error);
+    throw error;
+  }
+};
+
+export const createStartPoint = async ({
+  data,
+  token,
+}: {
+  data: any;
+  token: string;
+}) => {
+  try {
+    console.log(data);
+    const response = await studioMakerApi.post('/points', data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('Start point created:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to create start point:', error);
+    return { error: error };
+  }
+};
+
+export const updateStartPointById = async ({
+  id,
+  data,
+  token,
+}: {
+  id: string;
+  data: any;
+  token: string;
+}) => {
+  try {
+    const response = await studioMakerApi.put(`/points/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('Start point updated:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to update start point:', error);
+    return { error: error };
+  }
+};
+
+export const deleteStartPoint = async ({
+  id,
+  token,
+}: {
+  id: string;
+  token: string;
+}) => {
+  try {
+    const response = await studioMakerApi.delete(`/points/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log('Start point deleted:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to delete start points:', error);
+    return { error: error };
+  }
+};
 
 export const getJourneys = async (): Promise<Journey[]> => {
   try {
@@ -17,9 +117,9 @@ export const getJourneys = async (): Promise<Journey[]> => {
   }
 };
 
-export const getJourneysByUser = async (id: string): Promise<Journey[]> => {
+export const getJourneysByPoint = async (id: string): Promise<Journey[]> => {
   try {
-    const response = await studioMakerApi.get(`/journeys/user/${id}`, {
+    const response = await studioMakerApi.get(`/journeys/point/${id}`, {
       // headers: {
       //   Authorization: `Bearer ${token}`,
       // },
@@ -111,11 +211,12 @@ export const getTrails = async ({
   id: string;
   token: string;
 }): Promise<Trail[]> => {
+  console.log(id, token);
   try {
     const response = await studioMakerApi.get(`/trails/journey/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      // headers: {
+      //   Authorization: `Bearer ${token}`,
+      // },
     });
     console.log('Trails:', response.data);
     return response.data;
@@ -207,6 +308,84 @@ export const getJourney = async (id: string): Promise<Journey> => {
   }
 };
 
+export const updateTrailsOrder = async (
+  updatedTrails: Trail[],
+): Promise<any> => {
+  try {
+    const response = await studioMakerApi.patch('/trails/update-trail-order', {
+      trails: updatedTrails,
+    });
+    console.log('Trails updated:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to update trails:', error);
+    return { error: error };
+  }
+};
+
+export const updateJourneysOrder = async (
+  updatedTrails: Journey[],
+): Promise<any> => {
+  try {
+    const response = await studioMakerApi.patch(
+      '/journeys/update-journeys-order',
+      {
+        journeys: updatedTrails,
+      },
+    );
+    console.log('Trails updated:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to update trails:', error);
+    return { error: error };
+  }
+};
+
+export const getContentsByTrailId = async (trailId: string): Promise<any> => {
+  try {
+    console.log('Fetching contents...');
+    const response = await studioMakerApi.get<Content[]>(
+      `/contents/trail/${trailId}`,
+    );
+    return { data: response.data };
+  } catch (error) {
+    console.error('Erro ao buscar conteúdos:', error);
+    return { error: error };
+  }
+};
+
+export const getContentById = async (id: string): Promise<any> => {
+  try {
+    const response = await studioMakerApi.get<Content>(`/contents/${id}`);
+    return { data: response.data };
+  } catch (error) {
+    console.error('Erro ao buscar conteúdo:', error);
+    return { error: error };
+  }
+};
+
+export const updateContentOrder = async (
+  updatedContents: Content[],
+): Promise<any> => {
+  try {
+    const response = await studioMakerApi.patch('/contents/order/update-order',
+      {
+        contents: updatedContents,
+      },
+    );
+    console.log('Trails updated:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to update trails:', error);
+    return { error: error };
+  }
+};
 export const addJourneyToUser = async ({
   userId,
   journeyId,

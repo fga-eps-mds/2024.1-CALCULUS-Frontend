@@ -104,9 +104,7 @@ const MarkdownToolbar: React.FC<ToolbarProps> = ({
           </Tooltip>
           <Tooltip title="Lista">
             <IconButton
-              onClick={() =>
-                insertTextAtSelection('- ', '\n', 'Item da lista')
-              }
+              onClick={() => insertTextAtSelection('- ', '\n', 'Item da lista')}
             >
               <FormatListBulletedIcon />
             </IconButton>
@@ -123,23 +121,23 @@ const MarkdownToolbar: React.FC<ToolbarProps> = ({
         </Box>
       </Toolbar>
       <Box className="flex items-center gap-2">
-          <Tooltip title="Novo Conteúdo">
-            <IconButton
-              className="text-[#6667AB] bg-white border border-[#D9D9D9] rounded-full"
-              onClick={handleOpenPopup}
-            >
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Salvar">
-            <IconButton
-              className="text-[#515287]"
-              onClick={() => handleSave(trailId)}
-            >
-              <SaveIcon sx={{ fontSize: 35 }} />
-            </IconButton>
-          </Tooltip>
-        </Box>
+        <Tooltip title="Novo Conteúdo">
+          <IconButton
+            className="text-[#6667AB] bg-white border border-[#D9D9D9] rounded-full"
+            onClick={handleOpenPopup}
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Salvar">
+          <IconButton
+            className="text-[#515287]"
+            onClick={() => handleSave(trailId)}
+          >
+            <SaveIcon sx={{ fontSize: 35 }} />
+          </IconButton>
+        </Tooltip>
+      </Box>
       <Dialog open={openPopup} onClose={handleClosePopup}>
         <DialogTitle>Novo Conteúdo</DialogTitle>
         <DialogContent>

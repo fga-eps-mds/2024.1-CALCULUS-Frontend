@@ -1,7 +1,7 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useSession } from 'next-auth/react';
 import {
   Box,
   Dialog,
@@ -11,29 +11,27 @@ import {
   Button,
   Typography,
   CircularProgress,
-  TextField,
 } from '@mui/material';
 import ButtonRed from '@/components/ui/buttons/red.button';
 import SearchBar from '@/components/admin/SearchBar';
 import JourneyTable from '@/components/tables/journey.table';
 import { Journey } from '@/lib/interfaces/journey.interface';
-import { UserRole } from '@/lib/enum/userRole.enum';
 import {
   deleteJourney,
-  getJourneys,
-  getJourneysByUser,
+  getJourneysByPoint,
 } from '@/services/studioMaker.service';
 import Popup from '@/components/ui/popup';
-import { CreateJourneyForm } from '@/components/forms/createJourney.form';
-import { UpdateJourneyForm } from '@/components/forms/editJourney.form';
+import { JourneyForm } from '@/components/forms/journey.form';
 import { toast } from 'sonner';
 
-const JourneyPage: React.FC = () => {
-  const { data: session } = useSession();
+export default function JourneyPage({
+  params,
+}: {
+  params: { pointId: string };
+}) {
   const fetchJourneys = async (): Promise<Journey[]> => {
-    const journeys = !session?.user.role.includes(UserRole.ADMIN)
-      ? await getJourneysByUser(session?.user.id!)
-      : await getJourneys();
+    let journeys = await getJourneysByPoint(params.pointId);
+    journeys.sort((a, b) => a.order - b.order);
     setListJourneys(journeys);
     setFilteredJourneys(journeys);
     return journeys;
@@ -42,10 +40,9 @@ const JourneyPage: React.FC = () => {
   const {
     data = [],
     isLoading,
-
     error,
   } = useQuery<Journey[], Error>({
-    queryKey: ['journeys'],
+    queryKey: ['journeys', params.pointId],
     queryFn: fetchJourneys,
   });
 
@@ -88,12 +85,15 @@ const JourneyPage: React.FC = () => {
 
   const handleJourneyAction = (action: string) => {
     if (action === 'editar') setEditionDialogOpen(true);
-    if (action === 'gerenciar') alert("Redirect to selected journey's trails");
+    if (action === 'gerenciar') {
+    }
     if (action === 'excluir') setExclusionDialogOpen(true);
   };
 
   const addJourney = (journey: Journey) => {
-    setListJourneys([...listJourneys, journey]);
+    setListJourneys(
+      [...listJourneys, journey].sort((a, b) => a.order - b.order),
+    );
   };
 
   const updateJourney = (journey: Journey) => {
@@ -119,6 +119,7 @@ const JourneyPage: React.FC = () => {
   const handleCloseCreateDialog = () => {
     setCreateDialogOpen(false);
   };
+
   if (isLoading) {
     return <CircularProgress />;
   }
@@ -145,13 +146,15 @@ const JourneyPage: React.FC = () => {
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
       </Box>
 
-      <JourneyTable
-        journeys={filteredJourneys}
-        anchorEl={anchorEl}
-        onMenuClick={handleMenuOpen}
-        onMenuClose={handleMenuClose}
-        onJourneyAction={handleJourneyAction}
-      />
+      <Box sx={{ width: '100%', maxWidth: 800, marginBottom: 2 }}>
+        <JourneyTable
+          journeys={filteredJourneys}
+          anchorEl={anchorEl}
+          onMenuClick={handleMenuOpen}
+          onMenuClose={handleMenuClose}
+          onJourneyAction={handleJourneyAction}
+        />
+      </Box>
 
       <ButtonRed onClick={() => setCreateDialogOpen(true)}>
         Nova Jornada
@@ -162,8 +165,8 @@ const JourneyPage: React.FC = () => {
         setPopup={setEditionDialogOpen}
         title="Editar Jornada"
       >
-        <UpdateJourneyForm
-          updateJourney={updateJourney}
+        <JourneyForm
+          callback={updateJourney}
           journey={selectedJourney!}
           setDialog={setEditionDialogOpen}
         />
@@ -174,8 +177,9 @@ const JourneyPage: React.FC = () => {
         setPopup={setCreateDialogOpen}
         title="Criar Nova Jornada"
       >
-        <CreateJourneyForm
-          addJourney={addJourney}
+        <JourneyForm
+          callback={addJourney}
+          pointId={params.pointId[0]}
           setDialog={setCreateDialogOpen}
         />
       </Popup>
@@ -204,6 +208,4 @@ const JourneyPage: React.FC = () => {
       </Dialog>
     </Box>
   );
-};
-
-export default JourneyPage;
+}
