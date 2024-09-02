@@ -41,7 +41,7 @@ const JourneyService = () => {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_STUDIO}/points/`);
             return response.data;
         } catch (error) {
-            console.error('Erro ao buscar pontos:', error);
+            console.error('Erro ao buscar pontos de partida:', error);
             return null;
         }
     }
@@ -51,7 +51,7 @@ const JourneyService = () => {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL_STUDIO}/points/${id}/journeys`);
             return response.data;
         } catch (error) {
-            console.error(`Erro ao buscar jornada com ID ${id}:`, error);
+            console.error(`Erro ao buscar jornadas do Ponto de Partida com ID ${id}:`, error);
             return null;
         }
     }

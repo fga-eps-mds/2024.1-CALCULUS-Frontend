@@ -35,7 +35,6 @@ const StartCard: React.FC<StartCardProps> = ({
         const journeysId = await fetchJourneybyPoint(Id);
 
         if (!journeysId || journeysId.length === 0) {
-          console.error('No journeys found for this point.');
           return;
         }
 
