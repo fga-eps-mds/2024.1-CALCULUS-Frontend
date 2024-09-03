@@ -8,10 +8,7 @@ import { getJourney, getTrails } from '@/services/studioMaker.service';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { Trail } from '@/lib/interfaces/trails.interface';
 import { useParams } from 'next/navigation';
-import {
-  subscribeJourney,
-  getSubscribedJourneys,
-} from '@/services/user.service';
+import { getSubscribedJourneys,} from '@/services/user.service';
 import { useSession } from 'next-auth/react';
 import { getCompletedTrails } from '@/services/user.service';
 
@@ -68,18 +65,6 @@ export default function JourneyPage() {
     fetchJourneyData();
   }, [journeyId, session?.user?.id]);
 
-  const handleJoin = async () => {
-    if (session?.user.id) {
-      const id = Array.isArray(journeyId) ? journeyId[0] : journeyId;
-      await subscribeJourney({
-        userId: session.user.id,
-        journeyId: id,
-        accessToken: session?.user.accessToken,
-      });
-      setHasJourney(true);
-    }
-  };
-
   if (error) {
     return <div>{error}</div>;
   }
@@ -113,7 +98,6 @@ export default function JourneyPage() {
             description={journey.description}
             trailCount={trails.length}
             hasJourney={hasJourney}
-            onJoin={handleJoin}
             completedTrailsCount={completedTrailsInJourney.length}
           />
         </Box>
@@ -137,7 +121,7 @@ export default function JourneyPage() {
           </Typography>
         ) : (
           <React.Fragment>
-            <JourneyPath trails={trails} />
+            <JourneyPath trails={trails} journeyId={journey._id} hasJourney={hasJourney} />
           </React.Fragment>
         )}
       </Box>
