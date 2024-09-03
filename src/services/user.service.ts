@@ -60,11 +60,23 @@ export const getUsers = async (token: string) => {
   }
 };
 
-export const updateUserRole = async (userId: string, newRole: string) => {
+export const updateUserRole = async (
+  userId: string,
+  newRole: string,
+  token: string,
+) => {
   try {
-    const response = await userApi.patch(`/users/${userId}/role`, {
-      role: newRole,
-    });
+    const response = await userApi.patch(
+      `/users/${userId}/role`,
+      {
+        role: newRole,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
     return response.data;
   } catch (error) {
     console.error('Failed to update user role:', error);
@@ -90,74 +102,76 @@ export const resetPassword = async (data: any) => {
   } catch (error) {
     throw error;
   }
-
 };
 
-  export const subscribeJourney = async ({
-    userId,
-    journeyId,
-    accessToken,
-  }:{
-    userId: string;
-    journeyId: string;
-    accessToken: string;
-  }) => {
-    try {
-      const response = await userApi.post(`/users/${userId}/subscribe/${journeyId}`,
-        {},
-        {
+export const subscribeJourney = async ({
+  userId,
+  journeyId,
+  accessToken,
+}: {
+  userId: string;
+  journeyId: string;
+  accessToken: string;
+}) => {
+  try {
+    const response = await userApi.post(
+      `/users/${userId}/subscribe/${journeyId}`,
+      {},
+      {
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
-      return response.data;
-    } catch (err) {
-      console.log("Failed to subscribe to journey: ", err);
-      throw err;
-    }
-  };
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (err) {
+    console.log('Failed to subscribe to journey: ', err);
+    throw err;
+  }
+};
 
-  export const getSubscribedJourneys = async (userId: string) => {
-    try {
-      const response = await userApi.get(`/users/${userId}/subscribedJourneys`);
-      return response.data;
-    } catch(error) {
-      console.log("Error fetched journeys");
-      throw error;
-    }
+export const getSubscribedJourneys = async (userId: string) => {
+  try {
+    const response = await userApi.get(`/users/${userId}/subscribedJourneys`);
+    return response.data;
+  } catch (error) {
+    console.log('Error fetched journeys');
+    throw error;
+  }
+};
 
-  };
+export const getCompletedTrails = async (userId: string) => {
+  try {
+    const response = await userApi.get(`/users/${userId}/completedTrails`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching Trails');
+    throw error;
+  }
+};
 
-  export const getCompletedTrails = async (userId: string) => {
-    try {
-      const response = await userApi.get(`/users/${userId}/completedTrails`);
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching Trails");
-      throw error;
-    }
-  };
-
-  export const completeTrail = async ({
-    userId,
-    trailId,
-    accessToken,
-  }:{
-    userId: string;
-    trailId: string;
-    accessToken: string;
-  }) => {
-    try {
-      const response = await userApi.post(`/users/${userId}/complete/${trailId}`,
-        {},
-        {
+export const completeTrail = async ({
+  userId,
+  trailId,
+  accessToken,
+}: {
+  userId: string;
+  trailId: string;
+  accessToken: string;
+}) => {
+  try {
+    const response = await userApi.post(
+      `/users/${userId}/complete/${trailId}`,
+      {},
+      {
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
-      return response.data;
-    } catch (err) {
-      console.log("Failed to append trail: ", err);
-      throw err;
-    }
-  };
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    return response.data;
+  } catch (err) {
+    console.log('Failed to append trail: ', err);
+    throw err;
+  }
+};

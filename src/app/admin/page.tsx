@@ -89,7 +89,8 @@ const Admin: React.FC = () => {
   const confirmRoleChange = async () => {
     if (selectedUser && selectedRole) {
       try {
-        await updateUserRole(selectedUser._id, selectedRole);
+        const token = JSON.parse(localStorage.getItem('token')!);
+        await updateUserRole(selectedUser._id, selectedRole,token);
         const updatedUsers = users.map((user) =>
           user._id === selectedUser._id
             ? { ...user, role: selectedRole }
