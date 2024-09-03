@@ -60,14 +60,12 @@ export const getUsers = async (token: string) => {
   }
 };
 
-export const updateUserRole = async (userId: string, newRole: string) => {
+export const updateUserRole = async (
+  userId: string,
+  newRole: string,
+  token: string,
+) => {
   try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('No token found');
-    }
-    const parsedToken = JSON.parse(token);
-    console.log(parsedToken);
     const response = await userApi.patch(
       `/users/${userId}/role`,
       {
@@ -75,7 +73,7 @@ export const updateUserRole = async (userId: string, newRole: string) => {
       },
       {
         headers: {
-          Authorization: `Bearer ${parsedToken}`,
+          Authorization: `Bearer ${token}`,
         },
       },
     );
