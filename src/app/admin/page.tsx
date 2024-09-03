@@ -89,6 +89,7 @@ const Admin: React.FC = () => {
   const confirmRoleChange = async () => {
     if (selectedUser && selectedRole) {
       try {
+        console.log(selectedUser._id, selectedRole);
         await updateUserRole(selectedUser._id, selectedRole);
         const updatedUsers = users.map((user) =>
           user._id === selectedUser._id
