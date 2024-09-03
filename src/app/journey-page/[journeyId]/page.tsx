@@ -1,25 +1,31 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Divider, Typography } from '@mui/material';
+import { Box, CircularProgress, Divider, IconButton, Typography } from '@mui/material';
 import JourneyInfo from '@/components/journey/journeyInfo';
 import JourneyPath from '@/components/journey/journeyPath';
-import { getJourney, getTrails } from '@/services/studioMaker.service';
+import { getJourney, getJourneysByPoint, getTrails } from '@/services/studioMaker.service';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { Trail } from '@/lib/interfaces/trails.interface';
-import { useParams } from 'next/navigation';
-import { getSubscribedJourneys,} from '@/services/user.service';
+import { useParams, useRouter } from 'next/navigation';
+import { getSubscribedJourneys, } from '@/services/user.service';
 import { useSession } from 'next-auth/react';
 import { getCompletedTrails } from '@/services/user.service';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 
 export default function JourneyPage() {
   const { journeyId } = useParams();
+  const router = useRouter();
   const [journey, setJourney] = useState<Journey | null>(null);
   const [trails, setTrails] = useState<Trail[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [hasJourney, setHasJourney] = useState(false);
   const { data: session } = useSession();
   const [completedTrails, setCompletedTrails] = useState<string[]>([]);
+  const [previousJourney, setPreviousJourney] = useState<Journey | null>(null);
+  const [nextJourney, setNextJourney] = useState<Journey | null>(null);
 
   useEffect(() => {
     const fetchCompletedTrails = async () => {
@@ -47,6 +53,23 @@ export default function JourneyPage() {
         const trailsData = await getTrails({ id, token });
         setTrails(trailsData);
 
+        const pointId = journeyData.point;
+        if (pointId) {
+          const relatedJourneys: Journey[] = await getJourneysByPoint(pointId);
+          const next = relatedJourneys.find(j => j.order === journeyData.order + 1);
+          if (next != undefined) {
+            setNextJourney(next);
+            console.log(next);
+            console.log(nextJourney);
+          }
+          const previous = relatedJourneys.find(j => j.order === journeyData.order - 1);
+          if (previous != undefined) {
+            setPreviousJourney(previous);
+            console.log(previous);
+            console.log(previousJourney);
+          }
+        }
+
         if (session?.user?.id) {
           const userJourneys = await getSubscribedJourneys(session.user.id);
           let isSubscribed = false;
@@ -65,6 +88,14 @@ export default function JourneyPage() {
     fetchJourneyData();
   }, [journeyId, session?.user?.id]);
 
+  const handleNext = async () => {
+    router.push(`/journey-page/${nextJourney?._id}`);
+  }
+
+  const handlePrevious = async () => {
+    router.push(`/journey-page/${previousJourney?._id}`);
+  }
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -82,6 +113,39 @@ export default function JourneyPage() {
       backgroundColor: '#f1f1f1',
       height: '100vh',
     }}>
+
+      {(previousJourney) ?
+        <IconButton onClick={handlePrevious} sx={{
+          position: 'relative',
+          top: '80px',
+          left: '40px',
+          backgroundColor: '#FF4122',
+          height: '40px',
+          width: '40px',
+          borderRadius: '40px',
+          color: '#f1f1f1',
+        }}>
+          <ArrowBackIcon />
+        </IconButton>
+        : (null)
+      }
+      {(nextJourney) ?
+        <IconButton onClick={handleNext}
+          sx={{
+            position: 'relative',
+            top: '80px',
+            right: '-50px',
+            backgroundColor: '#FF4122',
+            height: '40px',
+            width: '40px',
+            borderRadius: '40px',
+            color: '#f1f1f1'
+          }}>
+          <ArrowForwardIcon />
+        </IconButton>
+        : (null)
+      }
+
       <Box
         sx={{
           display: 'flex',
