@@ -110,6 +110,7 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails, journeyId, hasJourney
         height: `${Math.max(trails.length * nodeSpacing + nodeSize + 50, 400)}px`,
         backgroundColor: '#f0f0f0',
         overflow: 'hidden', 
+        zIndex: 1,
       }}
     >
       <svg

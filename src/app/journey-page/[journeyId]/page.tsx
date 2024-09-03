@@ -112,40 +112,43 @@ export default function JourneyPage() {
     <Box sx={{
       backgroundColor: '#f1f1f1',
       height: '100vh',
+      position: 'relative',
+      overflow: 'hidden',
     }}>
-
-      {(previousJourney) ?
+      {(previousJourney) &&
         <IconButton onClick={handlePrevious} sx={{
-          position: 'relative',
-          top: '80px',
-          left: '40px',
+          position: 'absolute',  
+          top: '10%',            
+          left: '5%',          
           backgroundColor: '#FF4122',
           height: '40px',
           width: '40px',
           borderRadius: '40px',
           color: '#f1f1f1',
+          transform: 'translateY(-50%)',  
+          zIndex: 2,
         }}>
           <ArrowBackIcon />
         </IconButton>
-        : (null)
       }
-      {(nextJourney) ?
-        <IconButton onClick={handleNext}
-          sx={{
-            position: 'relative',
-            top: '80px',
-            right: '-50px',
-            backgroundColor: '#FF4122',
-            height: '40px',
-            width: '40px',
-            borderRadius: '40px',
-            color: '#f1f1f1'
-          }}>
+    
+      {(nextJourney) &&
+        <IconButton onClick={handleNext} sx={{
+          position: 'absolute',  
+          top: '10%',            
+          right: '5%',         
+          backgroundColor: '#FF4122',
+          height: '40px',
+          width: '40px',
+          borderRadius: '40px',
+          color: '#f1f1f1',
+          transform: 'translateY(-50%)',  
+          zIndex: 2,
+        }}>
           <ArrowForwardIcon />
         </IconButton>
-        : (null)
       }
-
+    
       <Box
         sx={{
           display: 'flex',
@@ -154,6 +157,7 @@ export default function JourneyPage() {
           height: 'auto',
           width: '100vw',
           overflow: 'hidden',
+          position: 'relative',
         }}
       >
         <Box flex={1} pr={2}>
@@ -165,13 +169,14 @@ export default function JourneyPage() {
             completedTrailsCount={completedTrailsInJourney.length}
           />
         </Box>
-
+    
         <Divider
           sx={{ marginBottom: '100px', marginTop: '100px' }}
           orientation="vertical"
           variant="middle"
           flexItem
         />
+    
         {!trails.length ? (
           <Typography
             variant="h3"
