@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import {
   useMaterialReactTable,
   type MRT_ColumnDef,
@@ -7,18 +7,10 @@ import {
 } from 'material-react-table';
 import {
   Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   IconButton,
   Menu,
   MenuItem,
 } from '@mui/material';
-import { useRouter } from 'next/navigation';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { StartPoint } from '@/lib/interfaces/startPoint.interface';
 import { updatePointOrder } from '@/services/studioMaker.service';
@@ -33,6 +25,7 @@ interface StartpointTableProps {
   ) => void;
   onMenuClose: () => void;
   onStartPointAction: (action: string) => void;
+  onUpdateStartPoints: OnUpdateStartPoints;
 }
 
 const StartpointTable: React.FC<StartpointTableProps> = ({
@@ -41,10 +34,9 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
   onMenuClick,
   onMenuClose,
   onStartPointAction,
+  onUpdateStartPoints,
 }) => {
-  const [startPoint_, setStartPoint_] = useState(startPoints);
   const open = Boolean(anchorEl);
-  const router = useRouter();
   const [selectedStartPoint, setSelectedStartPoint] =
     React.useState<StartPoint | null>(null);
 
@@ -103,20 +95,22 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
 
   const table = useMaterialReactTable({
     columns,
-    data: startPoint_,
+    data: startPoints, // Use diretamente `startPoints` aqui
     enableRowOrdering: true,
+    enablePagination: false,
     muiRowDragHandleProps: ({ table }) => ({
       onDragEnd: async () => {
         const { draggingRow, hoveredRow } = table.getState();
         if (hoveredRow && draggingRow) {
-          const newData = [...startPoint_];
+          const newData = [...startPoints];
           newData.splice(
             (hoveredRow as MRT_Row<StartPoint>).index,
             0,
             newData.splice(draggingRow.index, 1)[0],
           );
-          setStartPoint_(newData);
+
           await updateTrailOrder(newData);
+          onUpdateStartPoints(newData);
         }
       },
     }),
@@ -130,10 +124,10 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
     const response = await updatePointOrder(updatedTrails);
 
     if (response.error) {
-      toast.error('Error ao atualizar order da trilha');
+      toast.error('Erro ao atualizar ordem da trilha');
       return;
     }
-    toast.success('Order da trilha atualizada com sucesso');
+    toast.success('Ordem da trilha atualizada com sucesso');
   };
 
   return (
