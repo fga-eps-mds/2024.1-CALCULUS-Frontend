@@ -1,4 +1,10 @@
-import React from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
+import {
+  useMaterialReactTable,
+  type MRT_ColumnDef,
+  MRT_TableContainer,
+  MRT_Row,
+} from 'material-react-table';
 import {
   Box,
   Table,
@@ -15,6 +21,8 @@ import {
 import { useRouter } from 'next/navigation';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { StartPoint } from '@/lib/interfaces/startPoint.interface';
+import { updatePointOrder } from '@/services/studioMaker.service';
+import { toast } from 'sonner';
 
 interface StartpointTableProps {
   startPoints: StartPoint[];
@@ -34,6 +42,7 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
   onMenuClose,
   onStartPointAction,
 }) => {
+  const [startPoint_, setStartPoint_] = useState(startPoints);
   const open = Boolean(anchorEl);
   const router = useRouter();
   const [selectedStartPoint, setSelectedStartPoint] =
@@ -49,58 +58,86 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
     setSelectedStartPoint(startPoint);
   };
 
+  const columns = useMemo<MRT_ColumnDef<StartPoint>[]>(
+    () => [
+      {
+        accessorKey: 'name',
+        header: 'Nome',
+      },
+      {
+        accessorKey: 'actions',
+        header: '',
+        enableColumnFilter: false,
+        Cell: ({ row }: { row: { original: StartPoint } }) => (
+          <>
+            <IconButton
+              onClick={(e) => {
+                onMenuClick(e, row.original);
+                setSelectedStartPoint(row.original);
+              }}
+              color="primary"
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={onMenuClose}
+            >
+              <MenuItem onClick={() => handleMenuItemClick('editar')}>
+                Editar Trilha
+              </MenuItem>
+              <MenuItem onClick={() => handleMenuItemClick('gerenciar')}>
+                Gerenciar Trilha
+              </MenuItem>
+              <MenuItem onClick={() => handleMenuItemClick('excluir')}>
+                Excluir
+              </MenuItem>
+            </Menu>
+          </>
+        ),
+      },
+    ],
+    [anchorEl, onMenuClick, onMenuClose, handleMenuItemClick],
+  );
+
+  const table = useMaterialReactTable({
+    columns,
+    data: startPoint_,
+    enableRowOrdering: true,
+    muiRowDragHandleProps: ({ table }) => ({
+      onDragEnd: async () => {
+        const { draggingRow, hoveredRow } = table.getState();
+        if (hoveredRow && draggingRow) {
+          const newData = [...startPoint_];
+          newData.splice(
+            (hoveredRow as MRT_Row<StartPoint>).index,
+            0,
+            newData.splice(draggingRow.index, 1)[0],
+          );
+          setStartPoint_(newData);
+          await updateTrailOrder(newData);
+        }
+      },
+    }),
+  });
+
+  const updateTrailOrder = async (updatedTrails: StartPoint[]) => {
+    updatedTrails.forEach((trail, index) => {
+      trail.order = index;
+    });
+
+    const response = await updatePointOrder(updatedTrails);
+
+    if (response.error) {
+      toast.error('Error ao atualizar order da trilha');
+      return;
+    }
+    toast.success('Order da trilha atualizada com sucesso');
+  };
+
   return (
-    <Box sx={{ width: '100%', maxWidth: 800 }}>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold' }}>Nome</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Descrição</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {startPoints.map((startPoint) => (
-              <TableRow key={startPoint._id}>
-                <TableCell align="left">{startPoint.name}</TableCell>
-                <TableCell align="left">{startPoint.description}</TableCell>
-                <TableCell align="right">
-                  <IconButton
-                    onClick={(e) => handleItem(e, startPoint)}
-                    color="primary"
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={onMenuClose}
-                  >
-                    <MenuItem onClick={() => handleMenuItemClick('editar')}>
-                      Editar Ponto de partida
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() =>
-                        router.push(`/journey/${selectedStartPoint?._id}`)
-                      }
-                    >
-                      Gerenciar Jornadas
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => handleMenuItemClick('excluir')}
-                      sx={{ color: 'crimson' }}
-                    >
-                      Excluir
-                    </MenuItem>
-                  </Menu>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+    <MRT_TableContainer table={table} />
   );
 };
 

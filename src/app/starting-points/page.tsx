@@ -31,6 +31,10 @@ const StartPointPage: React.FC = () => {
   const { data: session } = useSession();
   const fetchStartPoints = async (): Promise<StartPoint[]> => {
     const startPoints = await getStartPointsByUser(session?.user.id!);
+    
+    startPoints.sort((a, b) => a.order - b.order)
+    
+
     setListStartPoints(startPoints);
     setFilteredStartPoints(startPoints);
     return startPoints;
