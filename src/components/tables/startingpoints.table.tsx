@@ -95,7 +95,7 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
 
   const table = useMaterialReactTable({
     columns,
-    data: startPoints, // Use diretamente `startPoints` aqui
+    data: startPoints,
     enableRowOrdering: true,
     enablePagination: false,
     muiRowDragHandleProps: ({ table }) => ({
@@ -131,7 +131,9 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
   };
 
   return (
-    <MRT_TableContainer table={table} />
+    <Box sx={{ width: '100%', maxWidth: 800 }}>
+      <MRT_TableContainer table={table} />
+    </Box>
   );
 };
 
