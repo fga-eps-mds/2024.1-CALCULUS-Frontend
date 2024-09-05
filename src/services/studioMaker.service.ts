@@ -325,6 +325,25 @@ export const updateTrailsOrder = async (
   }
 };
 
+
+export const updatePointOrder = async (
+  updatedPoints: StartPoint[],
+): Promise<any> => {
+  try {
+    const response = await studioMakerApi.patch('/points/update-point-order', {
+      points: updatedPoints,
+    });
+    console.log('Points updated:', response.data);
+    return {
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Failed to update points', error);
+    return { error: error };
+  }
+};
+
+
 export const updateJourneysOrder = async (
   updatedTrails: Journey[],
 ): Promise<any> => {

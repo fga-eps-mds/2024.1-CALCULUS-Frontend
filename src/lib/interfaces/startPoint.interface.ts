@@ -5,4 +5,5 @@ export interface StartPoint {
   user: string;
   createdAt: string;
   updatedAt: string;
+  order: number;
 }

@@ -29,27 +29,8 @@ import { UpdateStartPointForm } from '@/components/forms/editStartPoint.form';
 
 const StartPointPage: React.FC = () => {
   const { data: session } = useSession();
-  const fetchStartPoints = async (): Promise<StartPoint[]> => {
-    const startPoints = await getStartPointsByUser(session?.user.id!);
-    setListStartPoints(startPoints);
-    setFilteredStartPoints(startPoints);
-    return startPoints;
-  };
-
-  const {
-    data = [],
-    isLoading,
-
-    error,
-  } = useQuery<StartPoint[], Error>({
-    queryKey: ['startpoints', session?.user.id],
-    queryFn: fetchStartPoints,
-  });
-
   const [listStartPoints, setListStartPoints] = useState<StartPoint[]>([]);
-  const [filteredStartPoints, setFilteredStartPoints] = useState<StartPoint[]>(
-    [],
-  );
+  const [filteredStartPoints, setFilteredStartPoints] = useState<StartPoint[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const [selectedStartPoint, setSelectedStartPoint] =
@@ -59,6 +40,31 @@ const StartPointPage: React.FC = () => {
     useState<boolean>(false);
   const [editionDialogOpen, setEditionDialogOpen] = useState<boolean>(false);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+
+  const fetchStartPoints = async (): Promise<StartPoint[]> => {
+    let startPoints: StartPoint[] = [];
+    
+    if (session?.user.role === UserRole.ADMIN) {
+      startPoints = await getStartPoints();
+    } else {
+      startPoints = await getStartPointsByUser(session?.user.id!);
+    }
+    
+    startPoints.sort((a, b) => a.order - b.order);
+    
+    setListStartPoints(startPoints);
+    setFilteredStartPoints(startPoints);
+    return startPoints;
+  };
+
+  const {
+    data = [],
+    isLoading,
+    error,
+  } = useQuery<StartPoint[], Error>({
+    queryKey: ['startpoints', session?.user.id],
+    queryFn: fetchStartPoints,
+  });
 
   useEffect(() => {
     if (searchQuery === '') {
@@ -72,7 +78,7 @@ const StartPointPage: React.FC = () => {
       );
       setFilteredStartPoints(filtered);
     }
-  }, [searchQuery, listStartPoints]);
+  }, [searchQuery, listStartPoints, setFilteredStartPoints]);
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -131,6 +137,11 @@ const StartPointPage: React.FC = () => {
     );
   }
 
+  const updateStartPoints = (updatedStartPoints: StartPoint[]) => {
+    setListStartPoints(updatedStartPoints);
+    setFilteredStartPoints(updatedStartPoints);
+  };
+
   return (
     <Box
       sx={{
@@ -151,6 +162,7 @@ const StartPointPage: React.FC = () => {
         onMenuClick={handleMenuOpen}
         onMenuClose={handleMenuClose}
         onStartPointAction={handleStartPointAction}
+        onUpdateStartPoints={updateStartPoints}
       />
 
       <ButtonRed onClick={() => setCreateDialogOpen(true)}>

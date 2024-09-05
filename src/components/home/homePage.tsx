@@ -40,6 +40,7 @@ const HomePrincipalPage = () => {
         const { fetchPoints } = JourneyService();
         const allPoints = await fetchPoints();
 
+        allPoints.sort((a, b) => a.order - b.order);
         setAllPoints(allPoints);
       };
       loadPoints();
