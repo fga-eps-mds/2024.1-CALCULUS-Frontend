@@ -113,7 +113,6 @@ export default function JourneyPage() {
       backgroundColor: '#f1f1f1',
       height: '100vh',
       position: 'relative',
-      overflow: 'hidden',
     }}>
       {(previousJourney) &&
         <IconButton onClick={handlePrevious} sx={{
