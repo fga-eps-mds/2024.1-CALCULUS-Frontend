@@ -77,13 +77,13 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
               onClose={onMenuClose}
             >
               <MenuItem onClick={() => handleMenuItemClick('editar')}>
-                Editar Trilha
+                Editar Ponto de Partida
               </MenuItem>
               <MenuItem onClick={() => handleMenuItemClick('gerenciar')}>
-                Gerenciar Trilha
+                Gerenciar Ponto de Partida
               </MenuItem>
               <MenuItem onClick={() => handleMenuItemClick('excluir')}>
-                Excluir
+                Excluir Ponto de Partida
               </MenuItem>
             </Menu>
           </>

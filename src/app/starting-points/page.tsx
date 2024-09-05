@@ -26,8 +26,10 @@ import Popup from '@/components/ui/popup';
 import { toast } from 'sonner';
 import { CreateStartPointForm } from '@/components/forms/createStartPoint.form';
 import { UpdateStartPointForm } from '@/components/forms/editStartPoint.form';
+import { useRouter } from 'next/navigation';
 
 const StartPointPage: React.FC = () => {
+  const router = useRouter();
   const { data: session } = useSession();
   const [listStartPoints, setListStartPoints] = useState<StartPoint[]>([]);
   const [filteredStartPoints, setFilteredStartPoints] = useState<StartPoint[]>([]);
@@ -95,6 +97,11 @@ const StartPointPage: React.FC = () => {
   const handleStartPointAction = (action: string) => {
     if (action === 'editar') setEditionDialogOpen(true);
     if (action === 'excluir') setExclusionDialogOpen(true);
+    if (action === 'gerenciar') {
+      router.push(`/journey/${selectedStartPoint!._id}`);
+
+    }
+    
   };
 
   const addStartPoint = (startPoint: StartPoint) => {
