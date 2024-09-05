@@ -3,13 +3,15 @@ import { Box, Button, Typography } from '@mui/material';
 import { Trail } from '@/lib/interfaces/trails.interface';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { getCompletedTrails } from '@/services/user.service';
+import { getCompletedTrails, subscribeJourney } from '@/services/user.service';
 
 interface JourneyPathProps {
   trails: Trail[];
+  journeyId: string;
+  hasJourney: boolean;
 }
 
-const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
+const JourneyPath: React.FC<JourneyPathProps> = ({ trails, journeyId, hasJourney }) => {
   const nodeSpacing = 120;
   const nodeSize = 80;
   const zigzagOffset = 100;
@@ -86,7 +88,15 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
     };
   }, [trails]);
 
-  const handleClick = (trailId: string) => {
+  const handleClick = async (trailId: string) => {
+    if (session?.user.id && !hasJourney) {
+      const id = Array.isArray(journeyId) ? journeyId[0] : journeyId;
+      await subscribeJourney({
+        userId: session.user.id,
+        journeyId: id,
+        accessToken: session?.user.accessToken,
+      });
+    }
     router.push(`/trail-page/${trailId}`);
   };
 
@@ -100,6 +110,7 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails }) => {
         height: `${Math.max(trails.length * nodeSpacing + nodeSize + 50, 400)}px`,
         backgroundColor: '#f0f0f0',
         overflow: 'hidden', 
+        zIndex: 1,
       }}
     >
       <svg
