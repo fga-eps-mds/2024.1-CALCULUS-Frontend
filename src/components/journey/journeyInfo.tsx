@@ -3,14 +3,12 @@
 import React from 'react';
 import { Box, Typography, LinearProgress } from '@mui/material';
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
-import MyButton from '@/components/ui/buttons/myButton.component';
 
 interface JourneyInfoProps {
   title: string;
   description: string;
   trailCount: number;
   hasJourney: boolean;
-  onJoin: () => void; 
   completedTrailsCount: number;
 }
 
@@ -19,13 +17,8 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
   description,
   trailCount,
   hasJourney,
-  onJoin,
   completedTrailsCount,
 }) => {
-
-  const handleJoinClick = () => {
-    onJoin(); 
-  };
 
   const progressValue = Math.floor(( completedTrailsCount / trailCount ) * 100);
 

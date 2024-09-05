@@ -65,8 +65,8 @@ const MarkdownPage: React.FC<MarkdownPageProps> = ({ trailId }) => {
   return (
     <Box className="relative flex flex-col h-screen">
       <AppBar
-        position="static"
-        className="bg-[#f8f3f3] border-b border-[#D9D9D9]"
+        position="sticky"
+        className="bg-[#f8f3f3] border-b border-[#D9D9D9] top-16 z-10"
       >
         <Toolbar className="flex justify-between items-center">
           <MarkdownToolbar
