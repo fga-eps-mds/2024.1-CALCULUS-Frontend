@@ -11,7 +11,11 @@ interface JourneyPathProps {
   hasJourney: boolean;
 }
 
-const JourneyPath: React.FC<JourneyPathProps> = ({ trails, journeyId, hasJourney }) => {
+const JourneyPath: React.FC<JourneyPathProps> = ({
+  trails,
+  journeyId,
+  hasJourney,
+}) => {
   const nodeSpacing = 120;
   const nodeSize = 80;
   const zigzagOffset = 100;
@@ -28,7 +32,7 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails, journeyId, hasJourney
         try {
           const completed = await getCompletedTrails(session.user.id);
           setCompletedTrails(completed);
-          console.log("resultado do completed: ", completed);
+          console.log('resultado do completed: ', completed);
         } catch (error) {
           console.error('Error fetching completed trails:', error);
         }
@@ -44,8 +48,6 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails, journeyId, hasJourney
       const svg = svgRef.current;
       const svgNS = 'http://www.w3.org/2000/svg';
       const svgWidth = svg.clientWidth;
-      const svgHeight = svg.clientHeight;
-      const container = containerRef.current;
 
       while (svg.firstChild) {
         svg.removeChild(svg.firstChild);
@@ -109,7 +111,7 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails, journeyId, hasJourney
         position: 'relative',
         height: `${Math.max(trails.length * nodeSpacing + nodeSize + 50, 400)}px`,
         backgroundColor: '#f0f0f0',
-        overflow: 'hidden', 
+        overflow: 'hidden',
         zIndex: 1,
       }}
     >
@@ -148,7 +150,9 @@ const JourneyPath: React.FC<JourneyPathProps> = ({ trails, journeyId, hasJourney
               sx={{
                 width: `${nodeSize}px`,
                 height: `${nodeSize}px`,
-                backgroundColor: completedTrails.includes(trail._id) ? 'green' : 'lightgray',
+                backgroundColor: completedTrails.includes(trail._id)
+                  ? 'green'
+                  : 'lightgray',
                 borderRadius: '10px',
                 boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
                 color: 'black',

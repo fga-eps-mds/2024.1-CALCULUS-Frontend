@@ -2,14 +2,11 @@
 
 import Image from 'next/image';
 import microsoftIcon from '@/public/microsoft.svg';
-import { Button } from '@mui/material';
-import { signIn } from 'next-auth/react';
 import MyButton from '@/components/ui/buttons/myButton.component';
 
 export function MicrosoftAuthButton() {
   const handleClick = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL_USER}/auth/microsoft/callback`;
-    // signIn('azure-ad');
   };
 
   return (

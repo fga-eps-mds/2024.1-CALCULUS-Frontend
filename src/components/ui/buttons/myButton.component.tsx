@@ -33,9 +33,9 @@ const CustomButton = styled(Button)<{
   radius?: string;
   bold?: boolean;
 }>(({ width, height, btncolor, radius, subcolor, bold, hovercolor }) => ({
-  width: width || '100%',
-  height: height || '50px',
-  borderRadius: radius || height || '5px',
+  width: width ?? '100%',
+  height: height ?? '50px',
+  borderRadius: radius ?? height ?? '5px',
   backgroundColor: btncolor,
   border: `1px solid ${subcolor}`,
   boxShadow: `0px 5px 0 ${subcolor}`,

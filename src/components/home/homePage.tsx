@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -15,8 +17,8 @@ const HomePrincipalPage = () => {
   const [allPoints, setAllPoints] = useState<any[]>([]);
 
   useEffect(() => {
-    try {
-      const fetchJourneys = async () => {
+    const fetchJourneys = async () => {
+      try {
         const { fetchUserJourneys, fetchJourneyById } = JourneyService();
         const journeyIds = await fetchUserJourneys(session);
 
@@ -25,22 +27,20 @@ const HomePrincipalPage = () => {
         );
 
         setUserJourneys(journeysDetails.filter((j) => j !== null));
-      };
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-      fetchJourneys();
-    } catch (error) {
-      console.log(error);
-    }
+    fetchJourneys();
   }, [session]);
-
 
   useEffect(() => {
     try {
       const loadPoints = async () => {
         const { fetchPoints } = JourneyService();
         const allPoints = await fetchPoints();
-
-        allPoints.sort((a, b) => a.order - b.order);
+        allPoints!.sort((a, b) => a.order - b.order);
         setAllPoints(allPoints);
       };
       loadPoints();
@@ -48,7 +48,7 @@ const HomePrincipalPage = () => {
       console.log(error);
     }
   }, []);
-  
+
   const filteredPoints =
     searchQuery.length > 0
       ? allPoints.filter(
@@ -59,7 +59,7 @@ const HomePrincipalPage = () => {
               .includes(searchQuery.toLowerCase()),
         )
       : [];
-      
+
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -87,18 +87,16 @@ const HomePrincipalPage = () => {
     <>
       <h5 className="text-3xl font-bold mb-5">Em andamento</h5>
       {userJourneys.length > 0 ? (
-        <>
-          <Carousel responsive={responsive}>
-            {userJourneys.map((jornada) => (
-              <JourneyCard
-                key={jornada._id}
-                title={jornada.title}
-                image={jornada.image || Foto}
-                Id={jornada._id}
-              />
-            ))}
-          </Carousel>
-        </>
+        <Carousel responsive={responsive}>
+          {userJourneys.map((jornada) => (
+            <JourneyCard
+              key={jornada._id}
+              title={jornada.title}
+              image={jornada.image || Foto}
+              Id={jornada._id}
+            />
+          ))}
+        </Carousel>
       ) : (
         <div className="border rounded-lg bg-white my-10 w-2/4 p-8 mx-auto">
           <p className="text-2xl font-medium text-center">
@@ -117,12 +115,12 @@ const HomePrincipalPage = () => {
           <div>
             {filteredPoints.map((jornada) => (
               <StartCard
-              key={jornada._id}
-              title={jornada.name}
-              description={jornada.description}
-              image={jornada.image || Foto}
-              Id={jornada._id}
-            />
+                key={jornada._id}
+                title={jornada.name}
+                description={jornada.description}
+                image={jornada.image || Foto}
+                Id={jornada._id}
+              />
             ))}
           </div>
         ) : (

@@ -1,11 +1,6 @@
 import { Awaitable, NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import {
-  loginWithEmailAndPassword,
-  loginWithFederatedProvider,
-} from '@/services/user.service';
-import GoogleProvider from 'next-auth/providers/google';
-import AzureADProvider from 'next-auth/providers/azure-ad';
+import { loginWithEmailAndPassword } from '@/services/user.service';
 import { JWT } from 'next-auth/jwt';
 
 export const authOptions: NextAuthOptions = {
@@ -34,7 +29,7 @@ export const authOptions: NextAuthOptions = {
         if (credentials!.token) {
           const token = credentials!.token;
           const decodedAccessToken = JSON.parse(
-            Buffer.from(token!.split('.')[1], 'base64').toString(),
+            Buffer.from(token.split('.')[1], 'base64').toString(),
           );
           const user = {
             id: decodedAccessToken['id'],
@@ -47,8 +42,8 @@ export const authOptions: NextAuthOptions = {
         }
 
         const res = await loginWithEmailAndPassword(
-          credentials!.email as string,
-          credentials!.password as string,
+          credentials!.email,
+          credentials!.password,
         );
         if (res?.status !== 201) {
           throw new Error(res?.data.message);

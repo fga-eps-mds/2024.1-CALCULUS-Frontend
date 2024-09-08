@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { insertTextAtSelection } from '../utils/insertTextAtSelection';
 import { Content } from '@/lib/interfaces/content.interface';

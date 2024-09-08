@@ -19,8 +19,7 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
   hasJourney,
   completedTrailsCount,
 }) => {
-
-  const progressValue = Math.floor(( completedTrailsCount / trailCount ) * 100);
+  const progressValue = Math.floor((completedTrailsCount / trailCount) * 100);
 
   return (
     <Box
@@ -75,8 +74,7 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
             justifyContent: 'flex-end',
           }}
           ml={55}
-        >
-        </Box>
+        ></Box>
       ) : (
         <Box>
           <Box
@@ -88,12 +86,8 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
               mb: 1,
             }}
           >
-            <Typography variant="body2">
-              Progresso:
-            </Typography>
-            <Typography variant="body2">
-              {`${progressValue}%`}
-            </Typography>
+            <Typography variant="body2">Progresso:</Typography>
+            <Typography variant="body2">{`${progressValue}%`}</Typography>
           </Box>
           <LinearProgress
             variant="determinate"
@@ -101,10 +95,10 @@ const JourneyInfo: React.FC<JourneyInfoProps> = ({
             sx={{
               height: '8px',
               borderRadius: '5px',
-              backgroundColor: '#e0e0e0', 
+              backgroundColor: '#e0e0e0',
               '& .MuiLinearProgress-bar': {
                 backgroundColor: 'green',
-                borderRadius: '5px', 
+                borderRadius: '5px',
               },
             }}
           />

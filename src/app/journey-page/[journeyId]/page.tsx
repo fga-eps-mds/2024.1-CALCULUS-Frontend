@@ -1,19 +1,30 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Box, CircularProgress, Divider, IconButton, Typography } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import JourneyInfo from '@/components/journey/journeyInfo';
 import JourneyPath from '@/components/journey/journeyPath';
-import { getJourney, getJourneysByPoint, getTrails } from '@/services/studioMaker.service';
+import {
+  getJourney,
+  getJourneysByPoint,
+  getTrails,
+} from '@/services/studioMaker.service';
 import { Journey } from '@/lib/interfaces/journey.interface';
 import { Trail } from '@/lib/interfaces/trails.interface';
 import { useParams, useRouter } from 'next/navigation';
-import { getSubscribedJourneys, } from '@/services/user.service';
+import {
+  getSubscribedJourneys,
+  getCompletedTrails,
+} from '@/services/user.service';
 import { useSession } from 'next-auth/react';
-import { getCompletedTrails } from '@/services/user.service';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-
 
 export default function JourneyPage() {
   const { journeyId } = useParams();
@@ -56,13 +67,17 @@ export default function JourneyPage() {
         const pointId = journeyData.point;
         if (pointId) {
           const relatedJourneys: Journey[] = await getJourneysByPoint(pointId);
-          const next = relatedJourneys.find(j => j.order === journeyData.order + 1);
+          const next = relatedJourneys.find(
+            (j) => j.order === journeyData.order + 1,
+          );
           if (next != undefined) {
             setNextJourney(next);
             console.log(next);
             console.log(nextJourney);
           }
-          const previous = relatedJourneys.find(j => j.order === journeyData.order - 1);
+          const previous = relatedJourneys.find(
+            (j) => j.order === journeyData.order - 1,
+          );
           if (previous != undefined) {
             setPreviousJourney(previous);
             console.log(previous);
@@ -90,11 +105,11 @@ export default function JourneyPage() {
 
   const handleNext = async () => {
     router.push(`/journey-page/${nextJourney?._id}`);
-  }
+  };
 
   const handlePrevious = async () => {
     router.push(`/journey-page/${previousJourney?._id}`);
-  }
+  };
 
   if (error) {
     return <div>{error}</div>;
@@ -109,45 +124,53 @@ export default function JourneyPage() {
   );
 
   return (
-    <Box sx={{
-      backgroundColor: '#f1f1f1',
-      height: '100vh',
-      position: 'relative',
-    }}>
-      {(previousJourney) &&
-        <IconButton onClick={handlePrevious} sx={{
-          position: 'absolute',  
-          top: '10%',            
-          left: '5%',          
-          backgroundColor: '#FF4122',
-          height: '40px',
-          width: '40px',
-          borderRadius: '40px',
-          color: '#f1f1f1',
-          transform: 'translateY(-50%)',  
-          zIndex: 2,
-        }}>
+    <Box
+      sx={{
+        backgroundColor: '#f1f1f1',
+        height: '100vh',
+        position: 'relative',
+      }}
+    >
+      {previousJourney && (
+        <IconButton
+          onClick={handlePrevious}
+          sx={{
+            position: 'absolute',
+            top: '10%',
+            left: '5%',
+            backgroundColor: '#FF4122',
+            height: '40px',
+            width: '40px',
+            borderRadius: '40px',
+            color: '#f1f1f1',
+            transform: 'translateY(-50%)',
+            zIndex: 2,
+          }}
+        >
           <ArrowBackIcon />
         </IconButton>
-      }
-    
-      {(nextJourney) &&
-        <IconButton onClick={handleNext} sx={{
-          position: 'absolute',  
-          top: '10%',            
-          right: '5%',         
-          backgroundColor: '#FF4122',
-          height: '40px',
-          width: '40px',
-          borderRadius: '40px',
-          color: '#f1f1f1',
-          transform: 'translateY(-50%)',  
-          zIndex: 2,
-        }}>
+      )}
+
+      {nextJourney && (
+        <IconButton
+          onClick={handleNext}
+          sx={{
+            position: 'absolute',
+            top: '10%',
+            right: '5%',
+            backgroundColor: '#FF4122',
+            height: '40px',
+            width: '40px',
+            borderRadius: '40px',
+            color: '#f1f1f1',
+            transform: 'translateY(-50%)',
+            zIndex: 2,
+          }}
+        >
           <ArrowForwardIcon />
         </IconButton>
-      }
-    
+      )}
+
       <Box
         sx={{
           display: 'flex',
@@ -168,14 +191,14 @@ export default function JourneyPage() {
             completedTrailsCount={completedTrailsInJourney.length}
           />
         </Box>
-    
+
         <Divider
           sx={{ marginBottom: '100px', marginTop: '100px' }}
           orientation="vertical"
           variant="middle"
           flexItem
         />
-    
+
         {!trails.length ? (
           <Typography
             variant="h3"
@@ -188,9 +211,11 @@ export default function JourneyPage() {
             Ainda não há trilhas nessa jornada
           </Typography>
         ) : (
-          <React.Fragment>
-            <JourneyPath trails={trails} journeyId={journey._id} hasJourney={hasJourney} />
-          </React.Fragment>
+          <JourneyPath
+            trails={trails}
+            journeyId={journey._id}
+            hasJourney={hasJourney}
+          />
         )}
       </Box>
     </Box>

@@ -2,21 +2,16 @@ import React, { useMemo } from 'react';
 import {
   useMaterialReactTable,
   type MRT_ColumnDef,
-  MRT_TableContainer,
+  MRT_TableContainer as MrtTableContainer,
   MRT_Row,
 } from 'material-react-table';
-import {
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-} from '@mui/material';
+import { Box, IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { StartPoint } from '@/lib/interfaces/startPoint.interface';
 import { updatePointOrder } from '@/services/studioMaker.service';
 import { toast } from 'sonner';
 
-interface StartpointTableProps {
+interface StartPointTableProps {
   startPoints: StartPoint[];
   anchorEl: null | HTMLElement;
   onMenuClick: (
@@ -25,10 +20,10 @@ interface StartpointTableProps {
   ) => void;
   onMenuClose: () => void;
   onStartPointAction: (action: string) => void;
-  onUpdateStartPoints: OnUpdateStartPoints;
+  onUpdateStartPoints: (updatedStartPoints: StartPoint[]) => void;
 }
 
-const StartpointTable: React.FC<StartpointTableProps> = ({
+const StartPointTable: React.FC<StartPointTableProps> = ({
   startPoints,
   anchorEl,
   onMenuClick,
@@ -36,18 +31,9 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
   onStartPointAction,
   onUpdateStartPoints,
 }) => {
-  const open = Boolean(anchorEl);
-  const [selectedStartPoint, setSelectedStartPoint] =
-    React.useState<StartPoint | null>(null);
-
   const handleMenuItemClick = (action: string) => {
     onStartPointAction(action);
     onMenuClose();
-  };
-
-  const handleItem = (e: any, startPoint: StartPoint) => {
-    onMenuClick(e, startPoint);
-    setSelectedStartPoint(startPoint);
   };
 
   const columns = useMemo<MRT_ColumnDef<StartPoint>[]>(
@@ -65,7 +51,6 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
             <IconButton
               onClick={(e) => {
                 onMenuClick(e, row.original);
-                setSelectedStartPoint(row.original);
               }}
               color="primary"
             >
@@ -99,7 +84,7 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
     enableRowOrdering: true,
     enablePagination: false,
     muiRowDragHandleProps: ({ table }) => ({
-      onDragEnd: async () => {
+      onDragEnd: async (): Promise<void> => {
         const { draggingRow, hoveredRow } = table.getState();
         if (hoveredRow && draggingRow) {
           const newData = [...startPoints];
@@ -132,9 +117,9 @@ const StartpointTable: React.FC<StartpointTableProps> = ({
 
   return (
     <Box sx={{ width: '100%', maxWidth: 800 }}>
-      <MRT_TableContainer table={table} />
+      <MrtTableContainer table={table} />
     </Box>
   );
 };
 
-export default StartpointTable;
+export default StartPointTable;

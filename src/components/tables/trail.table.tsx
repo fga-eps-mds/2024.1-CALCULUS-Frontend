@@ -11,7 +11,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Typography,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -35,7 +34,6 @@ const TrailTable: React.FC<TrailTableProps> = ({
   onMenuClose,
   onTrailAction,
 }) => {
-  const open = Boolean(anchorEl);
   const router = useRouter();
 
   const handleMenuItemClick = (action: string) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Box, AppBar, Toolbar } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import MarkdownToolbar from './MarkdownToolbar';

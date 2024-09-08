@@ -2,13 +2,11 @@
 
 import Image from 'next/image';
 import appleIcon from '@/public/apple.svg';
-import { Button } from '@mui/material';
 import MyButton from '@/components/ui/buttons/myButton.component';
 
 export function AppleAuthButton() {
   const handleClick = () => {
     alert('Ops, ainda estamos trabalhando nessa funcionalidade');
-    //signIn('apple');
   };
 
   return (

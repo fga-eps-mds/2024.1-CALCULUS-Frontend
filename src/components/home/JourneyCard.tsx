@@ -11,14 +11,16 @@ interface JourneyCardProps {
 }
 
 const JourneyCard: React.FC<JourneyCardProps> = ({ title, image, Id }) => {
-
   const router = useRouter();
   const handleClick = () => {
     router.push('/journey-page/' + Id);
-  } 
+  };
 
   return (
-    <div className="bg-[#FFFAFA] border-2 rounded-3xl w-44 h-60 overflow-hidden flex items-center flex-col gap-7 justify-center cursor-pointer" onClick={handleClick}>
+    <button
+      className="bg-[#FFFAFA] border-2 rounded-3xl w-44 h-60 overflow-hidden flex items-center flex-col gap-7 justify-center cursor-pointer"
+      onClick={handleClick}
+    >
       <Image
         src={image}
         alt={title}
@@ -27,7 +29,7 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ title, image, Id }) => {
         style={{ marginTop: '20px' }}
       />
       <h3 className="text-lg font-bold text-center flex-1">{title}</h3>
-    </div>
+    </button>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, IconButton, Link, Grid } from '@mui/material';
+import { Box, Typography, Link, Grid } from '@mui/material';
 import Image from 'next/image';
 import maoCerebro from '@/public/mao_cerebro.png';
 import { SingUpForm } from '@/components/forms/signUpForm';

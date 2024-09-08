@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import {
   useMaterialReactTable,
   type MRT_ColumnDef,
-  MRT_TableContainer,
+  MRT_TableContainer as MrtTableContainer,
   MRT_Row,
 } from 'material-react-table';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -31,8 +31,8 @@ export default function TrailsListPage({
   trails,
   journeyId,
 }: {
-  trails: Trail[];
-  journeyId: string;
+  readonly trails: Trail[];
+  readonly journeyId: string;
 }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
@@ -148,7 +148,7 @@ export default function TrailsListPage({
     data: filteredTrails,
     enableRowOrdering: true,
     muiRowDragHandleProps: ({ table }) => ({
-      onDragEnd: async () => {
+      onDragEnd: async (): Promise<void> => {
         const { draggingRow, hoveredRow } = table.getState();
         if (hoveredRow && draggingRow) {
           const newData = [...filteredTrails];
@@ -191,7 +191,7 @@ export default function TrailsListPage({
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
       </Box>
 
-      <MRT_TableContainer table={table} />
+      <MrtTableContainer table={table} />
 
       <ButtonRed onClick={() => setCreateDialogOpen(true)}>
         Nova Trilha

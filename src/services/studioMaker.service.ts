@@ -325,7 +325,6 @@ export const updateTrailsOrder = async (
   }
 };
 
-
 export const updatePointOrder = async (
   updatedPoints: StartPoint[],
 ): Promise<any> => {
@@ -342,7 +341,6 @@ export const updatePointOrder = async (
     return { error: error };
   }
 };
-
 
 export const updateJourneysOrder = async (
   updatedTrails: Journey[],
@@ -391,7 +389,8 @@ export const updateContentOrder = async (
   updatedContents: Content[],
 ): Promise<any> => {
   try {
-    const response = await studioMakerApi.patch('/contents/order/update-order',
+    const response = await studioMakerApi.patch(
+      '/contents/order/update-order',
       {
         contents: updatedContents,
       },
@@ -413,9 +412,12 @@ export const addJourneyToUser = async ({
   journeyId: string;
 }) => {
   try {
-    const response = await studioMakerApi.patch(`/journeys/${userId}/add-journey`, {
-      journeyId,
-    });
+    const response = await studioMakerApi.patch(
+      `/journeys/${userId}/add-journey`,
+      {
+        journeyId,
+      },
+    );
     console.log('Journey added to user');
     return response.data;
   } catch (error) {

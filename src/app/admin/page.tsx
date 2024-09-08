@@ -11,7 +11,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Button,
   Typography,
 } from '@mui/material';
 
@@ -90,7 +89,7 @@ const Admin: React.FC = () => {
     if (selectedUser && selectedRole) {
       try {
         const token = JSON.parse(localStorage.getItem('token')!);
-        await updateUserRole(selectedUser._id, selectedRole,token);
+        await updateUserRole(selectedUser._id, selectedRole, token);
         const updatedUsers = users.map((user) =>
           user._id === selectedUser._id
             ? { ...user, role: selectedRole }

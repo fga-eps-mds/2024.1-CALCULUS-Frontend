@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import ButtonRed from '@/components/ui/buttons/red.button';
 import SearchBar from '@/components/admin/SearchBar';
-import StartpointTable from '@/components/tables/startingpoints.table';
+import StartPointTable from '@/components/tables/startingpoints.table';
 import { StartPoint } from '@/lib/interfaces/startPoint.interface';
 import { UserRole } from '@/lib/enum/userRole.enum';
 import {
@@ -32,7 +32,9 @@ const StartPointPage: React.FC = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const [listStartPoints, setListStartPoints] = useState<StartPoint[]>([]);
-  const [filteredStartPoints, setFilteredStartPoints] = useState<StartPoint[]>([]);
+  const [filteredStartPoints, setFilteredStartPoints] = useState<StartPoint[]>(
+    [],
+  );
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const [selectedStartPoint, setSelectedStartPoint] =
@@ -45,15 +47,15 @@ const StartPointPage: React.FC = () => {
 
   const fetchStartPoints = async (): Promise<StartPoint[]> => {
     let startPoints: StartPoint[] = [];
-    
+
     if (session?.user.role === UserRole.ADMIN) {
       startPoints = await getStartPoints();
     } else {
       startPoints = await getStartPointsByUser(session?.user.id!);
     }
-    
+
     startPoints.sort((a, b) => a.order - b.order);
-    
+
     setListStartPoints(startPoints);
     setFilteredStartPoints(startPoints);
     return startPoints;
@@ -99,9 +101,7 @@ const StartPointPage: React.FC = () => {
     if (action === 'excluir') setExclusionDialogOpen(true);
     if (action === 'gerenciar') {
       router.push(`/journey/${selectedStartPoint!._id}`);
-
     }
-    
   };
 
   const addStartPoint = (startPoint: StartPoint) => {
@@ -137,11 +137,7 @@ const StartPointPage: React.FC = () => {
   }
 
   if (error) {
-    return (
-      <Typography>
-        Error fetching start points: {(error as Error).message}
-      </Typography>
-    );
+    return <Typography>Error fetching start points</Typography>;
   }
 
   const updateStartPoints = (updatedStartPoints: StartPoint[]) => {
@@ -163,7 +159,7 @@ const StartPointPage: React.FC = () => {
         <SearchBar value={searchQuery} onChange={setSearchQuery} />
       </Box>
 
-      <StartpointTable
+      <StartPointTable
         startPoints={filteredStartPoints}
         anchorEl={anchorEl}
         onMenuClick={handleMenuOpen}
