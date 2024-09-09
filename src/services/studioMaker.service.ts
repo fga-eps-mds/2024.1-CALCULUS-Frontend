@@ -105,9 +105,6 @@ export const deleteStartPoint = async ({
 export const getJourneys = async (): Promise<Journey[]> => {
   try {
     const response = await studioMakerApi.get('/journeys', {
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
     });
     console.log('Journeys:', response.data);
     return response.data;
@@ -120,9 +117,6 @@ export const getJourneys = async (): Promise<Journey[]> => {
 export const getJourneysByPoint = async (id: string): Promise<Journey[]> => {
   try {
     const response = await studioMakerApi.get(`/journeys/point/${id}`, {
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
     });
     console.log('Journeys:', response.data);
     return response.data;
@@ -214,9 +208,6 @@ export const getTrails = async ({
   console.log(id, token);
   try {
     const response = await studioMakerApi.get(`/trails/journey/${id}`, {
-      // headers: {
-      //   Authorization: `Bearer ${token}`,
-      // },
     });
     console.log('Trails:', response.data);
     return response.data;
