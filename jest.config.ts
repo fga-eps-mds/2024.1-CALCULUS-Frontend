@@ -1,19 +1,17 @@
 import type { Config } from 'jest';
+import nextJest from 'next/jest';
 
-import nextJest from 'next/jest.js'
- 
 const createJestConfig = nextJest({
-  dir: './src',
-})
- 
+  dir: './', 
+});
+
 const config: Config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
   preset: 'ts-jest',
   moduleNameMapper: {
-    // ...
-    '^@/components/(.*)$': '<rootDir>/src/app/components/$1',
     '^@/(.*)$': '<rootDir>/src/$1',
+    '\\.(css|less|scss|sass)$': 'identity-obj-proxy', 
   },
   reporters: [
     'default',
@@ -25,7 +23,7 @@ const config: Config = {
       },
     ],
   ],
+  testMatch: ['<rootDir>/test/**/*.(test|spec).ts?(x)'], 
+};
 
-}
- 
-export default createJestConfig(config)
+export default createJestConfig(config);

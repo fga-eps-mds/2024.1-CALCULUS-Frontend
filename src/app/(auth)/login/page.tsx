@@ -1,9 +1,9 @@
-'use client';
-
-import { Box } from '@mui/material';
+import { Box, Grid, Link } from '@mui/material';
 import Image from 'next/image';
 import calcuclusLogo from '@/public/calculus-logo.svg';
-import LoginComponent from '@/app/components/login.component';
+import { GoogleAuthButton } from '@/components/ui/buttons/googleAuth.button';
+import { MicrosoftAuthButton } from '@/components/ui/buttons/microsoftAuth.button';
+import { SingInForm } from '@/components/forms/signInForm';
 
 export default function LoginPage() {
   return (
@@ -19,7 +19,28 @@ export default function LoginPage() {
           />
           <p className="text-[32px] font-bold">Login</p>
         </Box>
-        <LoginComponent />
+        <Grid
+          container
+          spacing={1}
+          justifyContent="center"
+          className="mt-2 mb-2"
+        >
+          <Grid item>
+            <GoogleAuthButton />
+          </Grid>
+          <Grid item>
+            <MicrosoftAuthButton />
+          </Grid>
+        </Grid>
+
+        <SingInForm />
+
+        <p className="text-[18px] font-light">
+          Novo Usuário?
+          <Link href="/register" className="text-indigo-700 block">
+            Cadastre-se
+          </Link>
+        </p>
       </Box>
     </Box>
   );

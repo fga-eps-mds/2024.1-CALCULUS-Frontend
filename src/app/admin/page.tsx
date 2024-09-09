@@ -1,10 +1,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import UserTable from '@/app/components/admin/UserTable';
-import SearchBar from '@/app/components/admin/SearchBar';
+import UserTable from '@/components/admin/UserTable';
+import SearchBar from '@/components/admin/SearchBar';
 import { getUsers, updateUserRole } from '@/services/user.service';
-import { CircularProgress, Box, Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography } from '@mui/material';
+import {
+  CircularProgress,
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from '@mui/material';
+
+import MyButton from '@/components/ui/buttons/myButton.component';
 
 type User = {
   _id: string;
@@ -27,7 +37,9 @@ const Admin: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await getUsers();
+        const response = await getUsers(
+          JSON.parse(localStorage.getItem('token')!),
+        );
         setUsers(response);
         setFilteredUsers(response);
       } catch (err) {
@@ -42,9 +54,10 @@ const Admin: React.FC = () => {
 
   useEffect(() => {
     const lowercasedQuery = searchQuery.toLowerCase();
-    const newFilteredUsers = users.filter(user =>
-      user.username.toLowerCase().includes(lowercasedQuery) ||
-      user.email.toLowerCase().includes(lowercasedQuery)
+    const newFilteredUsers = users.filter(
+      (user) =>
+        user.username.toLowerCase().includes(lowercasedQuery) ||
+        user.email.toLowerCase().includes(lowercasedQuery),
     );
     setFilteredUsers(newFilteredUsers);
   }, [searchQuery, users]);
@@ -53,7 +66,10 @@ const Admin: React.FC = () => {
     setSearchQuery(query);
   };
 
-  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>, user: User) => {
+  const handleMenuClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    user: User,
+  ) => {
     setAnchorEl(event.currentTarget);
     setSelectedUser(user);
   };
@@ -72,9 +88,12 @@ const Admin: React.FC = () => {
   const confirmRoleChange = async () => {
     if (selectedUser && selectedRole) {
       try {
-        await updateUserRole(selectedUser._id, selectedRole);
-        const updatedUsers = users.map(user =>
-          user._id === selectedUser._id ? { ...user, role: selectedRole } : user
+        const token = JSON.parse(localStorage.getItem('token')!);
+        await updateUserRole(selectedUser._id, selectedRole, token);
+        const updatedUsers = users.map((user) =>
+          user._id === selectedUser._id
+            ? { ...user, role: selectedRole }
+            : user,
         );
         setUsers(updatedUsers);
         setFilteredUsers(updatedUsers);
@@ -95,7 +114,14 @@ const Admin: React.FC = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <Box sx={{ padding: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <Box
+      sx={{
+        padding: 2,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
       <Box sx={{ width: '100%', maxWidth: 800, marginBottom: 2 }}>
         <SearchBar value={searchQuery} onChange={handleSearch} />
       </Box>
@@ -118,12 +144,17 @@ const Admin: React.FC = () => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={cancelRoleChange} color="error">
+          <MyButton onClick={cancelRoleChange} color="red" radius="30px" bold>
             Cancelar
-          </Button>
-          <Button onClick={confirmRoleChange} color="primary">
+          </MyButton>
+          <MyButton
+            onClick={confirmRoleChange}
+            color="green"
+            radius="30px"
+            bold
+          >
             Confirmar
-          </Button>
+          </MyButton>
         </DialogActions>
       </Dialog>
     </Box>
