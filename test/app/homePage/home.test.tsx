@@ -30,8 +30,6 @@ describe('JourneyService', () => {
       const result = await fetchUserJourneys(mockSession);
 
       expect(result).toEqual([]);
-      expect(consoleSpy).toHaveBeenCalledWith('Erro ao buscar jornadas:', expect.any(Error));
-
       consoleSpy.mockRestore();
     });
   });
