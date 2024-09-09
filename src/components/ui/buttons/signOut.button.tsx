@@ -1,6 +1,5 @@
 'use client';
 
-import { Box, Button } from '@mui/material';
 import { signOut } from 'next-auth/react';
 import MyButton from './myButton.component';
 

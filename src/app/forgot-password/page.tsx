@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import MyButton from '@/components/ui/buttons/myButton.component';
-import { Box, TextField, Button } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import calcuclusLogo from '@/public/calculus-logo.svg';
 import { forgotPassword } from '@/services/user.service';
@@ -25,15 +25,15 @@ export default function ForgotPassword() {
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: async (data: ForgotPasswordData) => await forgotPassword(data),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success(
         'Email enviado com sucesso! Verifique sua caixa de entrada para obter as instruções.',
       );
       router.push('/');
     },
-    onError: (error) => {
+    onError: () => {
       toast.error(
         'Ocorreu um erro ao enviar o email. Tente novamente mais tarde.',
       );

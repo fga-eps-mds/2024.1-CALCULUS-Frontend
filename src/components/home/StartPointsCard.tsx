@@ -43,19 +43,11 @@ const StartCard: React.FC<StartCardProps> = ({
           const journey = await fetchJourneyById(journeyId);
           if (journey) {
             j.push(journey);
-          } else {
-            console.error(`Journey with ID ${journeyId} not found.`);
           }
         }
 
-        if (j.length === 0) {
-          console.error('No valid journeys found.');
-        }
-
         setJourneys(j);
-      } catch (error) {
-        console.error('Error loading journeys:', error);
-      }
+      } catch (error) {}
     };
 
     loadJourneys();
@@ -83,7 +75,7 @@ const StartCard: React.FC<StartCardProps> = ({
 
   return (
     <div className="w-full my-5 relative">
-      <div
+      <button
         onClick={() => {
           setIsOpen(!isOpen);
         }}
@@ -91,11 +83,11 @@ const StartCard: React.FC<StartCardProps> = ({
       >
         <Image src={image} alt={title} width={80} height={80} />
         <h3 className="text-xl font-bold text-center w-[40%] ">{title}</h3>
-        <p className="text-sm font-light w-[40%] ">{description || ""}</p>
+        <p className="text-sm font-light w-[40%] ">{description || ''}</p>
         <div className=" rounded-full h-7 w-7 absolute right-[1%]">
           {isOpen ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
         </div>
-      </div>
+      </button>
       {isOpen && (
         <div className="bg-[#ececec] p-8 rounded-xl">
           {journeys.length > 0 ? (
@@ -105,7 +97,7 @@ const StartCard: React.FC<StartCardProps> = ({
                   key={index}
                   className="h-52 w-58 flex flex-col items-center cursor-pointer "
                 >
-                  <div
+                  <button
                     className="bg-[#FFFAFA] h-40 w-44 flex place-content-center rounded-3xl border-2 border-[#e5e7eb] hover:border-[#dbdbdb] shadow-[0_6px_0_#e5e7eb] hover:shadow-[0_6px_0_#dbdbdb] relative"
                     onClick={() => handleOnclick(jornada._id)}
                   >
@@ -115,7 +107,7 @@ const StartCard: React.FC<StartCardProps> = ({
                       width={120}
                       height={120}
                     />
-                  </div>
+                  </button>
                   <h3 className="text-xl text-center mt-3">{jornada.title}</h3>
 
                   {index < journeys.length - 1 && (

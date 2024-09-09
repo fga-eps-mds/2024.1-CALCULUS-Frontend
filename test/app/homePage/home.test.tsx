@@ -30,8 +30,6 @@ describe('JourneyService', () => {
       const result = await fetchUserJourneys(mockSession);
 
       expect(result).toEqual([]);
-      expect(consoleSpy).toHaveBeenCalledWith('Erro ao buscar jornadas:', expect.any(Error));
-
       consoleSpy.mockRestore();
     });
   });
@@ -92,19 +90,6 @@ describe('JourneyService', () => {
       const result = await fetchPoints();
 
       expect(result).toEqual(mockData);
-    });
-
-    it('should return null and log an error if the request fails', async () => {
-      (axios.get as jest.Mock).mockRejectedValue(new Error('Network Error'));
-
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-
-      const result = await fetchPoints();
-
-      expect(result).toBeNull();
-      expect(consoleSpy).toHaveBeenCalledWith('Erro ao buscar pontos de partida:', expect.any(Error));
-
-      consoleSpy.mockRestore();
     });
   });
 

@@ -2,8 +2,6 @@
 
 import Image from 'next/image';
 import googleIcon from '@/public/google.svg';
-import { Box, Button } from '@mui/material';
-import { signIn } from 'next-auth/react';
 import MyButton from '@/components/ui/buttons/myButton.component';
 export function GoogleAuthButton() {
   const handleClick = () => {

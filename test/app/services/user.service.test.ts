@@ -145,34 +145,33 @@ describe('User Service', () => {
       const newRole = 'professor';
       const token = 'valid_token';
       const mockResponse = { data: { id: '1', role: newRole } };
-  
+
       mockedApi.patch.mockResolvedValueOnce(mockResponse);
-  
+
       const resultado = await updateUserRole(userId, newRole, token);
-  
+
       expect(mockedApi.patch).toHaveBeenCalledWith(
         `/users/${userId}/role`,
         { role: newRole },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
-  
+
       expect(resultado).toEqual(mockResponse.data);
     });
-  
+
     it('deve lidar com erros e lançar uma exceção', async () => {
       const userId = '1';
       const newRole = 'professor';
-      const token = 'valid_token'; 
+      const token = 'valid_token';
       const mockError = new Error('Falha ao atualizar o papel do usuário');
-  
+
       mockedApi.patch.mockRejectedValueOnce(mockError);
-  
+
       await expect(updateUserRole(userId, newRole, token)).rejects.toThrow(
-        'Falha ao atualizar o papel do usuário'
+        'Falha ao atualizar o papel do usuário',
       );
     });
   });
-  
 
   describe('forgotPassword', () => {
     it('deve solicitar a redefinição de senha', async () => {

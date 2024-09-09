@@ -16,7 +16,6 @@ import MyButton from '@/components/ui/buttons/myButton.component';
 import { completeTrail } from '@/services/user.service';
 import { useSession } from 'next-auth/react';
 
-
 function TrailPage() {
   const { trailId } = useParams();
   const router = useRouter();
@@ -28,9 +27,8 @@ function TrailPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { data: session } = useSession();
 
-
   const contentClick = (id: string) => {
-    const index = contents.findIndex(content => content._id === id);
+    const index = contents.findIndex((content) => content._id === id);
     if (index !== -1) {
       setContentId(id);
       setCurrentIndex(index);
@@ -56,7 +54,6 @@ function TrailPage() {
           setContentId(contentsData[0]._id);
           setCurrentIndex(0);
         }
-
       } catch (error) {
         setError('Failed to fetch trail data');
       }
@@ -66,7 +63,7 @@ function TrailPage() {
   }, [trailId]);
 
   useEffect(() => {
-    const index = contents.findIndex(content => content._id === contentId);
+    const index = contents.findIndex((content) => content._id === contentId);
     if (index !== -1) {
       setCurrentIndex(index);
     }
@@ -78,7 +75,7 @@ function TrailPage() {
       setCurrentIndex(newIndex);
       setContentId(contents[newIndex]._id);
     } else if (trail && journey) {
-      const trailIndex = journey.trails!.findIndex(t => t === trail._id);
+      const trailIndex = journey.trails!.findIndex((t) => t === trail._id);
       if (trailIndex > 0) {
         const previousTrailId = journey.trails![trailIndex - 1];
         router.push(`/trail-page/${previousTrailId}`);
@@ -97,13 +94,11 @@ function TrailPage() {
           await completeTrail({
             userId: session?.user.id as string,
             trailId: trail._id,
-            accessToken: session?.user.accessToken as  string
+            accessToken: session?.user.accessToken as string,
           });
-        } catch (error) {
-          console.error('Failed to complete trail:', error);
-        }
+        } catch (error) {}
       }
-      const trailIndex = journey.trails!.findIndex(t => t === trail._id);
+      const trailIndex = journey.trails!.findIndex((t) => t === trail._id);
       if (trailIndex < journey.trails!.length - 1) {
         const nextTrailId = journey.trails![trailIndex + 1];
         router.push(`/trail-page/${nextTrailId}`);
@@ -119,8 +114,13 @@ function TrailPage() {
     return <Box>Loading...</Box>;
   }
 
-  const isPreviousDisabled = currentIndex === 0 && journey.trails!.findIndex(t => t === trail._id) === 0;
-  const isNextDisabled = currentIndex === contents.length - 1 && journey.trails!.findIndex(t => t === trail._id) === journey.trails!.length - 1;
+  const isPreviousDisabled =
+    currentIndex === 0 &&
+    journey.trails!.findIndex((t) => t === trail._id) === 0;
+  const isNextDisabled =
+    currentIndex === contents.length - 1 &&
+    journey.trails!.findIndex((t) => t === trail._id) ===
+      journey.trails!.length - 1;
 
   return (
     <Box
@@ -197,7 +197,11 @@ function TrailPage() {
             onClick={handleNextContent}
             disabled={isNextDisabled}
           >
-            {currentIndex < contents.length - 1 ? <>Próximo Conteúdo</> : <>Próxima Trilha</>}
+            {currentIndex < contents.length - 1 ? (
+              <>Próximo Conteúdo</>
+            ) : (
+              <>Próxima Trilha</>
+            )}
           </MyButton>
         </Box>
       </Box>

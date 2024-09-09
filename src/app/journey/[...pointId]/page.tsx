@@ -27,7 +27,7 @@ import { toast } from 'sonner';
 export default function JourneyPage({
   params,
 }: {
-  params: { pointId: string };
+  readonly params: { pointId: string };
 }) {
   const fetchJourneys = async (): Promise<Journey[]> => {
     let journeys = await getJourneysByPoint(params.pointId);
@@ -85,8 +85,6 @@ export default function JourneyPage({
 
   const handleJourneyAction = (action: string) => {
     if (action === 'editar') setEditionDialogOpen(true);
-    if (action === 'gerenciar') {
-    }
     if (action === 'excluir') setExclusionDialogOpen(true);
   };
 
@@ -116,20 +114,12 @@ export default function JourneyPage({
     }
   };
 
-  const handleCloseCreateDialog = () => {
-    setCreateDialogOpen(false);
-  };
-
   if (isLoading) {
     return <CircularProgress />;
   }
 
   if (error) {
-    return (
-      <Typography>
-        Error fetching journeys: {(error as Error).message}
-      </Typography>
-    );
+    return <Typography>Error fetching journeys</Typography>;
   }
 
   return (

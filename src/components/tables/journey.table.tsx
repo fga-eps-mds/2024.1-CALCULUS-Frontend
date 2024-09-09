@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import {
   useMaterialReactTable,
   type MRT_ColumnDef,
-  MRT_TableContainer,
+  MRT_TableContainer as MrtTableContainer,
   MRT_Row,
 } from 'material-react-table';
 import { useRouter } from 'next/navigation';
@@ -59,7 +59,6 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
               color="primary"
             >
               <MoreVertIcon />
-            
             </IconButton>
             <Menu
               anchorEl={anchorEl}
@@ -101,7 +100,7 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
     data,
     enableRowOrdering: true,
     muiRowDragHandleProps: ({ table }) => ({
-      onDragEnd: async () => {
+      onDragEnd: async (): Promise<void> => {
         const { draggingRow, hoveredRow } = table.getState();
         if (hoveredRow && draggingRow) {
           const newData = [...data];
@@ -129,7 +128,7 @@ const JourneyTable: React.FC<JourneyTableProps> = ({
     toast.success('Order da trilha atualizada com sucesso');
   };
 
-  return <MRT_TableContainer table={table} />;
+  return <MrtTableContainer table={table} />;
 };
 
 export default JourneyTable;

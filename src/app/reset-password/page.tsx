@@ -5,26 +5,19 @@ import { Box, TextField, IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import MyButton from '@/components/ui/buttons/myButton.component';
 import calculusLogos from '@/public/calculus-logo.svg';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import {
   ResetPasswordData,
   resetPasswordSchema,
 } from '@/lib/schemas/password.schema';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import { resetPassword } from '@/services/user.service';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useState, Suspense } from 'react';
 
 export default function ResetPassword() {
-  const SearchParamsComponent = () => {
-    const searchParams = useSearchParams();
-    const token = searchParams.get('token');
-    return { token };
-  };
-
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <SearchParamsComponentWrapper />
@@ -47,7 +40,7 @@ function SearchParamsComponentWrapper() {
     resolver: zodResolver(resetPasswordSchema),
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: async (data: any) => await resetPassword(data),
     onSuccess: (data) => {
       toast.success('Senha alterada com sucesso');

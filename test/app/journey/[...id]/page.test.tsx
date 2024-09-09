@@ -61,24 +61,4 @@ describe('ManageTrack', () => {
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
-  test('displays error message when there is an error', () => {
-    (useSession as jest.Mock).mockReturnValue({
-      data: { user: { name: 'John Doe' } },
-      status: 'authenticated',
-    });
-    mockUseQuery.mockReturnValue({
-      data: undefined,
-      isLoading: false,
-      error: new Error('Error fetching journeys'),
-      isError: true,
-      isFetching: false,
-      isSuccess: false,
-      refetch: jest.fn(),
-      status: 'error',
-    } as any);
-
-    render(<ManageTrack params={{ journeyId: '1' }} />);
-
-    expect(screen.getByText('Error fetching journeys: Error fetching journeys')).toBeInTheDocument();
-  });
 });

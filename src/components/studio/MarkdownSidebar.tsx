@@ -3,7 +3,7 @@ import {
   useMaterialReactTable,
   type MRT_ColumnDef,
   type MRT_Row,
-  MRT_TableContainer,
+  MRT_TableContainer as MrtTableContainer,
 } from 'material-react-table';
 import { Box, IconButton, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -47,7 +47,7 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
           <Button
             variant="text"
             onClick={(e) => {
-              e.stopPropagation(); 
+              e.stopPropagation();
               handleSelectContent(row.original._id);
             }}
             fullWidth
@@ -74,7 +74,7 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
         ),
       },
     ],
-    [handleSelectContent, handleDelete, selectedContentId, trailId]
+    [handleSelectContent, handleDelete, selectedContentId, trailId],
   );
 
   const table = useMaterialReactTable({
@@ -84,14 +84,14 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
     enableRowOrdering: true,
     enableSorting: false,
     muiRowDragHandleProps: ({ table }) => ({
-      onDragEnd: async () => {
+      onDragEnd: async (): Promise<void> => {
         const { draggingRow, hoveredRow } = table.getState();
         if (hoveredRow && draggingRow) {
           const newData = [...data];
           newData.splice(
             (hoveredRow as MRT_Row<Content>).index,
             0,
-            newData.splice(draggingRow.index, 1)[0]
+            newData.splice(draggingRow.index, 1)[0],
           );
           setData(newData);
           await updateOrder(newData);
@@ -131,9 +131,9 @@ const MarkdownSidebar: React.FC<SidebarProps> = ({
         >
           <CloseIcon />
         </IconButton>
-        
+
         <Box mt={4} />
-        <MRT_TableContainer table={table} />
+        <MrtTableContainer table={table} />
       </Box>
     </>
   );

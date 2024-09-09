@@ -13,9 +13,8 @@ import { useSession } from 'next-auth/react';
 export default function ManageTrack({
   params,
 }: {
-  params: { journeyId: string };
+  readonly params: { journeyId: string };
 }) {
-  const { data: session } = useSession();
   const [jorney, setJorney] = useState<Journey>({} as Journey);
   const fetchTrails = async (): Promise<Trail[]> => {
     let trails = await getTrails({
@@ -42,19 +41,13 @@ export default function ManageTrack({
   }
 
   if (error) {
-    return (
-      <Typography>
-        Error fetching journeys: {(error as Error).message}
-      </Typography>
-    );
+    return <Typography>Error fetching journeys</Typography>;
   }
 
   return (
-    <>
-      <Box className="flex flex-col items-center mt-8">
-        <h1 className="text-blac font-bold text-4xl">{jorney.title}</h1>
-        <TrailsListPage trails={trails} journeyId={params.journeyId} />
-      </Box>
-    </>
+    <Box className="flex flex-col items-center mt-8">
+      <h1 className="text-blac font-bold text-4xl">{jorney.title}</h1>
+      <TrailsListPage trails={trails} journeyId={params.journeyId} />
+    </Box>
   );
 }
