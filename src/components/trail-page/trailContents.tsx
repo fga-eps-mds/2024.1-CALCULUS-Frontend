@@ -51,7 +51,7 @@ const TrailContents: React.FC<TrailContentProps> = ({
       >
         {contents.map((content, index) => {
           const isClickable =
-            index <= contents.findIndex((c) => c._id === currentContentId); // Apenas as trilhas passadas e a atual são clicáveis
+            index <= contents.findIndex((c) => c._id === currentContentId);
 
           return (
             <Button
