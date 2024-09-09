@@ -43,19 +43,11 @@ const StartCard: React.FC<StartCardProps> = ({
           const journey = await fetchJourneyById(journeyId);
           if (journey) {
             j.push(journey);
-          } else {
-            console.error(`Journey with ID ${journeyId} not found.`);
           }
         }
 
-        if (j.length === 0) {
-          console.error('No valid journeys found.');
-        }
-
         setJourneys(j);
-      } catch (error) {
-        console.error('Error loading journeys:', error);
-      }
+      } catch (error) {}
     };
 
     loadJourneys();

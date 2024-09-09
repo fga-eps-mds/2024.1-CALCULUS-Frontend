@@ -44,9 +44,7 @@ export default function JourneyPage() {
         try {
           const completed = await getCompletedTrails(session.user.id);
           setCompletedTrails(completed);
-        } catch (error) {
-          console.error('Error fetching completed trails:', error);
-        }
+        } catch (error) {}
       }
     };
     fetchCompletedTrails();

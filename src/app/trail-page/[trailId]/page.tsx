@@ -96,9 +96,7 @@ function TrailPage() {
             trailId: trail._id,
             accessToken: session?.user.accessToken as string,
           });
-        } catch (error) {
-          console.error('Failed to complete trail:', error);
-        }
+        } catch (error) {}
       }
       const trailIndex = journey.trails!.findIndex((t) => t === trail._id);
       if (trailIndex < journey.trails!.length - 1) {

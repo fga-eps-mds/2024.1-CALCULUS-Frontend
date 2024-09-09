@@ -14,7 +14,6 @@ const JourneyService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error('Erro ao buscar jornadas:', error);
       return [];
     }
   };
@@ -50,8 +49,7 @@ const JourneyService = () => {
       );
       return response.data;
     } catch (error) {
-      console.error('Erro ao buscar pontos de partida:', error);
-      throw error;
+      return [];
     }
   };
 
